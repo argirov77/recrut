@@ -1,19 +1,19 @@
-import path from "path"
-import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-      host: '0.0.0.0',
-      port: 5173,
-      watch: {
-        usePolling: true
-      }
-  },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+      "@": path.resolve(__dirname, "src")
+    }
   },
-})
+  server: {
+    host: true,        // слушаем 0.0.0.0, а не только localhost
+    port: 5173,
+    watch: {
+      usePolling: true // для корректной работы в Docker
+    }
+  }
+});

@@ -1,0 +1,80 @@
+{
+  "siteTitle": "HR Agency",
+  "nav": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "contact": "Contact"
+  },
+  "hero": {
+    "headline": "Staff recruitment for your business",
+    "subtext": "We help Ukrainians and Moldovans find jobs in Bulgaria — from hotels to factories and farms.",
+    "button": "View Jobs"
+  },
+  "about": {
+    "title": "About Us",
+    "text": "We are a small team that since 2020 helps citizens from Ukraine and Moldova find legal employment in Bulgaria. We cooperate with hotels, factories, and farms, monitor labor contracts, and provide full legal support."
+  },
+  "services": {
+    "title": "Our Services",
+    "list": [
+      {
+        "title": "Job Placement",
+        "desc": "We find the best options in hotels, factories, and farms."
+      },
+      {
+        "title": "Visa Assistance",
+        "desc": "We prepare documents and assist with embassies."
+      },
+      {
+        "title": "Legal Support",
+        "desc": "We control labor contracts and protect worker rights."
+      },
+      {
+        "title": "Adaptation",
+        "desc": "Help with housing, translator, and language courses."
+      }
+    ]
+  },
+  "jobs": {
+    "title": "Current Vacancies",
+    "loading": "Loading jobs...",
+    "noJobs": "No open positions at the moment.",
+    "error": "Failed to load job listings."
+  },
+  "testimonials": {
+    "title": "Client Testimonials",
+    "items": [
+      {
+        "name": "Ivan Ivanov",
+        "role": "Hotel Manager, Varna",
+        "text": "Thanks to this agency, I quickly found a hotel job in Varna. Everything was transparent and fast."
+      },
+      {
+        "name": "Maria Petrova",
+        "role": "Farm Worker, Plovdiv",
+        "text": "They helped me with paperwork and visa, and the employer was ready within the first week."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Apply Now",
+    "fullName": "Full Name",
+    "country": "Country",
+    "email": "Email",
+    "phone": "Phone",
+    "position": "Desired Position",
+    "message": "Additional Information",
+    "submit": "Send Application"
+  },
+  "footer": {
+    "rights": "© 2025 HR Agency. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "contacts": "Contacts"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "ru": "Русский",
+    "bg": "Български"
+  }
+}

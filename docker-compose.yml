@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   postgres:
     image: postgres:17-alpine
@@ -17,7 +19,8 @@ services:
       start_period: 10s
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
     ports:
       - "8000:8000"
     volumes:
@@ -49,13 +52,12 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend:/app
-      - /app/node_modules
     environment:
       - VITE_API_URL=http://localhost:8000
     depends_on:
       backend:
         condition: service_healthy
-    command: npm run dev
+    command: sh -c "npm install && npm run dev"
 
 volumes:
   postgres_data:
