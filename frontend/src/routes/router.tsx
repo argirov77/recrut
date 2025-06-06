@@ -54,6 +54,10 @@ const routes = {
       path: 'admin',
       element: <AdminLogin />,
     },
+    {
+      path: 'admin/',
+      element: <AdminLogin />,
+    },
   ],
   protected: [
     {
@@ -65,7 +69,15 @@ const routes = {
       element: <JobAdmin />,
     },
     {
+      path: 'admin/jobs/',
+      element: <JobAdmin />,
+    },
+    {
       path: 'admin/forms',
+      element: <AdminForms />,
+    },
+    {
+      path: 'admin/forms/',
       element: <AdminForms />,
     },
   ],
