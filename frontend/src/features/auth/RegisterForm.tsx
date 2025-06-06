@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Suspense, cache } from 'react'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/input'
+import Button from '@/components/ui/Button'
+import Input from '@/components/ui/input'
 import {
   Card,
   CardContent,

@@ -50,35 +50,27 @@ const routes = {
       path: 'register',
       element: <Register />,
     },
-    {
-      path: 'admin',
-      element: <AdminLogin />,
-    },
-    {
-      path: 'admin/',
-      element: <AdminLogin />,
-    },
   ],
+  admin: {
+    public: {
+      index: true,
+      element: <AdminLogin />,
+    },
+    protected: [
+      {
+        path: 'jobs',
+        element: <JobAdmin />,
+      },
+      {
+        path: 'forms',
+        element: <AdminForms />,
+      },
+    ],
+  },
   protected: [
     {
       path: 'dashboard',
       element: <Dashboard />,
-    },
-    {
-      path: 'admin/jobs',
-      element: <JobAdmin />,
-    },
-    {
-      path: 'admin/jobs/',
-      element: <JobAdmin />,
-    },
-    {
-      path: 'admin/forms',
-      element: <AdminForms />,
-    },
-    {
-      path: 'admin/forms/',
-      element: <AdminForms />,
     },
   ],
 }
@@ -102,6 +94,21 @@ export const router = createBrowserRouter([
         ...route,
         element: withSuspense(route.element),
       })),
+
+      // Admin routes
+      {
+        path: 'admin',
+        children: [
+          {
+            index: true,
+            element: withSuspense(routes.admin.public.element),
+          },
+          ...routes.admin.protected.map((route) => ({
+            ...route,
+            element: withProtection(route.element),
+          })),
+        ],
+      },
 
       // Protected routes
       ...routes.protected.map((route) => ({

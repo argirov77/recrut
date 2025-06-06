@@ -3,7 +3,7 @@ import { AppProvider } from '../context/AppContext'
 import { Notification } from '../components/ui/Notification'
 import { ThemeToggle } from '../components/ui/ThemeToggle'
 import { useAuth } from '../context/AuthContext'
-import { Button } from '../components/ui/Button'
+import Button from '../components/ui/Button'
 
 const publicNavLinks = [
   { to: '/', label: 'Home' },
