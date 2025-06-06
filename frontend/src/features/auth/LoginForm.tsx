@@ -14,7 +14,11 @@ import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/context/AuthContext'
 import { useLoadingState } from '@/hooks/useLoadingState'
 
-function LoginFormContent() {
+interface LoginFormProps {
+  onSuccess?: () => void
+}
+
+function LoginFormContent({ onSuccess }: LoginFormProps) {
   const navigate = useNavigate()
   const { login } = useAuth()
   const { toast } = useToast()
@@ -36,7 +40,11 @@ function LoginFormContent() {
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
       })
-      navigate('/dashboard')
+      if (onSuccess) {
+        onSuccess()
+      } else {
+        navigate('/dashboard')
+      }
     } else {
       setError(result.error || 'An error occurred during login')
       toast({
@@ -99,10 +107,10 @@ function LoginFormContent() {
   )
 }
 
-export default function LoginForm() {
+export default function LoginForm({ onSuccess }: LoginFormProps) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <LoginFormContent />
+      <LoginFormContent onSuccess={onSuccess} />
     </Suspense>
   )
 }
