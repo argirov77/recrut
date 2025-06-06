@@ -5,6 +5,7 @@ from app.utils.logger import setup_logger
 from app.config import get_settings
 from urllib.parse import quote_plus
 from typing import Optional
+from sqlalchemy import select
 
 settings = get_settings()
 logger = setup_logger(__name__)
@@ -82,6 +83,25 @@ async def get_db() -> AsyncSession:
         await session.close()
 
 
+async def _create_default_admin() -> None:
+    """Create a default admin user if no users exist."""
+    from .models import User
+
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(select(User).limit(1))
+        if result.scalar_one_or_none():
+            return
+        admin = User(
+            email="admin@example.com",
+            username="admin",
+            role="admin",
+            is_superuser=True,
+        )
+        admin.set_password("admin")
+        session.add(admin)
+        await session.commit()
+
+
 async def init_db() -> None:
     """
     Initialize database tables and perform any startup database operations.
@@ -91,6 +111,7 @@ async def init_db() -> None:
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+        await _create_default_admin()
         logger.info("Database initialized successfully")
     except Exception as e:
         logger.error(f"Error initializing database: {str(e)}")

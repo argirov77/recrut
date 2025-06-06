@@ -128,6 +128,11 @@ fastapi-react-starter/
 
    The Swagger docs will be available at http://localhost:8000/docs
 
+   The first start creates an administrator account with:
+
+   - **Username:** `admin`
+   - **Password:** `admin`
+
 ### Automated Setup Scripts
 
 For your convenience, this project includes automated setup scripts for both Windows and Linux/Mac:
