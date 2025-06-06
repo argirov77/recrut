@@ -7,6 +7,7 @@ import { ProtectedRoute } from '../components/ProtectedRoute'
 const Home = lazy(() => import('../pages/Home'))
 const About = lazy(() => import('../pages/About'))
 const Dashboard = lazy(() => import('../pages/Dashboard'))
+const JobAdmin = lazy(() => import('../pages/JobAdmin'))
 const Login = lazy(() => import('../pages/Login'))
 const Register = lazy(() => import('../pages/Register'))
 
@@ -52,6 +53,10 @@ const routes = {
     {
       path: 'dashboard',
       element: <Dashboard />,
+    },
+    {
+      path: 'admin/jobs',
+      element: <JobAdmin />,
     },
   ],
 }
