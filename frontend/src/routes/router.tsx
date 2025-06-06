@@ -8,6 +8,8 @@ const Home = lazy(() => import('../pages/Home'))
 const About = lazy(() => import('../pages/About'))
 const Dashboard = lazy(() => import('../pages/Dashboard'))
 const JobAdmin = lazy(() => import('../pages/JobAdmin'))
+const AdminForms = lazy(() => import('../pages/AdminForms'))
+const AdminLogin = lazy(() => import('../pages/AdminLogin'))
 const Login = lazy(() => import('../pages/Login'))
 const Register = lazy(() => import('../pages/Register'))
 
@@ -48,6 +50,10 @@ const routes = {
       path: 'register',
       element: <Register />,
     },
+    {
+      path: 'admin',
+      element: <AdminLogin />,
+    },
   ],
   protected: [
     {
@@ -57,6 +63,10 @@ const routes = {
     {
       path: 'admin/jobs',
       element: <JobAdmin />,
+    },
+    {
+      path: 'admin/forms',
+      element: <AdminForms />,
     },
   ],
 }

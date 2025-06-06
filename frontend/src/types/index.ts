@@ -29,3 +29,4 @@ export interface ApiError {
   status_code: number
 }
 export type { Job } from './job'
+export type { ContactForm } from './contactForm'
