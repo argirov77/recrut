@@ -1,5 +1,5 @@
-export function StatusDot({ status }) {
-  const colors = {
+export function StatusDot({ status }: { status: 'healthy' | 'error' | 'loading' }) {
+  const colors: Record<'healthy' | 'error' | 'loading', string> = {
     healthy: 'bg-green-500',
     error: 'bg-red-500',
     loading: 'bg-gray-300 animate-pulse',

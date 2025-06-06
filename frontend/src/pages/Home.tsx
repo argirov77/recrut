@@ -4,7 +4,7 @@ import { CircleCheck, Sparkles } from 'lucide-react'
 import { ErrorBoundary } from '../features/health/ErrorBoundary'
 import { HealthStatus } from '../features/health/HealthStatus'
 import { LoadingStatus } from '../features/health/LoadingStatus'
-import { Button } from '../components/ui/Button'
+import Button from '../components/ui/Button'
 
 type FeatureItem = {
   id: string
@@ -38,12 +38,12 @@ export default function Home() {
 
       <div className="grid gap-6">
         <div
-          className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 
+          className="p-6 rounded-lg border border-gray-200 dark:border-gray-700
           bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all"
         >
           <div className="flex items-start space-x-4">
             <div
-              className="flex-shrink-0 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 
+              className="flex-shrink-0 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30
               text-blue-600 dark:text-blue-400"
             >
               <CircleCheck />
@@ -62,12 +62,12 @@ export default function Home() {
         </div>
 
         <div
-          className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 
+          className="p-6 rounded-lg border border-gray-200 dark:border-gray-700
           bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all"
         >
           <div className="flex items-start space-x-4">
             <div
-              className="flex-shrink-0 p-2 rounded-lg bg-green-50 dark:bg-green-900/30 
+              className="flex-shrink-0 p-2 rounded-lg bg-green-50 dark:bg-green-900/30
               text-green-600 dark:text-green-400"
             >
               <Sparkles />
