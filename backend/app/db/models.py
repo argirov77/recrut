@@ -38,3 +38,16 @@ class User(Base):
     def clear_reset_token(self):
         """Clear password reset token after use."""
         self.reset_token = None
+
+
+class Job(Base):
+    __tablename__ = "jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+    job_type = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    requirements = Column(String, nullable=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
