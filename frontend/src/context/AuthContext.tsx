@@ -1,5 +1,5 @@
-import { createContext, useContext, useReducer, ReactNode, useCallback } from 'react'
-import { AuthState, LoginCredentials, RegisterCredentials, AuthResult } from '@/types/auth'
+import { createContext, useContext, useReducer, ReactNode, useCallback, useEffect } from 'react'
+import { AuthState, LoginCredentials, RegisterCredentials, AuthResult, User } from '@/types/auth'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -8,12 +8,14 @@ export const AUTH_ACTIONS = {
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGOUT: 'LOGOUT',
   SET_LOADING: 'SET_LOADING',
+  SET_USER: 'SET_USER',
 } as const
 
 type AuthAction =
   | { type: typeof AUTH_ACTIONS.LOGIN_SUCCESS; payload: { token: string } }
   | { type: typeof AUTH_ACTIONS.LOGOUT }
   | { type: typeof AUTH_ACTIONS.SET_LOADING; payload: boolean }
+  | { type: typeof AUTH_ACTIONS.SET_USER; payload: User | null }
 
 const AuthStateContext = createContext<AuthState | null>(null)
 const AuthDispatchContext = createContext<{
@@ -50,6 +52,11 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         ...state,
         isLoading: action.payload,
       }
+    case AUTH_ACTIONS.SET_USER:
+      return {
+        ...state,
+        user: action.payload,
+      }
     default:
       return state
   }
@@ -61,6 +68,20 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(authReducer, getInitialState())
+
+  const fetchCurrentUser = useCallback(async (token: string) => {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res.ok) {
+        const data = (await res.json()) as User
+        dispatch({ type: AUTH_ACTIONS.SET_USER, payload: data })
+      }
+    } catch (error) {
+      console.error('Failed to fetch user', error)
+    }
+  }, [])
 
   const login = useCallback(async (credentials: LoginCredentials): Promise<AuthResult> => {
     dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true })
@@ -89,6 +110,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         type: AUTH_ACTIONS.LOGIN_SUCCESS,
         payload: { token: data.access_token },
       })
+
+      fetchCurrentUser(data.access_token)
 
       return { success: true, error: null }
     } catch (error) {
@@ -144,6 +167,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem('token')
     dispatch({ type: AUTH_ACTIONS.LOGOUT })
   }, [])
+
+  useEffect(() => {
+    if (state.token && !state.user) {
+      fetchCurrentUser(state.token)
+    }
+  }, [state.token, state.user, fetchCurrentUser])
 
   const value = {
     login,
