@@ -76,5 +76,10 @@
     "en": "English",
     "ru": "Русский",
     "bg": "Български"
+  },
+  "messengers": {
+    "title": "Свяжитесь с нами в мессенджерах",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   }
 }
