@@ -256,5 +256,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-#   r e c r u t  
+
+## Команда
+
+1. **Иван Иванов** — позвонить: +1234567890 (Viber, WhatsApp), email: ivan@example.com
+2. **Петр Петров** — позвонить: +1234567891 (Viber, WhatsApp), email: petr@example.com
+3. **Сидор Сидоров** — позвонить: +1234567892 (Viber, WhatsApp), email: sidor@example.com
  
