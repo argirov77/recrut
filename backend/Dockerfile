@@ -1,35 +1,54 @@
-FROM python:3.13-slim
+# backend/Dockerfile (алпайн-версия)
+FROM python:3.13-alpine AS base
+
+# build-time args
+ARG ADMIN_USERNAME=admin
+ARG ADMIN_EMAIL=admin@example.com
+
+# runtime env
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    ENVIRONMENT=development \
+    ADMIN_USERNAME=${ADMIN_USERNAME} \
+    ADMIN_EMAIL=${ADMIN_EMAIL}
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    libpq-dev \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
+# 1) обновляем систему и ставим dev-зависимости
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache \
+      build-base \
+      libpq \
+      libpq-dev \
+      curl \
+      postgresql-client \
+      musl-dev \
+      openssl-dev \
+    && rm -rf /var/cache/apk/*
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    ENVIRONMENT=development
-
-# Install Python dependencies
+# 2) обновляем pip и ставим Python-зависимости
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy the application
+# 3) копируем код
+COPY create_superuser.py .
 COPY . .
 
-# Create necessary directories
 RUN mkdir -p /app/logs/dev /app/logs/prod
 
-# Expose the port
 EXPOSE 8000
 
-# Add healthcheck
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/api/health || exit 1
+# 4) healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
+    CMD curl -f http://127.0.0.1:8000/api/health || exit 1
 
-# Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# 5) ENTRYPOINT: сперва создаём superuser, потом запускаем приложение
+ENTRYPOINT ["sh", "-c", "\
+    python create_superuser.py create-superuser \
+      --username \"$ADMIN_USERNAME\" \
+      --email \"$ADMIN_EMAIL\" \
+      --password \"$ADMIN_PASSWORD\" || true && \
+    python manage.py run \
+"]

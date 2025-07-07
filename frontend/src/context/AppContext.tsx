@@ -1,8 +1,14 @@
-import { createContext, useContext, useReducer, ReactNode, Dispatch } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  Dispatch,
+  useEffect,
+} from 'react'
 import { AppState, Theme, NotificationType } from '../types'
-import { AuthProvider } from './AuthContext'
 
-// Action types
+// ==== Типы экшенов ====
 export const ACTIONS = {
   SET_THEME: 'SET_THEME',
   SET_USER_PREFERENCES: 'SET_USER_PREFERENCES',
@@ -28,21 +34,24 @@ interface UpdateNotificationAction {
   }
 }
 
-type Action = SetThemeAction | SetUserPreferencesAction | UpdateNotificationAction
+type Action =
+  | SetThemeAction
+  | SetUserPreferencesAction
+  | UpdateNotificationAction
 
-// Get initial theme from localStorage or system preference
+// ==== Инициализация темы ====
 const getInitialTheme = (): Theme => {
   if (typeof window !== 'undefined') {
-    const savedTheme = localStorage.getItem('theme') as Theme | null
-    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-      return savedTheme
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const stored = localStorage.getItem('theme') as Theme | null
+    if (stored === 'light' || stored === 'dark') return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'
   }
   return 'light'
 }
 
-// Initial state
+// ==== Начальное состояние ====
 const initialState: AppState = {
   theme: getInitialTheme(),
   userPreferences: {},
@@ -53,20 +62,13 @@ const initialState: AppState = {
   },
 }
 
-// Reducer
+// ==== Редьюсер ====
 function appReducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case ACTIONS.SET_THEME: {
       const newTheme = action.payload
       localStorage.setItem('theme', newTheme)
-      // Update DOM synchronously with state change
-      const root = window.document.documentElement
-      root.classList.remove('light', 'dark')
-      root.classList.add(newTheme)
-      return {
-        ...state,
-        theme: newTheme,
-      }
+      return { ...state, theme: newTheme }
     }
     case ACTIONS.SET_USER_PREFERENCES:
       return {
@@ -85,92 +87,73 @@ function appReducer(state: AppState, action: Action): AppState {
         },
       }
     default:
-      throw new Error(`Unknown actionS`)
+      return state
   }
 }
 
-interface AppProviderProps {
-  children: ReactNode
-}
+// ==== Контексты ====
+const AppContext = createContext<AppState | null>(null)
+const AppDispatchContext = createContext<Dispatch<Action> | null>(null)
 
-export function AppProvider({ children }: AppProviderProps) {
+// ==== Провайдер ====
+export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState)
 
-  // Initialize theme class on mount
-  if (typeof window !== 'undefined') {
+  // Синхронизируем класс темы на <html> при изменении
+  useEffect(() => {
     const root = window.document.documentElement
     root.classList.remove('light', 'dark')
     root.classList.add(state.theme)
-  }
+  }, [state.theme])
 
   return (
     <AppContext.Provider value={state}>
       <AppDispatchContext.Provider value={dispatch}>
-        <AuthProvider>{children}</AuthProvider>
+        {children}
       </AppDispatchContext.Provider>
     </AppContext.Provider>
   )
 }
 
-// Custom hooks for using the context
+// ==== Хуки ====
 export function useAppState(): AppState {
-  const context = useContext(AppContext)
-  if (context === null) {
-    throw new Error('useAppState must be used within an AppProvider')
-  }
-  return context
+  const ctx = useContext(AppContext)
+  if (!ctx) throw new Error('useAppState must be used inside AppProvider')
+  return ctx
 }
 
 export function useAppDispatch(): Dispatch<Action> {
-  const context = useContext(AppDispatchContext)
-  if (context === null) {
-    throw new Error('useAppDispatch must be used within an AppProvider')
-  }
-  return context
+  const ctx = useContext(AppDispatchContext)
+  if (!ctx)
+    throw new Error('useAppDispatch must be used inside AppProvider')
+  return ctx
 }
 
-// Action creators
-export function showNotification(
-  dispatch: Dispatch<Action>,
-  message: string,
-  type: NotificationType = 'info'
-): void {
-  dispatch({
-    type: ACTIONS.UPDATE_NOTIFICATION,
-    payload: {
-      message,
-      type,
-      show: true,
-    },
-  })
-
-  // Auto-hide notification after 5 seconds
-  setTimeout(() => {
-    dispatch({
-      type: ACTIONS.UPDATE_NOTIFICATION,
-      payload: {
-        show: false,
-      },
-    })
-  }, 5000)
-}
-
-export function setTheme(dispatch: Dispatch<Action>, theme: Theme): void {
-  dispatch({
-    type: ACTIONS.SET_THEME,
-    payload: theme,
-  })
+// ==== Экшн-криэйторы ====
+export function setTheme(dispatch: Dispatch<Action>, theme: Theme) {
+  dispatch({ type: ACTIONS.SET_THEME, payload: theme })
 }
 
 export function setUserPreferences(
   dispatch: Dispatch<Action>,
-  preferences: Record<string, unknown>
-): void {
-  dispatch({
-    type: ACTIONS.SET_USER_PREFERENCES,
-    payload: preferences,
-  })
+  prefs: Record<string, unknown>
+) {
+  dispatch({ type: ACTIONS.SET_USER_PREFERENCES, payload: prefs })
 }
 
-const AppContext = createContext<AppState | null>(null)
-const AppDispatchContext = createContext<Dispatch<Action> | null>(null)
+export function showNotification(
+  dispatch: Dispatch<Action>,
+  message: string,
+  type: NotificationType = 'info'
+) {
+  dispatch({
+    type: ACTIONS.UPDATE_NOTIFICATION,
+    payload: { message, type, show: true },
+  })
+  setTimeout(() => {
+    dispatch({
+      type: ACTIONS.UPDATE_NOTIFICATION,
+      payload: { show: false },
+    })
+  }, 5000)
+}

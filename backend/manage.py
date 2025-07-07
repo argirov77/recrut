@@ -60,5 +60,47 @@ def reset_db():
     typer.echo("Database reset successfully.")
 
 
+@app.command()
+def create_superuser(
+    username: str = typer.Option(
+        None, "--username", envvar="ADMIN_USERNAME", help="Имя суперпользователя"
+    ),
+    email: str = typer.Option(
+        None, "--email",    envvar="ADMIN_EMAIL",    help="Email суперпользователя"
+    ),
+    password: str = typer.Option(
+        None, "--password", envvar="ADMIN_PASSWORD", help="Пароль суперпользователя"
+    ),
+):
+    """
+    Создать суперпользователя (role='admin', is_superuser=True).
+    По умолчанию берёт переменные ADM_IN_… из окружения.
+    """
+    # создаём таблицы, если ещё нет
+    Base.metadata.create_all(bind=engine)
+
+    username = username or "admin"
+    email = email or "admin@example.com"
+    password = password or "changeme"
+
+    db = SessionLocal()
+    exists = db.query(User).filter_by(username=username).first()
+    if exists:
+        typer.secho(f"Superuser '{username}' уже существует, пропускаем.", fg=typer.colors.YELLOW)
+    else:
+        u = User(
+            username=username,
+            email=email,
+            role="admin",
+            is_superuser=True,
+            is_active=True,
+            email_verified=True,
+        )
+        u.hashed_password = pwd_context.hash(password)
+        db.add(u)
+        db.commit()
+        typer.secho(f"Superuser '{username}' создан.", fg=typer.colors.GREEN)
+    db.close()
+
 if __name__ == "__main__":
     app()

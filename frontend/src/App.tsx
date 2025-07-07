@@ -1,4 +1,8 @@
+// frontend/src/App.tsx
 import { useEffect } from 'react'
+import { BrowserRouter } from 'react-router-dom'
+
+// Ваши компоненты
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -6,30 +10,31 @@ import Services from './components/Services'
 import JobList from './components/JobList'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
-import Footer from './components/Footer'
 import MessengerContacts from './components/MessengerContacts'
+import Footer from './components/Footer'
 
 export default function App() {
   useEffect(() => {
-    // Включаем плавное скроллирование по якорям (anchor links)
     document.documentElement.style.scrollBehavior = 'smooth'
   }, [])
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
+    <BrowserRouter>
+      <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+        <Navbar />
 
-      <main className="flex-grow">
-        <Hero />
-        <About />
-        <Services />
-        <JobList />
-        <Testimonials />
-        <Contact />
-        <MessengerContacts />
-      </main>
+        <main className="flex-1">
+          <Hero />
+          <About />
+          <Services />
+          <JobList />
+          <Testimonials />
+          <Contact />
+          <MessengerContacts />
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </BrowserRouter>
   )
 }

@@ -1,10 +1,7 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:17-alpine
-    ports:
-      - "5432:5432"
+    restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -21,6 +18,7 @@ services:
   backend:
     build:
       context: ./backend
+    restart: unless-stopped
     ports:
       - "8000:8000"
     volumes:
@@ -48,10 +46,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    restart: unless-stopped
     ports:
       - "5173:5173"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     environment:
       - VITE_API_URL=http://localhost:8000
     depends_on:

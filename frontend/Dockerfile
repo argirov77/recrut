@@ -1,6 +1,6 @@
 FROM node:22-slim
-
-WORKDIR /app
+RUN mkdir /app
+WORKDIR /frontend
 
 # Copy package files
 COPY package*.json ./

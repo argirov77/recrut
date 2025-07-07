@@ -1,126 +1,72 @@
+// frontend/src/routes/router.tsx
+import React, { Suspense, lazy } from 'react'
 import { createBrowserRouter, redirect } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
-import RootLayout from '../layouts/RootLayout'
+
+// Layout’ы
+import ClientLayout from '../layouts/ClientLayout'
+import AdminLayout from '../layouts/AdminLayout'
+
+// Защищённый маршрут берём как именованный экспорт
 import { ProtectedRoute } from '../components/ProtectedRoute'
 
-// Lazy load components
+// Клиентская «одностраничка» (Home рендерит всё на одном экране)
 const Home = lazy(() => import('../pages/Home'))
-const About = lazy(() => import('../pages/About'))
-const Dashboard = lazy(() => import('../pages/Dashboard'))
-const JobAdmin = lazy(() => import('../pages/JobAdmin'))
-const AdminForms = lazy(() => import('../pages/AdminForms'))
+
+// Админские страницы
 const AdminLogin = lazy(() => import('../pages/AdminLogin'))
-const Login = lazy(() => import('../pages/Login'))
-const Register = lazy(() => import('../pages/Register'))
+const Register   = lazy(() => import('../pages/Register'))
+const Dashboard  = lazy(() => import('../pages/Dashboard'))
+const JobAdmin   = lazy(() => import('../pages/JobAdmin'))
+const AdminForms = lazy(() => import('../pages/AdminForms'))
 
-// Error boundary component
-function ErrorBoundary() {
+// Обёртка для Suspense
+function withSuspense(el: React.ReactNode) {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-red-600 mb-4">Oops!</h1>
-      <p className="text-lg">Something went wrong. Please try again.</p>
-    </div>
+    <Suspense fallback={<div className="py-20 text-center">Loading…</div>}>
+      {el}
+    </Suspense>
   )
 }
 
-// Loading component
-function PageLoader() {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-    </div>
-  )
+// Обёртка для защищённых админ-роутов
+function withAuth(el: React.ReactNode) {
+  return <ProtectedRoute>{withSuspense(el)}</ProtectedRoute>
 }
-
-const routes = {
-  public: [
-    {
-      index: true,
-      element: <Home />,
-    },
-    {
-      path: 'about',
-      element: <About />,
-    },
-    {
-      path: 'login',
-      element: <Login />,
-    },
-    {
-      path: 'register',
-      element: <Register />,
-    },
-  ],
-  admin: {
-    public: {
-      index: true,
-      element: <AdminLogin />,
-    },
-    protected: [
-      {
-        path: 'jobs',
-        element: <JobAdmin />,
-      },
-      {
-        path: 'forms',
-        element: <AdminForms />,
-      },
-    ],
-  },
-  protected: [
-    {
-      path: 'dashboard',
-      element: <Dashboard />,
-    },
-  ],
-}
-
-const withSuspense = (element: React.ReactNode) => (
-  <Suspense fallback={<PageLoader />}>{element}</Suspense>
-)
-
-const withProtection = (element: React.ReactNode) => (
-  <ProtectedRoute>{withSuspense(element)}</ProtectedRoute>
-)
 
 export const router = createBrowserRouter([
+  // ==== клиентская часть ====
   {
     path: '/',
-    element: <RootLayout />,
-    errorElement: <ErrorBoundary />,
+    element: <ClientLayout />,
     children: [
-      // Public routes
-      ...routes.public.map((route) => ({
-        ...route,
-        element: withSuspense(route.element),
-      })),
-
-      // Admin routes
       {
-        path: 'admin',
-        children: [
-          {
-            index: true,
-            element: withSuspense(routes.admin.public.element),
-          },
-          ...routes.admin.protected.map((route) => ({
-            ...route,
-            element: withProtection(route.element),
-          })),
-        ],
+        index: true,
+        element: withSuspense(<Home />),
       },
-
-      // Protected routes
-      ...routes.protected.map((route) => ({
-        ...route,
-        element: withProtection(route.element),
-      })),
-
-      // Catch-all route
       {
         path: '*',
         loader: () => redirect('/'),
       },
+    ],
+  },
+
+  // ==== админская часть ====
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    children: [
+      // /admin или /admin/login → страница входа
+      { index: true,   element: withSuspense(<AdminLogin />) },
+      { path: 'login', element: withSuspense(<AdminLogin />) },
+      { path: 'register', element: withSuspense(<Register />) },
+
+      // защищённые админ-роуты
+      { path: 'dashboard', element: withAuth(<Dashboard />) },
+      { path: 'jobs',      element: withAuth(<JobAdmin />) },
+      { path: 'forms',     element: withAuth(<AdminForms />) },
+
+      // всё остальное под /admin → обратно на логин
+      { path: '*', loader: () => redirect('/admin') },
     ],
   },
 ])
