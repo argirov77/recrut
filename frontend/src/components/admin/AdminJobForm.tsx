@@ -9,13 +9,22 @@ import Textarea from '../ui/Textarea'
 interface Job {
   id?: number
   title: string
+  location: string
+  job_type: string
   description: string
+  requirements: string
 }
 
 export default function AdminJobForm() {
-  const { id } = useParams<{ id: string }>()
-  const editMode = Boolean(id)
-  const [job, setJob] = useState<Job>({ title: '', description: '' })
+  const { jobId } = useParams<{ jobId: string }>()
+  const editMode = Boolean(jobId)
+  const [job, setJob] = useState<Job>({
+    title: '',
+    location: '',
+    job_type: '',
+    description: '',
+    requirements: '',
+  })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string|null>(null)
   const navigate = useNavigate()
@@ -27,7 +36,7 @@ export default function AdminJobForm() {
       try {
         const API = import.meta.env.VITE_API_URL || ''
         const token = localStorage.getItem('token') || ''
-        const res = await fetch(`${API}/api/jobs/${id}`, {
+        const res = await fetch(`${API}/api/jobs/${jobId}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (!res.ok) throw new Error(await res.text())
@@ -36,7 +45,7 @@ export default function AdminJobForm() {
         setError(err.message)
       }
     })()
-  }, [editMode, id])
+  }, [editMode, jobId])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,8 +54,8 @@ export default function AdminJobForm() {
     try {
       const API = import.meta.env.VITE_API_URL || ''
       const token = localStorage.getItem('token') || ''
-      const url = editMode 
-        ? `${API}/api/jobs/${id}` 
+      const url = editMode
+        ? `${API}/api/jobs/${jobId}`
         : `${API}/api/jobs`
       const method = editMode ? 'PUT' : 'POST'
       const res = await fetch(url, {
@@ -85,10 +94,32 @@ export default function AdminJobForm() {
           />
         </div>
         <div>
+          <label className="block mb-1 font-medium">Location</label>
+          <Input
+            value={job.location}
+            onChange={e => setJob(j => ({ ...j, location: e.target.value }))}
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Job Type</label>
+          <Input
+            value={job.job_type}
+            onChange={e => setJob(j => ({ ...j, job_type: e.target.value }))}
+          />
+        </div>
+        <div>
           <label className="block mb-1 font-medium">Description</label>
           <Textarea
             value={job.description}
             onChange={e => setJob(j => ({ ...j, description: e.target.value }))}
+            rows={5}
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Requirements</label>
+          <Textarea
+            value={job.requirements}
+            onChange={e => setJob(j => ({ ...j, requirements: e.target.value }))}
             rows={5}
           />
         </div>
