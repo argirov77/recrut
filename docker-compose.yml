@@ -31,6 +31,7 @@ services:
       - DB_PORT=5432
       - CORS_ORIGINS=["http://localhost:5173"]
       - ENVIRONMENT=development
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-qwerty1234}
     depends_on:
       postgres:
         condition: service_healthy

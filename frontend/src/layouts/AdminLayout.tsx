@@ -1,77 +1,40 @@
 // frontend/src/layouts/AdminLayout.tsx
-
+import React from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { AppProvider } from '../context/AppContext'
-import { Notification } from '../components/ui/Notification'
-import { ThemeToggle } from '../components/ui/ThemeToggle'
 import { useAuth } from '../context/AuthContext'
 import Button from '../components/ui/Button'
-
-const adminNavLinks = [
-  { to: '/admin/dashboard', label: 'Dashboard' },
-  { to: '/admin/jobs', label: 'Jobs' },
-  { to: '/admin/forms', label: 'Applications' },
-] as const
 
 export default function AdminLayout() {
   const navigate = useNavigate()
   const { isAuthenticated, logout } = useAuth()
-  const currentYear = new Date().getFullYear()
-
-  const linkClasses =
-    'px-3 py-2 rounded-md text-sm font-medium ' +
-    'text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300'
-
-  const handleLogout = () => {
-    logout()
-    navigate('/admin') // вернём на страницу логина
-  }
 
   return (
-    <AppProvider>
-      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen flex">
+      {/* Админский сайдбар */}
+      <aside className="w-60 bg-gray-100 p-4 flex flex-col justify-between">
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Admin Panel</h2>
+          <ul className="space-y-2">
+            <li><Link to="dashboard" className="hover:underline">Dashboard</Link></li>
+            <li><Link to="jobs"      className="hover:underline">Jobs</Link></li>
+            <li><Link to="jobs/new"  className="hover:underline">+ New Job</Link></li>
+            <li><Link to="applicants" className="hover:underline">Applicants</Link></li>
+          </ul>
+        </div>
+        {isAuthenticated && (
+          <Button variant="ghost" onClick={() => {
+            logout()
+            navigate('/admin/login')
+          }}>
+            Logout
+          </Button>
+        )}
+      </aside>
 
-        {/* Админ-Навигация */}
-        <nav className="bg-white dark:bg-gray-800 shadow-sm">
-          <div className="container mx-auto px-6 flex justify-between items-center h-16">
-            <div className="flex space-x-4">
-              {adminNavLinks.map(({ to, label }) => (
-                <Link key={to} to={to} className={linkClasses}>
-                  {label}
-                </Link>
-              ))}
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              {isAuthenticated ? (
-                <Button variant="ghost" onClick={handleLogout} className={linkClasses}>
-                  Logout
-                </Button>
-              ) : (
-                <Link to="/admin" className={linkClasses}>
-                  Login
-                </Link>
-              )}
-            </div>
-          </div>
-        </nav>
-
-        {/* Контент админки */}
-        <main className="flex-1 container mx-auto px-6 py-8">
-          <Outlet />
-        </main>
-
-        {/* Футер админки */}
-        <footer className="bg-white dark:bg-gray-800 shadow-sm transition-colors">
-          <div className="container mx-auto px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-            © {currentYear} Admin Panel. All rights reserved.
-          </div>
-        </footer>
-
-        {/* Глобальные уведомления */}
-        <Notification />
-      </div>
-    </AppProvider>
+      {/* Контент админки */}
+      <main className="flex-1 bg-white p-6">
+        <Outlet />
+      </main>
+    </div>
   )
 }

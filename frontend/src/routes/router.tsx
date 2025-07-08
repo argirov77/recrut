@@ -1,71 +1,124 @@
 // frontend/src/routes/router.tsx
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense } from 'react'
 import { createBrowserRouter, redirect } from 'react-router-dom'
 
 // Layout’ы
 import ClientLayout from '../layouts/ClientLayout'
-import AdminLayout from '../layouts/AdminLayout'
+import AdminLayout  from '../layouts/AdminLayout'
 
-// Защищённый маршрут берём как именованный экспорт
+// ProtectedRoute — именованный экспорт
 import { ProtectedRoute } from '../components/ProtectedRoute'
 
-// Клиентская «одностраничка» (Home рендерит всё на одном экране)
-const Home = lazy(() => import('../pages/Home'))
+// Клиентские страницы (из папки pages)
+const Home      = React.lazy(() => import('../pages/Home'))
+const About     = React.lazy(() => import('../pages/About'))
+// при необходимости:
+// const Services  = React.lazy(() => import('../pages/Services'))
+// const Jobs      = React.lazy(() => import('../pages/JobList'))
+// const Contact   = React.lazy(() => import('../pages/Contact'))
 
-// Админские страницы
-const AdminLogin = lazy(() => import('../pages/AdminLogin'))
-const Register   = lazy(() => import('../pages/Register'))
-const Dashboard  = lazy(() => import('../pages/Dashboard'))
-const JobAdmin   = lazy(() => import('../pages/JobAdmin'))
-const AdminForms = lazy(() => import('../pages/AdminForms'))
+// Админские страницы (из папки pages)
+const AdminLogin   = React.lazy(() => import('../pages/AdminLogin'))
+const Register     = React.lazy(() => import('../pages/Register'))
+const Dashboard    = React.lazy(() => import('../pages/Dashboard'))
+const JobAdmin     = React.lazy(() => import('../pages/JobAdmin'))
+const AdminForms   = React.lazy(() => import('../pages/AdminForms'))
 
-// Обёртка для Suspense
-function withSuspense(el: React.ReactNode) {
-  return (
-    <Suspense fallback={<div className="py-20 text-center">Loading…</div>}>
-      {el}
-    </Suspense>
-  )
-}
+// Новые админские компоненты
+const AdminJobForm     = React.lazy(() => import('../components/admin/AdminJobForm'))
+const AdminApplicants  = React.lazy(() => import('../components/admin/AdminApplicants'))
 
-// Обёртка для защищённых админ-роутов
-function withAuth(el: React.ReactNode) {
-  return <ProtectedRoute>{withSuspense(el)}</ProtectedRoute>
-}
+/** Обёртка для Suspense */
+const withSuspense = (el: React.ReactElement) => (
+  <Suspense fallback={<div className="py-20 text-center">Loading…</div>}>
+    {el}
+  </Suspense>
+)
 
 export const router = createBrowserRouter([
-  // ==== клиентская часть ====
+  // ========== Клиентская часть ==========
   {
     path: '/',
     element: <ClientLayout />,
     children: [
-      {
-        index: true,
-        element: withSuspense(<Home />),
-      },
-      {
-        path: '*',
-        loader: () => redirect('/'),
-      },
+      { index: true,    element: withSuspense(<Home />) },
+      { path: 'about',  element: withSuspense(<About />) },
+      // { path: 'services', element: withSuspense(<Services />) },
+      // { path: 'jobs',     element: withSuspense(<Jobs />) },
+      // { path: 'contact',  element: withSuspense(<Contact />) },
+      { path: '*', loader: () => redirect('/') },
     ],
   },
 
-  // ==== админская часть ====
+  // ========== Админская часть ==========
   {
     path: '/admin',
     element: <AdminLayout />,
     children: [
-      // /admin или /admin/login → страница входа
-      { index: true,   element: withSuspense(<AdminLogin />) },
-      { path: 'login', element: withSuspense(<AdminLogin />) },
+      // /admin или /admin/login → логин
+      { index: true,      element: withSuspense(<AdminLogin />) },
+      { path: 'login',    element: withSuspense(<AdminLogin />) },
       { path: 'register', element: withSuspense(<Register />) },
 
-      // защищённые админ-роуты
-      { path: 'dashboard', element: withAuth(<Dashboard />) },
-      { path: 'jobs',      element: withAuth(<JobAdmin />) },
-      { path: 'forms',     element: withAuth(<AdminForms />) },
+      // защищённый дашборд
+      {
+        path: 'dashboard',
+        element: withSuspense(
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
 
-      // всё остальное под /admin → обратно на логин
+      // список вакансий
+      {
+        path: 'jobs',
+        element: withSuspense(
+          <ProtectedRoute>
+            <JobAdmin />
+          </ProtectedRoute>
+        ),
+      },
+      // форма создания вакансии
+      {
+        path: 'jobs/new',
+        element: withSuspense(
+          <ProtectedRoute>
+            <AdminJobForm />
+          </ProtectedRoute>
+        ),
+      },
+      // форма редактирования вакансии
+      {
+        path: 'jobs/:jobId/edit',
+        element: withSuspense(
+          <ProtectedRoute>
+            <AdminJobForm />
+          </ProtectedRoute>
+        ),
+      },
+
+      // управление заявками
+      {
+        path: 'applicants',
+        element: withSuspense(
+          <ProtectedRoute>
+            <AdminApplicants />
+          </ProtectedRoute>
+        ),
+      },
+
+      // работа с формами (если нужен список, он в AdminForms)
+      {
+        path: 'forms',
+        element: withSuspense(
+          <ProtectedRoute>
+            <AdminForms />
+          </ProtectedRoute>
+        ),
+      },
+
+      // всё остальное → /admin (логин)
       { path: '*', loader: () => redirect('/admin') },
     ],
   },

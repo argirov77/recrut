@@ -1,51 +1,84 @@
-# backend/create_superuser.py
-
+#!/usr/bin/env python
 import os
-import asyncio
+import sys
+import argparse
 
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.db.database import get_database_url, create_engine_with_retry
-from app.db.models import User
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-async def main():
-    # Берём переменные окружения
-    username = os.getenv("ADMIN_USERNAME")
-    email    = os.getenv("ADMIN_EMAIL")
-    password = os.getenv("ADMIN_PASSWORD")
+from passlib.context import CryptContext
 
-    # Создаём Асинхронный движок и сессию
-    engine = create_engine_with_retry(get_database_url())
-    AsyncSessionLocal = sessionmaker(
-        engine, class_=AsyncSession, expire_on_commit=False
+# Импортируете Base и модель User из вашего приложения
+from app.db.database import Base
+from app.db.models import User
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def get_sync_database_url() -> str:
+    """
+    Собираем синхронный URL к базе из переменных окружения.
+    """
+    user = os.getenv("DB_USER", "postgres")
+    pwd  = os.getenv("DB_PASSWORD", "postgres")
+    host = os.getenv("DB_HOST", "postgres")
+    port = os.getenv("DB_PORT", "5432")
+    name = os.getenv("DB_NAME", "fastapi_db")
+    return f"postgresql://{user}:{pwd}@{host}:{port}/{name}"
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Создать суперпользователя в БД"
     )
+    parser.add_argument(
+        "--username", required=True, help="Имя пользователя (username)"
+    )
+    parser.add_argument(
+        "--email", required=True, help="Email суперпользователя"
+    )
+    parser.add_argument(
+        "--password", required=True, help="Пароль суперпользователя"
+    )
+    args = parser.parse_args()
 
-    async with AsyncSessionLocal() as session:
-        # Проверяем, есть ли уже пользователь с таким username
-        result = await session.execute(
-            select(User).where(User.username == username)
+    db_url = get_sync_database_url()
+    engine = create_engine(db_url, echo=False)
+
+    # Если таблицы ещё нет — создаём её
+    Base.metadata.create_all(bind=engine)
+
+    SessionLocal = sessionmaker(bind=engine)
+    session = SessionLocal()
+
+    try:
+        exists = session.query(User).filter(User.email == args.email).first()
+        if exists:
+            print(f"Суперпользователь с email={args.email} уже есть (id={exists.id})")
+            return
+
+        # Создаём нового пользователя
+        user = User(
+            username=args.username,
+            email=args.email,
+            role="admin",
+            is_superuser=True,
+            is_active=True,
+            email_verified=True,
         )
-        existing = result.scalar_one_or_none()
+        # Хешируем пароль
+        user.hashed_password = pwd_context.hash(args.password)
 
-        if existing:
-            print(f"⚠️  Superuser '{username}' already exists, skipping.")
-        else:
-            # Создаём нового и помечаем is_superuser=True
-            user = User(
-                username=username,
-                email=email,
-                role="admin",
-                is_superuser=True,
-                is_active=True,
-                email_verified=True,
-            )
-            user.set_password(password)
+        session.add(user)
+        session.commit()
+        print(f"Суперпользователь {args.email} создан (id={user.id})")
 
-            session.add(user)
-            await session.commit()
-            print(f"✅  Superuser '{username}' created.")
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

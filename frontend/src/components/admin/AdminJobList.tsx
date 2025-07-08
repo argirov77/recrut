@@ -1,57 +1,88 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+// frontend/src/components/admin/AdminJobList.tsx
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import Button from '../ui/Button'
 
+// тип вакансии
 interface Job {
   id: number
   title: string
-  location: string
-  job_type: string
-  created_at: string
+  description: string
 }
 
 export default function AdminJobList() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    axios
-      .get<Job[]>('/api/admin/jobs')
-      .then((res) => setJobs(res.data))
-      .catch(() => setError('Failed to load jobs'))
-      .finally(() => setLoading(false))
+    const load = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        // подхватываем из .env
+        const API = import.meta.env.VITE_API_URL || ''
+        const token = localStorage.getItem('token') || ''
+
+        const res = await fetch(`${API}/api/jobs`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+
+        if (!res.ok) {
+          // если не 2xx — пробуем прочитать текст ошибки
+          const text = await res.text()
+          throw new Error(
+            `Server responded ${res.status}: ${text || res.statusText}`
+          )
+        }
+
+        // теперь точно можно парсить JSON
+        const data = (await res.json()) as Job[]
+        setJobs(data)
+      } catch (err: any) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    load()
   }, [])
 
-  if (loading) return <p>Loading jobs…</p>
-  if (error) return <p className="text-red-500">{error}</p>
+  if (loading) return <p className="p-6">Loading…</p>
+  if (error)
+    return (
+      <p className="p-6 text-red-600">
+        <strong>Error:</strong> {error}
+      </p>
+    )
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Jobs</h2>
-      <table className="min-w-full bg-white dark:bg-gray-800">
-        <thead>
-          <tr>
-            <th className="px-4 py-2 text-left">ID</th>
-            <th className="px-4 py-2 text-left">Title</th>
-            <th className="px-4 py-2 text-left">Location</th>
-            <th className="px-4 py-2 text-left">Type</th>
-            <th className="px-4 py-2 text-left">Created</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold">Jobs</h2>
+        <Button onClick={() => navigate('/admin/jobs/new')}>
+          New Job
+        </Button>
+      </div>
+
+      {jobs.length === 0 ? (
+        <p>No jobs found.</p>
+      ) : (
+        <ul className="space-y-3">
           {jobs.map((job) => (
-            <tr key={job.id} className="border-t">
-              <td className="px-4 py-2">{job.id}</td>
-              <td className="px-4 py-2">{job.title}</td>
-              <td className="px-4 py-2">{job.location}</td>
-              <td className="px-4 py-2">{job.job_type}</td>
-              <td className="px-4 py-2">
-                {new Date(job.created_at).toLocaleDateString()}
-              </td>
-            </tr>
+            <li
+              key={job.id}
+              className="border rounded p-4 hover:shadow cursor-pointer"
+              onClick={() => navigate(`/admin/jobs/${job.id}/edit`)}
+            >
+              <h3 className="font-medium">{job.title}</h3>
+              <p className="text-gray-600">{job.description}</p>
+            </li>
           ))}
-        </tbody>
-      </table>
+        </ul>
+      )}
     </div>
   )
 }

@@ -1,57 +1,72 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+// frontend/src/components/admin/AdminApplicants.tsx
+import { useState, useEffect } from 'react'
 
-interface Application {
+interface Applicant {
   id: number
-  job_id: number
-  applicant_name: string
+  name: string
   email: string
+  message: string
   submitted_at: string
 }
 
 export default function AdminApplicants() {
-  const [apps, setApps] = useState<Application[]>([])
+  const [apps, setApps] = useState<Applicant[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string|null>(null)
 
   useEffect(() => {
-    axios
-      .get<Application[]>('/api/admin/applications')
-      .then((res) => setApps(res.data))
-      .catch(() => setError('Failed to load applications'))
-      .finally(() => setLoading(false))
+    (async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const API = import.meta.env.VITE_API_URL || ''
+        const token = localStorage.getItem('token') || ''
+        const res = await fetch(`${API}/api/forms`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        if (!res.ok) {
+          throw new Error(`Server ${res.status}: ${await res.text()}`)
+        }
+        setApps(await res.json())
+      } catch (err: any) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    })()
   }, [])
 
-  if (loading) return <p>Loading applications…</p>
-  if (error) return <p className="text-red-500">{error}</p>
+  if (loading) return <p className="p-6">Loading…</p>
+  if (error)
+    return <p className="p-6 text-red-600"><strong>Error:</strong> {error}</p>
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Applicants</h2>
-      <table className="min-w-full bg-white dark:bg-gray-800">
-        <thead>
-          <tr>
-            <th className="px-4 py-2 text-left">ID</th>
-            <th className="px-4 py-2 text-left">Name</th>
-            <th className="px-4 py-2 text-left">Email</th>
-            <th className="px-4 py-2 text-left">Job ID</th>
-            <th className="px-4 py-2 text-left">Submitted</th>
-          </tr>
-        </thead>
-        <tbody>
-          {apps.map((app) => (
-            <tr key={app.id} className="border-t">
-              <td className="px-4 py-2">{app.id}</td>
-              <td className="px-4 py-2">{app.applicant_name}</td>
-              <td className="px-4 py-2">{app.email}</td>
-              <td className="px-4 py-2">{app.job_id}</td>
-              <td className="px-4 py-2">
-                {new Date(app.submitted_at).toLocaleDateString()}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="p-6 space-y-4">
+      <h2 className="text-2xl font-semibold">Applicants ({apps.length})</h2>
+      {apps.length === 0
+        ? <p>No applications yet.</p>
+        : (
+          <table className="min-w-full table-auto border">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Message</th>
+                <th className="px-4 py-2">Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {apps.map(a => (
+                <tr key={a.id} className="border-t">
+                  <td className="px-4 py-2">{a.name}</td>
+                  <td className="px-4 py-2">{a.email}</td>
+                  <td className="px-4 py-2">{a.message}</td>
+                  <td className="px-4 py-2">{new Date(a.submitted_at).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
     </div>
   )
 }

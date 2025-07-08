@@ -1,20 +1,15 @@
-import { Navigate } from 'react-router-dom'
-import { useAuth } from '@/context/AuthContext'
-import { PageLoader } from './ui/PageLoader'
+// frontend/src/components/ProtectedRoute.tsx
+import React from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
-interface ProtectedRouteProps {
-  children: React.ReactNode
-}
-
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth()
-
-  if (isLoading) {
-    return <PageLoader />
-  }
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth()
+  const location = useLocation()
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
+    // не авторизованы — на login
+    return <Navigate to="/admin/login" state={{ from: location }} replace />
   }
 
   return <>{children}</>
