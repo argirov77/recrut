@@ -3,10 +3,13 @@ import { useState, useEffect } from 'react'
 
 interface Applicant {
   id: number
-  name: string
+  full_name: string
+  country: string
   email: string
-  message: string
-  submitted_at: string
+  phone: string
+  position?: string | null
+  message?: string | null
+  created_at: string
 }
 
 export default function AdminApplicants() {
@@ -50,7 +53,10 @@ export default function AdminApplicants() {
             <thead>
               <tr className="bg-gray-200">
                 <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Country</th>
                 <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Phone</th>
+                <th className="px-4 py-2">Position</th>
                 <th className="px-4 py-2">Message</th>
                 <th className="px-4 py-2">Submitted</th>
               </tr>
@@ -58,10 +64,13 @@ export default function AdminApplicants() {
             <tbody>
               {apps.map(a => (
                 <tr key={a.id} className="border-t">
-                  <td className="px-4 py-2">{a.name}</td>
+                  <td className="px-4 py-2">{a.full_name}</td>
+                  <td className="px-4 py-2">{a.country}</td>
                   <td className="px-4 py-2">{a.email}</td>
+                  <td className="px-4 py-2">{a.phone}</td>
+                  <td className="px-4 py-2">{a.position}</td>
                   <td className="px-4 py-2">{a.message}</td>
-                  <td className="px-4 py-2">{new Date(a.submitted_at).toLocaleString()}</td>
+                  <td className="px-4 py-2">{new Date(a.created_at).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
