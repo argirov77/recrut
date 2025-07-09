@@ -1,8 +1,9 @@
 export interface Job {
-  id: number
+  id: string
   title: string
-  location: string
-  job_type: string
   description: string
-  requirements?: string
+  location: string
+  salary_min: number
+  salary_max: number
+  is_active: boolean
 }

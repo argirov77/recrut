@@ -9,6 +9,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src")
     }
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: './vitest.setup.ts'
+  },
   server: {
     host: true,        // слушаем 0.0.0.0, а не только localhost
     port: 5173,
