@@ -1,133 +1,114 @@
-// frontend/src/components/admin/AdminJobForm.tsx
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createJob, updateJob, fetchJobs } from '@/lib/api/jobs'
+import { Job } from '@/types/job'
 import Button from '../ui/Button'
-import Input  from '../ui/input'
-
+import Input from '../ui/input'
 import Textarea from '../ui/Textarea'
+import { useToast } from '@/hooks/use-toast'
 
-interface Job {
-  id?: number
-  title: string
-  location: string
-  job_type: string
-  description: string
-  requirements: string
-}
+const schema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  location: z.string().min(1),
+  salary_min: z.coerce.number().min(0),
+  salary_max: z.coerce.number().min(0),
+  is_active: z.boolean().optional().default(true),
+}).refine((data) => data.salary_min <= data.salary_max, {
+  message: 'salary_max must be >= salary_min',
+  path: ['salary_max'],
+})
 
 export default function AdminJobForm() {
   const { jobId } = useParams<{ jobId: string }>()
   const editMode = Boolean(jobId)
-  const [job, setJob] = useState<Job>({
-    title: '',
-    location: '',
-    job_type: '',
-    description: '',
-    requirements: '',
-  })
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string|null>(null)
   const navigate = useNavigate()
+  const { toast } = useToast()
 
-  // при редактировании подгружаем данные
+  const {
+    register,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof schema>>({ resolver: zodResolver(schema) })
+
   useEffect(() => {
     if (!editMode) return
-    (async () => {
+    ;(async () => {
       try {
-        const API = import.meta.env.VITE_API_URL || ''
-        const token = localStorage.getItem('token') || ''
-        const res = await fetch(`${API}/api/jobs/${jobId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        if (!res.ok) throw new Error(await res.text())
-        setJob(await res.json())
-      } catch (err: any) {
-        setError(err.message)
+        const res = await fetchJobs()
+        const job = res.find((j) => j.id === jobId)
+        if (job) {
+          reset(job)
+        }
+      } catch (e) {
+        console.error(e)
       }
     })()
-  }, [editMode, jobId])
+  }, [editMode, jobId, reset])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      const API = import.meta.env.VITE_API_URL || ''
-      const token = localStorage.getItem('token') || ''
-      const url = editMode
-        ? `${API}/api/jobs/${jobId}`
-        : `${API}/api/jobs`
-      const method = editMode ? 'PUT' : 'POST'
-      const res = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(job)
-      })
-      if (!res.ok) throw new Error(await res.text())
+      if (editMode && jobId) {
+        await updateJob(jobId, data)
+        toast({ title: 'Job updated' })
+      } else {
+        await createJob(data as Job)
+        toast({ title: 'Job created' })
+      }
       navigate('/admin/jobs')
     } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setSaving(false)
+      setError('root', { message: err.message })
     }
-  }
+  })
 
   return (
     <div className="p-6 max-w-xl mx-auto">
       <h2 className="text-2xl font-semibold mb-4">
         {editMode ? 'Edit Job' : 'New Job'}
       </h2>
-      {error && (
-        <p className="mb-4 text-red-600">
-          <strong>Error:</strong> {error}
-        </p>
-      )}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={onSubmit} className="space-y-4">
         <div>
           <label className="block mb-1 font-medium">Title</label>
-          <Input
-            value={job.title}
-            onChange={e => setJob(j => ({ ...j, title: e.target.value }))}
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Location</label>
-          <Input
-            value={job.location}
-            onChange={e => setJob(j => ({ ...j, location: e.target.value }))}
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Job Type</label>
-          <Input
-            value={job.job_type}
-            onChange={e => setJob(j => ({ ...j, job_type: e.target.value }))}
-          />
+          <Input {...register('title')} />
+          {errors.title && <p className="text-red-600 text-sm">{errors.title.message}</p>}
         </div>
         <div>
           <label className="block mb-1 font-medium">Description</label>
-          <Textarea
-            value={job.description}
-            onChange={e => setJob(j => ({ ...j, description: e.target.value }))}
-            rows={5}
-          />
+          <Textarea rows={4} {...register('description')} />
+          {errors.description && <p className="text-red-600 text-sm">{errors.description.message}</p>}
         </div>
         <div>
-          <label className="block mb-1 font-medium">Requirements</label>
-          <Textarea
-            value={job.requirements}
-            onChange={e => setJob(j => ({ ...j, requirements: e.target.value }))}
-            rows={5}
-          />
+          <label className="block mb-1 font-medium">Location</label>
+          <Input {...register('location')} />
+          {errors.location && <p className="text-red-600 text-sm">{errors.location.message}</p>}
         </div>
+        <div>
+          <label className="block mb-1 font-medium">Salary Min</label>
+          <Input type="number" {...register('salary_min', { valueAsNumber: true })} />
+          {errors.salary_min && <p className="text-red-600 text-sm">{errors.salary_min.message}</p>}
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Salary Max</label>
+          <Input type="number" {...register('salary_max', { valueAsNumber: true })} />
+          {errors.salary_max && <p className="text-red-600 text-sm">{errors.salary_max.message}</p>}
+        </div>
+        <div>
+          <label className="inline-flex items-center gap-2">
+            <input type="checkbox" {...register('is_active')} className="mr-2" />
+            Active
+          </label>
+        </div>
+        {errors.root && <p className="text-red-600">{errors.root.message}</p>}
         <div className="flex space-x-2">
-          <Button type="submit" disabled={saving}>
-            {saving ? 'Saving…' : 'Save'}
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Saving…' : 'Save'}
           </Button>
-          <Button variant="ghost" onClick={() => navigate('/admin/jobs')}>
+          <Button variant="ghost" onClick={() => navigate('/admin/jobs')} type="button">
             Cancel
           </Button>
         </div>
