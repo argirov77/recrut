@@ -1,5 +1,7 @@
 // frontend/src/components/admin/AdminApplicants.tsx
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
 interface Applicant {
   id: number
@@ -16,6 +18,8 @@ export default function AdminApplicants() {
   const [apps, setApps] = useState<Applicant[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string|null>(null)
+  const navigate = useNavigate()
+  const { logout } = useAuth()
 
   useEffect(() => {
     (async () => {
@@ -28,6 +32,11 @@ export default function AdminApplicants() {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (!res.ok) {
+          if (res.status === 401) {
+            logout()
+            navigate('/admin/login')
+            return
+          }
           throw new Error(`Server ${res.status}: ${await res.text()}`)
         }
         setApps(await res.json())
