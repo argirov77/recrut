@@ -1,14 +1,10 @@
-from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 
 class JobBase(BaseModel):
-    title: str
-    location: str
-    job_type: str
-    description: str
-    requirements: str
+    title: constr(min_length=1)
+    description: constr(min_length=1)
 
 
 class JobCreate(JobBase):
@@ -17,16 +13,11 @@ class JobCreate(JobBase):
 
 class JobUpdate(BaseModel):
     title: Optional[str] = None
-    location: Optional[str] = None
-    job_type: Optional[str] = None
     description: Optional[str] = None
-    requirements: Optional[str] = None
 
 
-class JobResponse(JobBase):
-    id: int
-    created_at: datetime
-    updated_at: datetime
+class JobRead(JobBase):
+    id: str
 
     class Config:
         from_attributes = True

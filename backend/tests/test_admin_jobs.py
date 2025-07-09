@@ -2,18 +2,16 @@ import os
 import sys
 import pytest
 import httpx
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from app.main import app
-from app.db.models import Base, User, Job
+from app.db.models import Base, User
 from app.db.database import get_db
 
 DATABASE_URL = "sqlite+aiosqlite:///./test.db"
-
-import pytest_asyncio
 
 import pytest_asyncio
 
@@ -38,6 +36,9 @@ async def client():
         admin = User(email="admin@example.com", username="admin", role="admin")
         admin.set_password("password")
         session.add(admin)
+        user = User(email="u@example.com", username="user")
+        user.set_password("password")
+        session.add(user)
         await session.commit()
 
     transport = httpx.ASGITransport(app=app)
@@ -51,37 +52,48 @@ async def client():
 
 
 @pytest.mark.asyncio
-async def test_admin_job_crud(client: AsyncClient):
-    # Login as admin
+async def test_job_crud_and_permissions(client: AsyncClient):
     res = await client.post(
-        "/api/auth/login",
-        json={"email": "admin@example.com", "password": "password"},
+        "/api/auth/login", json={"email": "admin@example.com", "password": "password"}
     )
-    assert res.status_code == 200
     token = res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
 
-    # Create job
     job_data = {
-        "title": "Software Engineer",
-        "location": "Remote",
-        "job_type": "Full-time",
-        "description": "Develop software",
-        "requirements": "Python",
+        "title": "Engineer",
+        "description": "Write code",
     }
-    res = await client.post("/api/jobs/", json=job_data, headers=headers)
+    res = await client.post("/api/admin/jobs/", json=job_data, headers=headers)
     assert res.status_code == 200
     job_id = res.json()["id"]
 
-    # Update job
-    res = await client.put(f"/api/jobs/{job_id}", json={"title": "Senior Engineer"}, headers=headers)
+    res = await client.put(f"/api/admin/jobs/{job_id}", json={"title": "Lead"}, headers=headers)
     assert res.status_code == 200
-    assert res.json()["title"] == "Senior Engineer"
+    assert res.json()["title"] == "Lead"
 
-    # Delete job
-    res = await client.delete(f"/api/jobs/{job_id}", headers=headers)
+    res = await client.delete(f"/api/admin/jobs/{job_id}", headers=headers)
     assert res.status_code == 204
 
-    # Ensure deletion
-    res = await client.get(f"/api/jobs/{job_id}")
+    res = await client.get(f"/api/admin/jobs/{job_id}", headers=headers)
     assert res.status_code == 404
+
+    # permissions
+    res = await client.post(
+        "/api/auth/login", json={"email": "u@example.com", "password": "password"}
+    )
+    token = res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+    res = await client.get("/api/admin/jobs/", headers=headers)
+    assert res.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_validation(client: AsyncClient):
+    res = await client.post(
+        "/api/auth/login", json={"email": "admin@example.com", "password": "password"}
+    )
+    token = res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+    bad_job = {"title": "", "description": ""}
+    res = await client.post("/api/admin/jobs/", json=bad_job, headers=headers)
+    assert res.status_code == 422
