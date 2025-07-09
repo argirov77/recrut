@@ -54,14 +54,14 @@ export default function AdminJobList() {
       ) : (
         <ul className="space-y-3">
           {jobs.map((job) => (
-            <li
-              key={job.id}
-              className="border rounded p-4 hover:shadow"
-            >
+            <li key={job.id} className="border rounded p-4 hover:shadow">
               <div className="flex justify-between items-center">
-                <div onClick={() => navigate(`/admin/jobs/${job.id}/edit`)} className="cursor-pointer">
+                <div
+                  onClick={() => navigate(`/admin/jobs/${job.id}/edit`)}
+                  className="cursor-pointer"
+                >
                   <h3 className="font-medium">{job.title}</h3>
-                  <p className="text-gray-600">{job.location}</p>
+                  <p className="text-gray-600 truncate max-w-md">{job.description}</p>
                 </div>
                 <Button variant="ghost" onClick={() => onDelete(job.id)}>
                   Delete

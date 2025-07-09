@@ -14,7 +14,7 @@ export async function fetchJobs(): Promise<Job[]> {
   return res.json()
 }
 
-export async function createJob(data: Omit<Job, 'id' | 'created_at' | 'updated_at'>): Promise<Job> {
+export async function createJob(data: { title: string; description: string }): Promise<Job> {
   const res = await fetch(`${API}/api/admin/jobs/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
@@ -24,7 +24,10 @@ export async function createJob(data: Omit<Job, 'id' | 'created_at' | 'updated_a
   return res.json()
 }
 
-export async function updateJob(id: string, data: Partial<Job>): Promise<Job> {
+export async function updateJob(
+  id: string,
+  data: { title: string; description: string }
+): Promise<Job> {
   const res = await fetch(`${API}/api/admin/jobs/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },

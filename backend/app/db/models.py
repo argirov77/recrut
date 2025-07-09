@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text
 from sqlalchemy.sql import func
 from uuid import uuid4
 from .database import Base
@@ -46,13 +46,7 @@ class Job(Base):
 
     id = Column(String(36), primary_key=True, default=lambda: str(uuid4()))
     title = Column(String, nullable=False)
-    description = Column(String, nullable=False)
-    location = Column(String, nullable=False)
-    salary_min = Column(Integer, nullable=False)
-    salary_max = Column(Integer, nullable=False)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    description = Column(Text, nullable=False)
 
 
 class ContactForm(Base):

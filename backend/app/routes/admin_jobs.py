@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import Optional
+
 
 from app.db.database import get_db
 from app.db.models import Job, User
@@ -21,22 +21,14 @@ def admin_or_manager(current_user: User = Depends(get_current_user)) -> User:
 
 
 @router.get("/", response_model=list[JobRead], dependencies=[Depends(admin_or_manager)])
-async def list_jobs(
-    is_active: Optional[bool] = None,
-    skip: int = 0,
-    limit: int = 100,
-    db: AsyncSession = Depends(get_db),
-):
-    query = select(Job).offset(skip).limit(limit)
-    if is_active is not None:
-        query = query.where(Job.is_active == is_active)
-    result = await db.execute(query)
+async def list_jobs(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Job))
     return result.scalars().all()
 
 
 @router.post("/", response_model=JobRead, dependencies=[Depends(admin_or_manager)])
 async def create_job(job_in: JobCreate, db: AsyncSession = Depends(get_db)):
-    job = Job(**job_in.dict())
+    job = Job(**job_in.model_dump())
     db.add(job)
     await db.commit()
     await db.refresh(job)
@@ -58,14 +50,16 @@ async def update_job(job_id: str, job_in: JobUpdate, db: AsyncSession = Depends(
     job = result.scalar_one_or_none()
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found")
-    for field, value in job_in.dict(exclude_unset=True).items():
+    for field, value in job_in.model_dump(exclude_unset=True).items():
         setattr(job, field, value)
     await db.commit()
     await db.refresh(job)
     return job
 
 
-@router.delete("/{job_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(admin_or_manager)])
+@router.delete(
+    "/{job_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(admin_or_manager)]
+)
 async def delete_job(job_id: str, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Job).where(Job.id == job_id))
     job = result.scalar_one_or_none()

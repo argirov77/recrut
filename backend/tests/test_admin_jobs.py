@@ -15,6 +15,7 @@ DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 
 import pytest_asyncio
 
+
 @pytest_asyncio.fixture
 async def client():
     if os.path.exists("./test.db"):
@@ -52,25 +53,23 @@ async def client():
 
 @pytest.mark.asyncio
 async def test_job_crud_and_permissions(client: AsyncClient):
-    res = await client.post("/api/auth/login", json={"email": "admin@example.com", "password": "password"})
+    res = await client.post(
+        "/api/auth/login", json={"email": "admin@example.com", "password": "password"}
+    )
     token = res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
 
     job_data = {
         "title": "Engineer",
         "description": "Write code",
-        "location": "Remote",
-        "salary_min": 1000,
-        "salary_max": 2000,
-        "is_active": True,
     }
     res = await client.post("/api/admin/jobs/", json=job_data, headers=headers)
     assert res.status_code == 200
     job_id = res.json()["id"]
 
-    res = await client.put(f"/api/admin/jobs/{job_id}", json={"salary_min": 1500}, headers=headers)
+    res = await client.put(f"/api/admin/jobs/{job_id}", json={"title": "Lead"}, headers=headers)
     assert res.status_code == 200
-    assert res.json()["salary_min"] == 1500
+    assert res.json()["title"] == "Lead"
 
     res = await client.delete(f"/api/admin/jobs/{job_id}", headers=headers)
     assert res.status_code == 204
@@ -79,7 +78,9 @@ async def test_job_crud_and_permissions(client: AsyncClient):
     assert res.status_code == 404
 
     # permissions
-    res = await client.post("/api/auth/login", json={"email": "u@example.com", "password": "password"})
+    res = await client.post(
+        "/api/auth/login", json={"email": "u@example.com", "password": "password"}
+    )
     token = res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
     res = await client.get("/api/admin/jobs/", headers=headers)
@@ -87,17 +88,12 @@ async def test_job_crud_and_permissions(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_salary_validation(client: AsyncClient):
-    res = await client.post("/api/auth/login", json={"email": "admin@example.com", "password": "password"})
+async def test_validation(client: AsyncClient):
+    res = await client.post(
+        "/api/auth/login", json={"email": "admin@example.com", "password": "password"}
+    )
     token = res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
-    bad_job = {
-        "title": "Bad",
-        "description": "Bad",
-        "location": "Remote",
-        "salary_min": 3000,
-        "salary_max": 2000,
-        "is_active": True,
-    }
+    bad_job = {"title": "", "description": ""}
     res = await client.post("/api/admin/jobs/", json=bad_job, headers=headers)
     assert res.status_code == 422
