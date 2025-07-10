@@ -20,7 +20,6 @@ async def lifespan(app: FastAPI):
     Lifespan context manager for the FastAPI application.
     Handles startup and shutdown events.
     """
-    # Startup
     logger.info("Starting application")
     try:
         await init_db()
@@ -30,7 +29,6 @@ async def lifespan(app: FastAPI):
         logger.error(f"Error during startup: {str(e)}")
         raise
     finally:
-        # Cleanup
         logger.info("Shutting down application")
         await engine.dispose()
 
@@ -54,7 +52,12 @@ app.add_middleware(
 # Include routers
 app.include_router(health_router, prefix="/api")
 app.include_router(auth_router, prefix="/api")
-app.include_router(jobs_router, prefix="/api")
+# Монтируем все эндпоинты из app/routes/jobs.py под /api/admin/jobs
+app.include_router(
+    jobs_router,
+    prefix="/api/admin",
+    tags=["admin", "jobs"],
+)
 app.include_router(forms_router, prefix="/api")
 
 logger.info("Application routes configured")

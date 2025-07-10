@@ -12,10 +12,9 @@ import { ProtectedRoute } from '../components/ProtectedRoute'
 // Клиентские страницы (из папки pages)
 const Home      = React.lazy(() => import('../pages/Home'))
 const About     = React.lazy(() => import('../pages/About'))
-// при необходимости:
 // const Services  = React.lazy(() => import('../pages/Services'))
-// const Jobs      = React.lazy(() => import('../pages/JobList'))
-// const Contact   = React.lazy(() => import('../pages/Contact'))
+// const Jobs       = React.lazy(() => import('../pages/JobList'))
+// const Contact    = React.lazy(() => import('../pages/Contact'))
 
 // Админские страницы (из папки pages)
 const AdminLogin   = React.lazy(() => import('../pages/AdminLogin'))
@@ -24,9 +23,10 @@ const Dashboard    = React.lazy(() => import('../pages/Dashboard'))
 const JobAdmin     = React.lazy(() => import('../pages/JobAdmin'))
 const AdminForms   = React.lazy(() => import('../pages/AdminForms'))
 
-// Новые админские компоненты
-const AdminJobForm     = React.lazy(() => import('../components/admin/AdminJobForm'))
-const AdminApplicants  = React.lazy(() => import('../components/admin/AdminApplicants'))
+// Админские компоненты (дочерние маршруты)
+const AdminJobList  = React.lazy(() => import('../components/admin/AdminJobList'))
+const AdminJobForm  = React.lazy(() => import('../components/admin/AdminJobForm'))
+const AdminApplicants = React.lazy(() => import('../components/admin/AdminApplicants'))
 
 /** Обёртка для Suspense */
 const withSuspense = (el: React.ReactElement) => (
@@ -70,7 +70,7 @@ export const router = createBrowserRouter([
         ),
       },
 
-      // список вакансий
+      // CRUD вакансий: список + вложенная форма
       {
         path: 'jobs',
         element: withSuspense(
@@ -78,24 +78,20 @@ export const router = createBrowserRouter([
             <JobAdmin />
           </ProtectedRoute>
         ),
-      },
-      // форма создания вакансии
-      {
-        path: 'jobs/new',
-        element: withSuspense(
-          <ProtectedRoute>
-            <AdminJobForm />
-          </ProtectedRoute>
-        ),
-      },
-      // форма редактирования вакансии
-      {
-        path: 'jobs/:jobId/edit',
-        element: withSuspense(
-          <ProtectedRoute>
-            <AdminJobForm />
-          </ProtectedRoute>
-        ),
+        children: [
+          {
+            index: true,
+            element: withSuspense(<AdminJobList />),
+          },
+          {
+            path: 'new',
+            element: withSuspense(<AdminJobForm />),
+          },
+          {
+            path: ':jobId/edit',
+            element: withSuspense(<AdminJobForm />),
+          },
+        ],
       },
 
       // управление заявками

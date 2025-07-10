@@ -1,3 +1,5 @@
+# app/routes/jobs.py
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -7,12 +9,18 @@ from app.db.models import Job, User
 from app.routes.auth import get_current_user
 from app.schemas.job import JobCreate, JobUpdate, JobResponse
 
-router = APIRouter(prefix="/jobs", tags=["jobs"])
+router = APIRouter(
+    prefix="/admin/jobs",
+    tags=["admin", "jobs"],
+)
 
 
 async def admin_required(current_user: User = Depends(get_current_user)) -> User:
     if current_user.role != "admin" and not current_user.is_superuser:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin privileges required"
+        )
     return current_user
 
 
@@ -31,7 +39,11 @@ async def get_job(job_id: int, db: AsyncSession = Depends(get_db)):
     return job
 
 
-@router.post("/", response_model=JobResponse, dependencies=[Depends(admin_required)])
+@router.post(
+    "/",
+    response_model=JobResponse,
+    dependencies=[Depends(admin_required)]
+)
 async def create_job(job_in: JobCreate, db: AsyncSession = Depends(get_db)):
     job = Job(**job_in.dict())
     db.add(job)
@@ -40,7 +52,11 @@ async def create_job(job_in: JobCreate, db: AsyncSession = Depends(get_db)):
     return job
 
 
-@router.put("/{job_id}", response_model=JobResponse, dependencies=[Depends(admin_required)])
+@router.put(
+    "/{job_id}",
+    response_model=JobResponse,
+    dependencies=[Depends(admin_required)]
+)
 async def update_job(job_id: int, job_in: JobUpdate, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Job).where(Job.id == job_id))
     job = result.scalar_one_or_none()
@@ -53,7 +69,11 @@ async def update_job(job_id: int, job_in: JobUpdate, db: AsyncSession = Depends(
     return job
 
 
-@router.delete("/{job_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(admin_required)])
+@router.delete(
+    "/{job_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(admin_required)]
+)
 async def delete_job(job_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Job).where(Job.id == job_id))
     job = result.scalar_one_or_none()
