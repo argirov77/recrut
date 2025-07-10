@@ -3,6 +3,13 @@ from typing import Optional
 from pydantic import BaseModel
 
 
+class JobTranslation(BaseModel):
+    language: str
+    title: str
+    description: str
+    requirements: str
+
+
 class JobBase(BaseModel):
     title: str
     location: str
@@ -12,7 +19,7 @@ class JobBase(BaseModel):
 
 
 class JobCreate(JobBase):
-    pass
+    translations: list[JobTranslation] = []
 
 
 class JobUpdate(BaseModel):
@@ -21,12 +28,14 @@ class JobUpdate(BaseModel):
     job_type: Optional[str] = None
     description: Optional[str] = None
     requirements: Optional[str] = None
+    translations: Optional[list[JobTranslation]] = None
 
 
 class JobResponse(JobBase):
     id: int
     created_at: datetime
     updated_at: datetime
+    translations: list[JobTranslation] = []
 
     class Config:
         from_attributes = True

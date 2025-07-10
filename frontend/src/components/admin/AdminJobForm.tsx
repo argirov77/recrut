@@ -2,12 +2,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Button from '../ui/Button'
-import Input  from '../ui/input'
-
+import Input from '../ui/input'
 import Textarea from '../ui/Textarea'
 
-interface Job {
-  id?: number
+type LangCode = 'en' | 'ru' | 'bg'
+
+interface TranslatedFields {
   title: string
   location: string
   job_type: string
@@ -15,30 +15,32 @@ interface Job {
   requirements: string
 }
 
+type Job = { id?: number } & Record<LangCode, TranslatedFields>
+
 export default function AdminJobForm() {
   const { jobId } = useParams<{ jobId: string }>()
   const editMode = Boolean(jobId)
   const [job, setJob] = useState<Job>({
-    title: '',
-    location: '',
-    job_type: '',
-    description: '',
-    requirements: '',
+    en: { title: '', location: '', job_type: '', description: '', requirements: '' },
+    ru: { title: '', location: '', job_type: '', description: '', requirements: '' },
+    bg: { title: '', location: '', job_type: '', description: '', requirements: '' },
   })
+  const [activeLang, setActiveLang] = useState<LangCode>('en')
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string|null>(null)
+  const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
 
   // при редактировании подгружаем данные
   useEffect(() => {
     if (!editMode) return
-    (async () => {
+    ;(async () => {
       try {
         const API = import.meta.env.VITE_API_URL || ''
         const token = localStorage.getItem('token') || ''
-        const res = await fetch(`${API}/api/admin/jobs/${jobId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await fetch(
+          `${API}/api/admin/jobs/${jobId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
         if (!res.ok) throw new Error(await res.text())
         setJob(await res.json())
       } catch (err: any) {
@@ -58,13 +60,14 @@ export default function AdminJobForm() {
         ? `${API}/api/admin/jobs/${jobId}`
         : `${API}/api/admin/jobs`
       const method = editMode ? 'PUT' : 'POST'
+
       const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(job)
+        body: JSON.stringify(job),
       })
       if (!res.ok) throw new Error(await res.text())
       navigate('/admin/jobs')
@@ -77,52 +80,94 @@ export default function AdminJobForm() {
 
   return (
     <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">
-        {editMode ? 'Edit Job' : 'New Job'}
-      </h2>
+      <h2 className="text-2xl font-semibold mb-4">{editMode ? 'Edit Job' : 'New Job'}</h2>
       {error && (
         <p className="mb-4 text-red-600">
           <strong>Error:</strong> {error}
         </p>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1 font-medium">Title</label>
-          <Input
-            value={job.title}
-            onChange={e => setJob(j => ({ ...j, title: e.target.value }))}
-          />
+        <div className="flex space-x-2 mb-2">
+          {(['en', 'ru', 'bg'] as LangCode[]).map((l) => (
+            <button
+              key={l}
+              type="button"
+              onClick={() => setActiveLang(l)}
+              className={`px-3 py-1 border-b-2 ${activeLang === l ? 'border-blue-500 font-semibold' : 'border-transparent'}`}
+            >
+              {l.toUpperCase()}
+            </button>
+          ))}
         </div>
-        <div>
-          <label className="block mb-1 font-medium">Location</label>
-          <Input
-            value={job.location}
-            onChange={e => setJob(j => ({ ...j, location: e.target.value }))}
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Job Type</label>
-          <Input
-            value={job.job_type}
-            onChange={e => setJob(j => ({ ...j, job_type: e.target.value }))}
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Description</label>
-          <Textarea
-            value={job.description}
-            onChange={e => setJob(j => ({ ...j, description: e.target.value }))}
-            rows={5}
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Requirements</label>
-          <Textarea
-            value={job.requirements}
-            onChange={e => setJob(j => ({ ...j, requirements: e.target.value }))}
-            rows={5}
-          />
-        </div>
+        {(() => {
+          const fields = job[activeLang]
+          return (
+            <>
+              <div>
+                <label className="block mb-1 font-medium">Title ({activeLang.toUpperCase()})</label>
+                <Input
+                  value={fields.title}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], title: e.target.value },
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Location ({activeLang.toUpperCase()})</label>
+                <Input
+                  value={fields.location}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], location: e.target.value },
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Job Type ({activeLang.toUpperCase()})</label>
+                <Input
+                  value={fields.job_type}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], job_type: e.target.value },
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Description ({activeLang.toUpperCase()})</label>
+                <Textarea
+                  value={fields.description}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], description: e.target.value },
+                    }))
+                  }
+                  rows={5}
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">Requirements ({activeLang.toUpperCase()})</label>
+                <Textarea
+                  value={fields.requirements}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], requirements: e.target.value },
+                    }))
+                  }
+                  rows={5}
+                />
+              </div>
+            </>
+          )
+        })()}
         <div className="flex space-x-2">
           <Button type="submit" disabled={saving}>
             {saving ? 'Saving…' : 'Save'}
@@ -135,3 +180,4 @@ export default function AdminJobForm() {
     </div>
   )
 }
+

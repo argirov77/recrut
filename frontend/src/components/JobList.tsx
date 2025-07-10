@@ -1,3 +1,5 @@
+// frontend/src/components/JobList.tsx
+
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useLanguage } from '../context/LanguageContext'
@@ -9,7 +11,7 @@ interface Job {
   job_type: string
   description: string
   requirements?: string
-  // Optional localized fields returned by the backend
+  // localized fields returned by the backend
   title_en?: string
   title_ru?: string
   title_bg?: string
@@ -31,7 +33,7 @@ export default function JobList() {
     const fetchJobs = async () => {
       try {
         const API = import.meta.env.VITE_API_URL || ''
-        const response = await axios.get<Job[]>(`${API}/api/admin/jobs`, {
+        const response = await axios.get<Job[]>(`${API}/api/jobs`, {
           params: { lang },
         })
         setJobs(response.data)
@@ -42,7 +44,7 @@ export default function JobList() {
       }
     }
     fetchJobs()
-  }, [lang, t]) // reload when language changes
+  }, [lang, t])
 
   if (loading) {
     return (
@@ -71,9 +73,9 @@ export default function JobList() {
         {jobs && jobs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {jobs.map((job) => {
-              const title = (job as any)[`title_${lang}`] ?? job.title
-              const description = (job as any)[`description_${lang}`] ?? job.description
-              const requirements = (job as any)[`requirements_${lang}`] ?? job.requirements
+              const title = job[`title_${lang}` as keyof Job] ?? job.title
+              const description = job[`description_${lang}` as keyof Job] ?? job.description
+              const requirements = job[`requirements_${lang}` as keyof Job] ?? job.requirements
               return (
                 <div
                   key={job.id}
@@ -90,8 +92,7 @@ export default function JobList() {
                   {requirements && (
                     <details className="mb-4">
                       <summary className="cursor-pointer text-gray-900">
-                        {t('services.title')}{' '}
-                        {/* на той же мысли: можно добавить ключ в JSON для “Требования” */}
+                        {t('jobs.requirements')}
                       </summary>
                       <p className="mt-2 text-gray-600 whitespace-pre-line">{requirements}</p>
                     </details>
