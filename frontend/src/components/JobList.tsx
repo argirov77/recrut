@@ -20,9 +20,8 @@ export default function JobList() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get<Job[]>(
-          "http://localhost:8000/api/jobs"
-        );
+        const API = import.meta.env.VITE_API_URL || ''
+        const response = await axios.get<Job[]>(`${API}/api/admin/jobs`)
         setJobs(response.data);
       } catch (_) {
         setError(t("jobs.error"));
