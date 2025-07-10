@@ -8,45 +8,23 @@ import Textarea from '../ui/Textarea'
 
 type LangCode = 'en' | 'ru' | 'bg'
 
-interface Job {
-  id?: number
-  title_en: string
-  title_ru: string
-  title_bg: string
-  location_en: string
-  location_ru: string
-  location_bg: string
-  job_type_en: string
-  job_type_ru: string
-  job_type_bg: string
-  description_en: string
-  description_ru: string
-  description_bg: string
-  requirements_en: string
-  requirements_ru: string
-  requirements_bg: string
-  [key: string]: any
+interface TranslatedFields {
+  title: string
+  location: string
+  job_type: string
+  description: string
+  requirements: string
 }
+
+type Job = { id?: number } & Record<LangCode, TranslatedFields>
 
 export default function AdminJobForm() {
   const { jobId } = useParams<{ jobId: string }>()
   const editMode = Boolean(jobId)
   const [job, setJob] = useState<Job>({
-    title_en: '',
-    title_ru: '',
-    title_bg: '',
-    location_en: '',
-    location_ru: '',
-    location_bg: '',
-    job_type_en: '',
-    job_type_ru: '',
-    job_type_bg: '',
-    description_en: '',
-    description_ru: '',
-    description_bg: '',
-    requirements_en: '',
-    requirements_ru: '',
-    requirements_bg: '',
+    en: { title: '', location: '', job_type: '', description: '', requirements: '' },
+    ru: { title: '', location: '', job_type: '', description: '', requirements: '' },
+    bg: { title: '', location: '', job_type: '', description: '', requirements: '' },
   })
   const [activeLang, setActiveLang] = useState<LangCode>('en')
   const [saving, setSaving] = useState(false)
@@ -118,129 +96,83 @@ export default function AdminJobForm() {
             </button>
           ))}
         </div>
-        {activeLang === 'en' && (
-          <>
-            <div>
-              <label className="block mb-1 font-medium">Title (EN)</label>
-              <Input
-                value={job.title_en}
-                onChange={(e) => setJob((j) => ({ ...j, title_en: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Location (EN)</label>
-              <Input
-                value={job.location_en}
-                onChange={(e) => setJob((j) => ({ ...j, location_en: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Job Type (EN)</label>
-              <Input
-                value={job.job_type_en}
-                onChange={(e) => setJob((j) => ({ ...j, job_type_en: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Description (EN)</label>
-              <Textarea
-                value={job.description_en}
-                onChange={(e) => setJob((j) => ({ ...j, description_en: e.target.value }))}
-                rows={5}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Requirements (EN)</label>
-              <Textarea
-                value={job.requirements_en}
-                onChange={(e) => setJob((j) => ({ ...j, requirements_en: e.target.value }))}
-                rows={5}
-              />
-            </div>
-          </>
-        )}
-        {activeLang === 'ru' && (
-          <>
-            <div>
-              <label className="block mb-1 font-medium">Title (RU)</label>
-              <Input
-                value={job.title_ru}
-                onChange={(e) => setJob((j) => ({ ...j, title_ru: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Location (RU)</label>
-              <Input
-                value={job.location_ru}
-                onChange={(e) => setJob((j) => ({ ...j, location_ru: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Job Type (RU)</label>
-              <Input
-                value={job.job_type_ru}
-                onChange={(e) => setJob((j) => ({ ...j, job_type_ru: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Description (RU)</label>
-              <Textarea
-                value={job.description_ru}
-                onChange={(e) => setJob((j) => ({ ...j, description_ru: e.target.value }))}
-                rows={5}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Requirements (RU)</label>
-              <Textarea
-                value={job.requirements_ru}
-                onChange={(e) => setJob((j) => ({ ...j, requirements_ru: e.target.value }))}
-                rows={5}
-              />
-            </div>
-          </>
-        )}
-        {activeLang === 'bg' && (
-          <>
-            <div>
-              <label className="block mb-1 font-medium">Title (BG)</label>
-              <Input
-                value={job.title_bg}
-                onChange={(e) => setJob((j) => ({ ...j, title_bg: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Location (BG)</label>
-              <Input
-                value={job.location_bg}
-                onChange={(e) => setJob((j) => ({ ...j, location_bg: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Job Type (BG)</label>
-              <Input
-                value={job.job_type_bg}
-                onChange={(e) => setJob((j) => ({ ...j, job_type_bg: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Description (BG)</label>
-              <Textarea
-                value={job.description_bg}
-                onChange={(e) => setJob((j) => ({ ...j, description_bg: e.target.value }))}
-                rows={5}
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Requirements (BG)</label>
-              <Textarea
-                value={job.requirements_bg}
-                onChange={(e) => setJob((j) => ({ ...j, requirements_bg: e.target.value }))}
-                rows={5}
-              />
-            </div>
-          </>
-        )}
+        {(() => {
+          const fields = job[activeLang]
+          return (
+            <>
+              <div>
+                <label className="block mb-1 font-medium">Title ({activeLang.toUpperCase()})</label>
+                <Input
+                  value={fields.title}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], title: e.target.value },
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">
+                  Location ({activeLang.toUpperCase()})
+                </label>
+                <Input
+                  value={fields.location}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], location: e.target.value },
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">
+                  Job Type ({activeLang.toUpperCase()})
+                </label>
+                <Input
+                  value={fields.job_type}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], job_type: e.target.value },
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">
+                  Description ({activeLang.toUpperCase()})
+                </label>
+                <Textarea
+                  value={fields.description}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], description: e.target.value },
+                    }))
+                  }
+                  rows={5}
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-medium">
+                  Requirements ({activeLang.toUpperCase()})
+                </label>
+                <Textarea
+                  value={fields.requirements}
+                  onChange={(e) =>
+                    setJob((j) => ({
+                      ...j,
+                      [activeLang]: { ...j[activeLang], requirements: e.target.value },
+                    }))
+                  }
+                  rows={5}
+                />
+              </div>
+            </>
+          )
+        })()}
         <div className="flex space-x-2">
           <Button type="submit" disabled={saving}>
             {saving ? 'Saving…' : 'Save'}
