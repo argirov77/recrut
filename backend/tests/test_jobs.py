@@ -68,20 +68,42 @@ async def test_admin_job_crud(client: AsyncClient):
         "job_type": "Full-time",
         "description": "Develop software",
         "requirements": "Python",
+        "translations": [
+            {
+                "language": "fr",
+                "title": "Ing\u00e9nieur Logiciel",
+                "description": "D\u00e9velopper",
+                "requirements": "Python",
+            }
+        ],
     }
-    res = await client.post("/api/jobs/", json=job_data, headers=headers)
+    res = await client.post("/api/admin/jobs/", json=job_data, headers=headers)
     assert res.status_code == 200
     job_id = res.json()["id"]
 
     # Update job
-    res = await client.put(f"/api/jobs/{job_id}", json={"title": "Senior Engineer"}, headers=headers)
+    res = await client.put(
+        f"/api/admin/jobs/{job_id}",
+        json={
+            "title": "Senior Engineer",
+            "translations": [
+                {
+                    "language": "fr",
+                    "title": "Ing\u00e9nieur Principal",
+                    "description": "D\u00e9velopper",
+                    "requirements": "Python",
+                }
+            ],
+        },
+        headers=headers,
+    )
     assert res.status_code == 200
     assert res.json()["title"] == "Senior Engineer"
 
     # Delete job
-    res = await client.delete(f"/api/jobs/{job_id}", headers=headers)
+    res = await client.delete(f"/api/admin/jobs/{job_id}", headers=headers)
     assert res.status_code == 204
 
     # Ensure deletion
-    res = await client.get(f"/api/jobs/{job_id}")
+    res = await client.get(f"/api/admin/jobs/{job_id}")
     assert res.status_code == 404

@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from .database import Base
 from passlib.context import CryptContext
 import secrets
@@ -51,6 +52,25 @@ class Job(Base):
     requirements = Column(String, nullable=False)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+    translations = relationship(
+        "JobTranslation",
+        back_populates="job",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
+
+class JobTranslation(Base):
+    __tablename__ = "job_translations"
+
+    job_id = Column(Integer, ForeignKey("jobs.id", ondelete="CASCADE"), primary_key=True)
+    language = Column(String, primary_key=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    requirements = Column(String, nullable=False)
+
+    job = relationship("Job", back_populates="translations")
 
 
 class ContactForm(Base):
