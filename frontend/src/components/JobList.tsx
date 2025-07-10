@@ -21,7 +21,7 @@ export default function JobList() {
     const fetchJobs = async () => {
       try {
         const API = import.meta.env.VITE_API_URL || ''
-        const response = await axios.get<Job[]>(`${API}/api/admin/jobs`)
+        const response = await axios.get<Job[]>(`${API}/api/jobs`)
         setJobs(response.data);
       } catch (_) {
         setError(t("jobs.error"));
