@@ -1,3 +1,5 @@
+# app/main.py
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -25,9 +27,6 @@ async def lifespan(app: FastAPI):
         await init_db()
         logger.info("Application started successfully")
         yield
-    except Exception as e:
-        logger.error(f"Error during startup: {str(e)}")
-        raise
     finally:
         logger.info("Shutting down application")
         await engine.dispose()
@@ -49,15 +48,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(health_router, prefix="/api")
-app.include_router(auth_router, prefix="/api")
-# Монтируем все эндпоинты из app/routes/jobs.py под /api/admin/jobs
-app.include_router(
-    jobs_router,
-    prefix="/api/admin",
-    tags=["admin", "jobs"],
-)
-app.include_router(forms_router, prefix="/api")
+# Include routers under /api
+app.include_router(health_router, prefix="/api", tags=["health"])
+app.include_router(auth_router,   prefix="/api", tags=["auth"])
+# Теперь вакансии доступны по /api/admin/jobs
+app.include_router(jobs_router,   prefix="/api/admin", tags=["admin", "jobs"])
+app.include_router(forms_router,  prefix="/api", tags=["forms"])
 
 logger.info("Application routes configured")
