@@ -79,13 +79,13 @@ async def test_admin_job_crud(client: AsyncClient):
             }
         ],
     }
-    res = await client.post("/api/admin/jobs/", json=job_data, headers=headers)
+    res = await client.post("/api/jobs/", json=job_data, headers=headers)
     assert res.status_code == 200
     job_id = res.json()["id"]
 
     # Update job
     res = await client.put(
-        f"/api/admin/jobs/{job_id}",
+        f"/api/jobs/{job_id}",
         json={
             "title": "Senior Engineer",
             "translations": [
@@ -105,11 +105,11 @@ async def test_admin_job_crud(client: AsyncClient):
     assert res.json()["title"] == "Senior Engineer"
 
     # Delete job
-    res = await client.delete(f"/api/admin/jobs/{job_id}", headers=headers)
+    res = await client.delete(f"/api/jobs/{job_id}", headers=headers)
     assert res.status_code == 204
 
     # Ensure deletion
-    res = await client.get(f"/api/admin/jobs/{job_id}")
+    res = await client.get(f"/api/jobs/{job_id}")
     assert res.status_code == 404
 
 
@@ -130,7 +130,7 @@ async def test_delete_job_via_public_route(client: AsyncClient):
         "requirements": "QA",
         "translations": [],
     }
-    res = await client.post("/api/admin/jobs/", json=job_data, headers=headers)
+    res = await client.post("/api/jobs/", json=job_data, headers=headers)
     job_id = res.json()["id"]
 
     res = await client.delete(f"/api/jobs/{job_id}", headers=headers)
