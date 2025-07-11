@@ -78,6 +78,27 @@ export default function AdminJobForm() {
     }
   }
 
+  const handleDelete = async () => {
+    if (!editMode || !jobId) return
+    if (!confirm('Delete this job?')) return
+    setSaving(true)
+    setError(null)
+    try {
+      const API = import.meta.env.VITE_API_URL || ''
+      const token = localStorage.getItem('token') || ''
+      const res = await fetch(`${API}/api/jobs/${jobId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!res.ok && res.status !== 204) throw new Error(await res.text())
+      navigate('/admin/jobs')
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <div className="p-6 max-w-xl mx-auto">
       <h2 className="text-2xl font-semibold mb-4">{editMode ? 'Edit Job' : 'New Job'}</h2>
@@ -175,6 +196,11 @@ export default function AdminJobForm() {
           <Button variant="ghost" onClick={() => navigate('/admin/jobs')}>
             Cancel
           </Button>
+          {editMode && (
+            <Button variant="secondary" type="button" onClick={handleDelete}>
+              Delete
+            </Button>
+          )}
         </div>
       </form>
     </div>
