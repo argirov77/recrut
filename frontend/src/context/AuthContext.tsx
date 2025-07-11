@@ -1,19 +1,6 @@
 // frontend/src/context/AuthContext.tsx
-import {
-  createContext,
-  useReducer,
-  useContext,
-  ReactNode,
-  useCallback,
-  useEffect,
-} from 'react'
-import {
-  AuthState,
-  LoginCredentials,
-  RegisterCredentials,
-  AuthResult,
-  User,
-} from '@/types/auth'
+import { createContext, useReducer, useContext, ReactNode, useCallback, useEffect } from 'react'
+import { AuthState, LoginCredentials, RegisterCredentials, AuthResult, User } from '@/types/auth'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -78,29 +65,27 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [state, dispatch] = useReducer(
-    authReducer,
-    undefined,
-    getInitialState
-  )
+  const [state, dispatch] = useReducer(authReducer, undefined, getInitialState)
 
   // Fetch current user when we have a token
-  const fetchCurrentUser = useCallback(
-    async (token: string) => {
-      try {
-        const res = await fetch(`${API_URL}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        if (res.ok) {
-          const user = (await res.json()) as User
-          dispatch({ type: AUTH_ACTIONS.SET_USER, payload: user })
-        }
-      } catch (err) {
-        console.error('Failed to fetch user:', err)
+  const fetchCurrentUser = useCallback(async (token: string) => {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res.ok) {
+        const user = (await res.json()) as User
+        dispatch({ type: AUTH_ACTIONS.SET_USER, payload: user })
+      } else {
+        localStorage.removeItem('token')
+        dispatch({ type: AUTH_ACTIONS.LOGOUT })
       }
-    },
-    []
-  )
+    } catch (err) {
+      console.error('Failed to fetch user:', err)
+      localStorage.removeItem('token')
+      dispatch({ type: AUTH_ACTIONS.LOGOUT })
+    }
+  }, [])
 
   // login action
   const login = useCallback(
@@ -175,9 +160,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthStateContext.Provider value={state}>
-      <AuthDispatchContext.Provider
-        value={{ login, register, logout }}
-      >
+      <AuthDispatchContext.Provider value={{ login, register, logout }}>
         {children}
       </AuthDispatchContext.Provider>
     </AuthStateContext.Provider>
