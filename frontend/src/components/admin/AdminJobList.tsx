@@ -45,6 +45,26 @@ export default function AdminJobList() {
     load()
   }, [])
 
+  const handleDelete = async (id: number) => {
+    if (!confirm('Delete this job?')) return
+    try {
+      const API = import.meta.env.VITE_API_URL || ''
+      const token = localStorage.getItem('token') || ''
+      const res = await fetch(`${API}/api/jobs/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res.status === 204) {
+        setJobs((j) => j.filter((job) => job.id !== id))
+      } else {
+        const text = await res.text()
+        throw new Error(`Server responded ${res.status}: ${text || res.statusText}`)
+      }
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
   if (loading) {
     return <p>Loading…</p>
   }
@@ -70,11 +90,22 @@ export default function AdminJobList() {
           {jobs.map((job) => (
             <li
               key={job.id}
-              className="border rounded p-4 hover:shadow cursor-pointer"
+              className="border rounded p-4 hover:shadow flex justify-between"
               onClick={() => navigate(`${job.id}/edit`)}
             >
-              <h3 className="font-medium">{job.title}</h3>
-              <p className="text-gray-600">{job.description}</p>
+              <div className="cursor-pointer flex-1">
+                <h3 className="font-medium">{job.title}</h3>
+                <p className="text-gray-600">{job.description}</p>
+              </div>
+              <Button
+                variant="ghost"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDelete(job.id)
+                }}
+              >
+                Delete
+              </Button>
             </li>
           ))}
         </ul>
