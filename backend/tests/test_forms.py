@@ -76,3 +76,34 @@ async def test_form_submission_and_admin_view(client: AsyncClient):
     forms = res.json()
     assert len(forms) == 1
     assert forms[0]["id"] == form_id
+
+
+@pytest.mark.asyncio
+async def test_delete_form(client: AsyncClient):
+    form_data = {
+        "full_name": "Jane Roe",
+        "country": "USA",
+        "email": "jane@example.com",
+        "phone": "9876543210",
+        "position": "Tester",
+        "message": "Hi",
+    }
+
+    res = await client.post("/api/forms/", json=form_data)
+    assert res.status_code == 201
+    form_id = res.json()["id"]
+
+    res = await client.post(
+        "/api/auth/login",
+        json={"email": "admin@example.com", "password": "password"},
+    )
+    token = res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    res = await client.delete(f"/api/forms/{form_id}", headers=headers)
+    assert res.status_code == 204
+
+    res = await client.get("/api/forms/", headers=headers)
+    assert res.status_code == 200
+    forms = res.json()
+    assert all(f["id"] != form_id for f in forms)
