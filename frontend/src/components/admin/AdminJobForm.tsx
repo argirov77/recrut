@@ -37,12 +37,37 @@ export default function AdminJobForm() {
       try {
         const API = import.meta.env.VITE_API_URL || ''
         const token = localStorage.getItem('token') || ''
-        const res = await fetch(
-          `${API}/api/admin/jobs/${jobId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
+        const res = await fetch(`${API}/api/admin/jobs/${jobId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         if (!res.ok) throw new Error(await res.text())
-        setJob(await res.json())
+        const data = await res.json()
+        const trRu = data.translations.find((t: any) => t.language === 'ru') || {}
+        const trBg = data.translations.find((t: any) => t.language === 'bg') || {}
+        setJob({
+          id: data.id,
+          en: {
+            title: data.title,
+            location: data.location,
+            job_type: data.job_type,
+            description: data.description,
+            requirements: data.requirements,
+          },
+          ru: {
+            title: trRu.title || '',
+            location: trRu.location || data.location,
+            job_type: trRu.job_type || data.job_type,
+            description: trRu.description || '',
+            requirements: trRu.requirements || '',
+          },
+          bg: {
+            title: trBg.title || '',
+            location: trBg.location || data.location,
+            job_type: trBg.job_type || data.job_type,
+            description: trBg.description || '',
+            requirements: trBg.requirements || '',
+          },
+        })
       } catch (err: any) {
         setError(err.message)
       }
@@ -56,10 +81,20 @@ export default function AdminJobForm() {
     try {
       const API = import.meta.env.VITE_API_URL || ''
       const token = localStorage.getItem('token') || ''
-      const url = editMode
-        ? `${API}/api/admin/jobs/${jobId}`
-        : `${API}/api/admin/jobs`
+      const url = editMode ? `${API}/api/admin/jobs/${jobId}` : `${API}/api/admin/jobs`
       const method = editMode ? 'PUT' : 'POST'
+
+      const payload = {
+        title: job.en.title,
+        location: job.en.location,
+        job_type: job.en.job_type,
+        description: job.en.description,
+        requirements: job.en.requirements,
+        translations: [
+          { language: 'ru', ...job.ru },
+          { language: 'bg', ...job.bg },
+        ],
+      }
 
       const res = await fetch(url, {
         method,
@@ -67,7 +102,7 @@ export default function AdminJobForm() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(job),
+        body: JSON.stringify(payload),
       })
       if (!res.ok) throw new Error(await res.text())
       navigate('/admin/jobs')
@@ -137,7 +172,9 @@ export default function AdminJobForm() {
                 />
               </div>
               <div>
-                <label className="block mb-1 font-medium">Location ({activeLang.toUpperCase()})</label>
+                <label className="block mb-1 font-medium">
+                  Location ({activeLang.toUpperCase()})
+                </label>
                 <Input
                   value={fields.location}
                   onChange={(e) =>
@@ -149,7 +186,9 @@ export default function AdminJobForm() {
                 />
               </div>
               <div>
-                <label className="block mb-1 font-medium">Job Type ({activeLang.toUpperCase()})</label>
+                <label className="block mb-1 font-medium">
+                  Job Type ({activeLang.toUpperCase()})
+                </label>
                 <Input
                   value={fields.job_type}
                   onChange={(e) =>
@@ -161,7 +200,9 @@ export default function AdminJobForm() {
                 />
               </div>
               <div>
-                <label className="block mb-1 font-medium">Description ({activeLang.toUpperCase()})</label>
+                <label className="block mb-1 font-medium">
+                  Description ({activeLang.toUpperCase()})
+                </label>
                 <Textarea
                   value={fields.description}
                   onChange={(e) =>
@@ -174,7 +215,9 @@ export default function AdminJobForm() {
                 />
               </div>
               <div>
-                <label className="block mb-1 font-medium">Requirements ({activeLang.toUpperCase()})</label>
+                <label className="block mb-1 font-medium">
+                  Requirements ({activeLang.toUpperCase()})
+                </label>
                 <Textarea
                   value={fields.requirements}
                   onChange={(e) =>
@@ -206,4 +249,3 @@ export default function AdminJobForm() {
     </div>
   )
 }
-
