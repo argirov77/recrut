@@ -71,6 +71,8 @@ async def test_admin_job_crud(client: AsyncClient):
         "translations": [
             {
                 "language": "fr",
+                "location": "Remote",
+                "job_type": "Full-time",
                 "title": "Ing\u00e9nieur Logiciel",
                 "description": "D\u00e9velopper",
                 "requirements": "Python",
@@ -89,6 +91,8 @@ async def test_admin_job_crud(client: AsyncClient):
             "translations": [
                 {
                     "language": "fr",
+                    "location": "Remote",
+                    "job_type": "Full-time",
                     "title": "Ing\u00e9nieur Principal",
                     "description": "D\u00e9velopper",
                     "requirements": "Python",

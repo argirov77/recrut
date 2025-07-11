@@ -17,6 +17,46 @@ interface TranslatedFields {
 
 type Job = { id?: number } & Record<LangCode, TranslatedFields>
 
+const langs: LangCode[] = ['en', 'ru', 'bg']
+
+function toApiPayload(job: Job) {
+  return {
+    title: job.en.title,
+    location: job.en.location,
+    job_type: job.en.job_type,
+    description: job.en.description,
+    requirements: job.en.requirements,
+    translations: langs.map((l) => ({ language: l, ...job[l] })).filter((t) => t.language !== 'en'),
+  }
+}
+
+function fromApi(data: any): Job {
+  const result: Job = {
+    en: {
+      title: data.title,
+      location: data.location,
+      job_type: data.job_type,
+      description: data.description,
+      requirements: data.requirements,
+    },
+    ru: { title: '', location: '', job_type: '', description: '', requirements: '' },
+    bg: { title: '', location: '', job_type: '', description: '', requirements: '' },
+  }
+  if (data.id) result.id = data.id
+  for (const tr of data.translations || []) {
+    if (langs.includes(tr.language)) {
+      result[tr.language as LangCode] = {
+        title: tr.title,
+        location: tr.location,
+        job_type: tr.job_type,
+        description: tr.description,
+        requirements: tr.requirements,
+      }
+    }
+  }
+  return result
+}
+
 export default function AdminJobForm() {
   const { jobId } = useParams<{ jobId: string }>()
   const editMode = Boolean(jobId)
@@ -42,7 +82,8 @@ export default function AdminJobForm() {
           { headers: { Authorization: `Bearer ${token}` } }
         )
         if (!res.ok) throw new Error(await res.text())
-        setJob(await res.json())
+        const data = await res.json()
+        setJob(fromApi(data))
       } catch (err: any) {
         setError(err.message)
       }
@@ -67,7 +108,7 @@ export default function AdminJobForm() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(job),
+        body: JSON.stringify(toApiPayload(job)),
       })
       if (!res.ok) throw new Error(await res.text())
       navigate('/admin/jobs')
