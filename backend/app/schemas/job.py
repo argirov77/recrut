@@ -5,6 +5,8 @@ from pydantic import BaseModel
 
 class JobTranslation(BaseModel):
     language: str
+    location: str
+    job_type: str
     title: str
     description: str
     requirements: str

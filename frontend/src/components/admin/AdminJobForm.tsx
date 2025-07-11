@@ -6,6 +6,7 @@ import Input from '../ui/input'
 import Textarea from '../ui/Textarea'
 
 type LangCode = 'en' | 'ru' | 'bg'
+const langs: LangCode[] = ['en', 'ru', 'bg']
 
 interface TranslatedFields {
   title: string
@@ -16,6 +17,47 @@ interface TranslatedFields {
 }
 
 type Job = { id?: number } & Record<LangCode, TranslatedFields>
+
+function toApiPayload(job: Job) {
+  return {
+    title: job.en.title,
+    location: job.en.location,
+    job_type: job.en.job_type,
+    description: job.en.description,
+    requirements: job.en.requirements,
+    translations: langs
+      .filter((l) => l !== 'en')
+      .map((language) => ({ language, ...job[language] })),
+  }
+}
+
+function fromApi(data: any): Job {
+  const base: Job = {
+    en: {
+      title: data.title,
+      location: data.location,
+      job_type: data.job_type,
+      description: data.description,
+      requirements: data.requirements,
+    },
+    ru: { title: '', location: '', job_type: '', description: '', requirements: '' },
+    bg: { title: '', location: '', job_type: '', description: '', requirements: '' },
+  }
+  if (data.id) base.id = data.id
+
+  for (const tr of data.translations || []) {
+    if (langs.includes(tr.language)) {
+      base[tr.language as LangCode] = {
+        title: tr.title,
+        location: tr.location,
+        job_type: tr.job_type,
+        description: tr.description,
+        requirements: tr.requirements,
+      }
+    }
+  }
+  return base
+}
 
 export default function AdminJobForm() {
   const { jobId } = useParams<{ jobId: string }>()
@@ -30,7 +72,6 @@ export default function AdminJobForm() {
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
 
-  // при редактировании подгружаем данные
   useEffect(() => {
     if (!editMode) return
     ;(async () => {
@@ -42,32 +83,7 @@ export default function AdminJobForm() {
         })
         if (!res.ok) throw new Error(await res.text())
         const data = await res.json()
-        const trRu = data.translations.find((t: any) => t.language === 'ru') || {}
-        const trBg = data.translations.find((t: any) => t.language === 'bg') || {}
-        setJob({
-          id: data.id,
-          en: {
-            title: data.title,
-            location: data.location,
-            job_type: data.job_type,
-            description: data.description,
-            requirements: data.requirements,
-          },
-          ru: {
-            title: trRu.title || '',
-            location: trRu.location || data.location,
-            job_type: trRu.job_type || data.job_type,
-            description: trRu.description || '',
-            requirements: trRu.requirements || '',
-          },
-          bg: {
-            title: trBg.title || '',
-            location: trBg.location || data.location,
-            job_type: trBg.job_type || data.job_type,
-            description: trBg.description || '',
-            requirements: trBg.requirements || '',
-          },
-        })
+        setJob(fromApi(data))
       } catch (err: any) {
         setError(err.message)
       }
@@ -81,20 +97,10 @@ export default function AdminJobForm() {
     try {
       const API = import.meta.env.VITE_API_URL || ''
       const token = localStorage.getItem('token') || ''
-      const url = editMode ? `${API}/api/admin/jobs/${jobId}` : `${API}/api/admin/jobs`
+      const url = editMode
+        ? `${API}/api/admin/jobs/${jobId}`
+        : `${API}/api/admin/jobs`
       const method = editMode ? 'PUT' : 'POST'
-
-      const payload = {
-        title: job.en.title,
-        location: job.en.location,
-        job_type: job.en.job_type,
-        description: job.en.description,
-        requirements: job.en.requirements,
-        translations: [
-          { language: 'ru', ...job.ru },
-          { language: 'bg', ...job.bg },
-        ],
-      }
 
       const res = await fetch(url, {
         method,
@@ -102,7 +108,7 @@ export default function AdminJobForm() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(toApiPayload(job)),
       })
       if (!res.ok) throw new Error(await res.text())
       navigate('/admin/jobs')
@@ -114,14 +120,14 @@ export default function AdminJobForm() {
   }
 
   const handleDelete = async () => {
-    if (!editMode || !jobId) return
+    if (!editMode) return
     if (!confirm('Delete this job?')) return
     setSaving(true)
     setError(null)
     try {
       const API = import.meta.env.VITE_API_URL || ''
       const token = localStorage.getItem('token') || ''
-      const res = await fetch(`${API}/api/jobs/${jobId}`, {
+      const res = await fetch(`${API}/api/admin/jobs/${jobId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -136,7 +142,9 @@ export default function AdminJobForm() {
 
   return (
     <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">{editMode ? 'Edit Job' : 'New Job'}</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        {editMode ? 'Edit Job' : 'New Job'}
+      </h2>
       {error && (
         <p className="mb-4 text-red-600">
           <strong>Error:</strong> {error}
@@ -144,29 +152,39 @@ export default function AdminJobForm() {
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex space-x-2 mb-2">
-          {(['en', 'ru', 'bg'] as LangCode[]).map((l) => (
+          {langs.map((l) => (
             <button
               key={l}
               type="button"
               onClick={() => setActiveLang(l)}
-              className={`px-3 py-1 border-b-2 ${activeLang === l ? 'border-blue-500 font-semibold' : 'border-transparent'}`}
+              className={`px-3 py-1 border-b-2 ${
+                activeLang === l
+                  ? 'border-blue-500 font-semibold'
+                  : 'border-transparent'
+              }`}
             >
               {l.toUpperCase()}
             </button>
           ))}
         </div>
+        {/* Поля для текущего языка */}
         {(() => {
           const fields = job[activeLang]
           return (
             <>
               <div>
-                <label className="block mb-1 font-medium">Title ({activeLang.toUpperCase()})</label>
+                <label className="block mb-1 font-medium">
+                  Title ({activeLang.toUpperCase()})
+                </label>
                 <Input
                   value={fields.title}
                   onChange={(e) =>
                     setJob((j) => ({
                       ...j,
-                      [activeLang]: { ...j[activeLang], title: e.target.value },
+                      [activeLang]: {
+                        ...j[activeLang],
+                        title: e.target.value,
+                      },
                     }))
                   }
                 />
@@ -180,7 +198,10 @@ export default function AdminJobForm() {
                   onChange={(e) =>
                     setJob((j) => ({
                       ...j,
-                      [activeLang]: { ...j[activeLang], location: e.target.value },
+                      [activeLang]: {
+                        ...j[activeLang],
+                        location: e.target.value,
+                      },
                     }))
                   }
                 />
@@ -194,7 +215,10 @@ export default function AdminJobForm() {
                   onChange={(e) =>
                     setJob((j) => ({
                       ...j,
-                      [activeLang]: { ...j[activeLang], job_type: e.target.value },
+                      [activeLang]: {
+                        ...j[activeLang],
+                        job_type: e.target.value,
+                      },
                     }))
                   }
                 />
@@ -208,7 +232,10 @@ export default function AdminJobForm() {
                   onChange={(e) =>
                     setJob((j) => ({
                       ...j,
-                      [activeLang]: { ...j[activeLang], description: e.target.value },
+                      [activeLang]: {
+                        ...j[activeLang],
+                        description: e.target.value,
+                      },
                     }))
                   }
                   rows={5}
@@ -223,7 +250,10 @@ export default function AdminJobForm() {
                   onChange={(e) =>
                     setJob((j) => ({
                       ...j,
-                      [activeLang]: { ...j[activeLang], requirements: e.target.value },
+                      [activeLang]: {
+                        ...j[activeLang],
+                        requirements: e.target.value,
+                      },
                     }))
                   }
                   rows={5}
@@ -240,7 +270,7 @@ export default function AdminJobForm() {
             Cancel
           </Button>
           {editMode && (
-            <Button variant="secondary" type="button" onClick={handleDelete}>
+            <Button variant="secondary" onClick={handleDelete}>
               Delete
             </Button>
           )}
@@ -249,3 +279,4 @@ export default function AdminJobForm() {
     </div>
   )
 }
+
