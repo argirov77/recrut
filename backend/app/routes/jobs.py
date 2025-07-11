@@ -1,6 +1,6 @@
 # app/routes/jobs.py
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -16,17 +16,30 @@ router = APIRouter(prefix="/jobs", tags=["jobs"])
 async def admin_required(current_user: User = Depends(get_current_user)) -> User:
     if current_user.role != "admin" and not current_user.is_superuser:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin privileges required"
+            status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required"
         )
     return current_user
 
 
 @router.get("", response_model=list[JobResponse])
 @router.get("/", response_model=list[JobResponse])
-async def list_jobs(db: AsyncSession = Depends(get_db)):
+async def list_jobs(
+    db: AsyncSession = Depends(get_db),
+    lang: str | None = Query(None),
+):
     result = await db.execute(select(Job).options(selectinload(Job.translations)))
-    return result.scalars().all()
+    jobs = result.scalars().all()
+    if lang:
+        for job in jobs:
+            translation = next(
+                (tr for tr in job.translations if tr.language == lang),
+                None,
+            )
+            if translation:
+                setattr(job, f"title_{lang}", translation.title)
+                setattr(job, f"description_{lang}", translation.description)
+                setattr(job, f"requirements_{lang}", translation.requirements)
+    return jobs
 
 
 @router.get("/{job_id}", response_model=JobResponse)
@@ -77,7 +90,7 @@ async def update_job(job_id: int, job_in: JobUpdate, db: AsyncSession = Depends(
 @router.delete(
     "/{job_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(admin_required)]
+    dependencies=[Depends(admin_required)],
 )
 async def delete_job(job_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Job).where(Job.id == job_id))
