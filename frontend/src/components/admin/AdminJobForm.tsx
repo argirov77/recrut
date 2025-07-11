@@ -37,10 +37,9 @@ export default function AdminJobForm() {
       try {
         const API = import.meta.env.VITE_API_URL || ''
         const token = localStorage.getItem('token') || ''
-        const res = await fetch(
-          `${API}/api/admin/jobs/${jobId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
+        const res = await fetch(`${API}/api/jobs/${jobId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         if (!res.ok) throw new Error(await res.text())
         setJob(await res.json())
       } catch (err: any) {
@@ -57,8 +56,8 @@ export default function AdminJobForm() {
       const API = import.meta.env.VITE_API_URL || ''
       const token = localStorage.getItem('token') || ''
       const url = editMode
-        ? `${API}/api/admin/jobs/${jobId}`
-        : `${API}/api/admin/jobs`
+        ? `${API}/api/jobs/${jobId}`
+        : `${API}/api/jobs`
       const method = editMode ? 'PUT' : 'POST'
 
       const res = await fetch(url, {
