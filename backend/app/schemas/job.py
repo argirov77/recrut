@@ -38,6 +38,15 @@ class JobResponse(JobBase):
     created_at: datetime
     updated_at: datetime
     translations: list[JobTranslation] = []
+    title_en: Optional[str] = None
+    title_ru: Optional[str] = None
+    title_bg: Optional[str] = None
+    description_en: Optional[str] = None
+    description_ru: Optional[str] = None
+    description_bg: Optional[str] = None
+    requirements_en: Optional[str] = None
+    requirements_ru: Optional[str] = None
+    requirements_bg: Optional[str] = None
 
     class Config:
         from_attributes = True

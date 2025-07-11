@@ -138,3 +138,39 @@ async def test_delete_job_via_public_route(client: AsyncClient):
 
     res = await client.get(f"/api/jobs/{job_id}")
     assert res.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_list_jobs_with_language(client: AsyncClient):
+    res = await client.post(
+        "/api/auth/login",
+        json={"email": "admin@example.com", "password": "password"},
+    )
+    token = res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    job_data = {
+        "title": "Backend Developer",
+        "location": "Remote",
+        "job_type": "Full-time",
+        "description": "Write code",
+        "requirements": "Python",
+        "translations": [
+            {
+                "language": "ru",
+                "location": "Удаленно",
+                "job_type": "Полная занятость",
+                "title": "Разработчик",
+                "description": "Писать код",
+                "requirements": "Python",
+            }
+        ],
+    }
+    res = await client.post("/api/jobs/", json=job_data, headers=headers)
+    assert res.status_code == 200
+
+    res = await client.get("/api/jobs", params={"lang": "ru"})
+    assert res.status_code == 200
+    jobs = res.json()
+    assert jobs[0]["title_ru"] == "Разработчик"
+    assert jobs[0]["description_ru"] == "Писать код"
