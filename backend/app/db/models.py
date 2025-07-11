@@ -66,6 +66,8 @@ class JobTranslation(Base):
 
     job_id = Column(Integer, ForeignKey("jobs.id", ondelete="CASCADE"), primary_key=True)
     language = Column(String, primary_key=True)
+    location = Column(String, nullable=False)
+    job_type = Column(String, nullable=False)
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     requirements = Column(String, nullable=False)
