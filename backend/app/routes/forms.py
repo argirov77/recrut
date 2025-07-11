@@ -35,3 +35,18 @@ async def submit_form(form_in: ContactFormCreate, db: AsyncSession = Depends(get
 async def list_forms(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(ContactForm))
     return result.scalars().all()
+
+
+@router.delete(
+    "/{form_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(admin_required)],
+)
+async def delete_form(form_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(ContactForm).where(ContactForm.id == form_id))
+    form = result.scalar_one_or_none()
+    if not form:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Form not found")
+    await db.delete(form)
+    await db.commit()
+    return None
