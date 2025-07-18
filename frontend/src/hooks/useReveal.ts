@@ -1,5 +1,5 @@
 // src/hooks/useReveal.ts
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect } from 'react'
 
 /**
  * Добавляет/убирает класс .is-active,
@@ -7,17 +7,17 @@ import { RefObject, useEffect } from 'react';
  */
 export default function useReveal<T extends HTMLElement>(ref: RefObject<T | null>) {
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const el = ref.current
+    if (!el) return
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        entry.target.classList.toggle('is-active', entry.intersectionRatio >= 0.25);
+        entry.target.classList.toggle('is-active', entry.intersectionRatio >= 0.25)
       },
-      { threshold: 0.25 }
-    );
+      { threshold: 0.25, root: document.querySelector('main') }
+    )
 
-    io.observe(el);
-    return () => io.disconnect();
-  }, [ref]);
+    io.observe(el)
+    return () => io.disconnect()
+  }, [ref])
 }
