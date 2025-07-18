@@ -74,7 +74,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
+    <div id="contact" className="py-20 bg-gray-50">
       <div className="container mx-auto px-6">
         <details
           id="contact-form"
@@ -185,6 +185,6 @@ export default function Contact() {
           />
         )}
       </div>
-    </section>
+    </div>
   )
 }

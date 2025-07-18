@@ -11,7 +11,7 @@ export default function Testimonials() {
   }>;
 
   return (
-    <section id="testimonials" className="py-20 bg-white">
+    <div id="testimonials" className="py-20 bg-white">
       <div className="container mx-auto px-6 text-center mb-12">
         <h2 className="text-3xl font-semibold text-gray-900">
           {t("testimonials.title")}
@@ -26,6 +26,6 @@ export default function Testimonials() {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

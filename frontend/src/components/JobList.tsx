@@ -72,7 +72,7 @@ export default function JobList() {
   }
 
   return (
-    <section id="jobs" className="py-20 bg-gray-100">
+    <div id="jobs" className="py-20 bg-gray-100">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl font-heading font-extrabold text-primary text-center mb-8">
           {t('jobs.title')}
@@ -155,7 +155,7 @@ export default function JobList() {
           <p className="text-center text-gray-500">{t('jobs.noJobs')}</p>
         )}
       </div>
-    </section>
+    </div>
   )
 }
 
