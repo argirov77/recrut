@@ -50,9 +50,9 @@ app.add_middleware(
 
 # Include routers under /api
 app.include_router(health_router, prefix="/api", tags=["health"])
-app.include_router(auth_router,   prefix="/api", tags=["auth"])
+app.include_router(auth_router, prefix="/api", tags=["auth"])
 # Job routes are served under /api/jobs
-app.include_router(jobs_router,   prefix="/api", tags=["jobs"])
-app.include_router(forms_router,  prefix="/api", tags=["forms"])
+app.include_router(jobs_router, prefix="/api", tags=["jobs"])
+app.include_router(forms_router, prefix="/api", tags=["forms"])
 
 logger.info("Application routes configured")
