@@ -1,3 +1,7 @@
+:root {
+  --navbar-height: 64px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
