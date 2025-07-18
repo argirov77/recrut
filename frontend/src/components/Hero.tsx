@@ -7,7 +7,7 @@ export default function Hero() {
   const { t } = useLanguage();
 
   return (
-    <section id="hero" className="relative h-screen overflow-hidden">
+    <div id="hero" className="relative h-screen overflow-hidden">
       {/* Фоновое видео с нарезкой довольных работников */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover"
@@ -36,6 +36,6 @@ export default function Hero() {
           {t("hero.button")}
         </a>
       </div>
-    </section>
+    </div>
   );
 }

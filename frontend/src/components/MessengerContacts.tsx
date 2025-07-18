@@ -1,8 +1,8 @@
+// frontend/src/components/MessengerContacts.tsx
 import { useLanguage } from '../context/LanguageContext'
 
 export default function MessengerContacts() {
   const { t } = useLanguage()
-
   const phone = '+359 881 234 567' // contact phone number
 
   return (
