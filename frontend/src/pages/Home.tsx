@@ -19,7 +19,7 @@ export default function Home() {
       <ParallaxSection
         speed={0.15}
         id="about"
-        className="snap-start h-[60vh] bg-[url('/images/about-bg.jpg')] bg-cover bg-center"
+        className="h-[60vh] bg-[url('/images/about-bg.jpg')] bg-cover bg-center"
       >
         <About />
       </ParallaxSection>
