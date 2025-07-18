@@ -174,3 +174,5 @@ async def test_list_jobs_with_language(client: AsyncClient):
     jobs = res.json()
     assert jobs[0]["title_ru"] == "Разработчик"
     assert jobs[0]["description_ru"] == "Писать код"
+    assert jobs[0]["location_ru"] == "Удаленно"
+    assert jobs[0]["job_type_ru"] == "Полная занятость"

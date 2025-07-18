@@ -21,6 +21,12 @@ interface Job {
   requirements_en?: string
   requirements_ru?: string
   requirements_bg?: string
+  location_en?: string
+  location_ru?: string
+  location_bg?: string
+  job_type_en?: string
+  job_type_ru?: string
+  job_type_bg?: string
 }
 
 export default function JobList() {
@@ -76,6 +82,8 @@ export default function JobList() {
               const title = job[`title_${lang}` as keyof Job] ?? job.title
               const description = job[`description_${lang}` as keyof Job] ?? job.description
               const requirements = job[`requirements_${lang}` as keyof Job] ?? job.requirements
+              const location = job[`location_${lang}` as keyof Job] ?? job.location
+              const jobType = job[`job_type_${lang}` as keyof Job] ?? job.job_type
               return (
                 <div
                   key={job.id}
@@ -83,10 +91,10 @@ export default function JobList() {
                 >
                   <h3 className="text-xl font-semibold mb-2">{title}</h3>
                   <p className="text-gray-700 mb-1">
-                    <span className="font-medium">{t('nav.jobs')}:</span> {job.location}
+                    <span className="font-medium">{t('nav.jobs')}:</span> {location}
                   </p>
                   <p className="text-gray-700 mb-4">
-                    <span className="font-medium">{job.job_type}</span>
+                    <span className="font-medium">{jobType}</span>
                   </p>
                   <p className="text-gray-700 mb-4 line-clamp-3">{description}</p>
                   {requirements && (
