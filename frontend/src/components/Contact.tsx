@@ -22,6 +22,7 @@ export default function Contact() {
     const title = params.get('position')
     if (title) {
       setForm((prev) => ({ ...prev, position: title }))
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
     }
   }, [location.search])
 
