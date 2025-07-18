@@ -71,36 +71,36 @@ export default function JobList() {
       <div className="container mx-auto px-6">
         <h2 className="text-3xl font-semibold text-center mb-8">{t('jobs.title')}</h2>
         {jobs && jobs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-6 max-w-3xl mx-auto">
             {jobs.map((job) => {
               const title = job[`title_${lang}` as keyof Job] ?? job.title
               const description = job[`description_${lang}` as keyof Job] ?? job.description
               const requirements = job[`requirements_${lang}` as keyof Job] ?? job.requirements
               return (
-                <div
-                  key={job.id}
-                  className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition"
-                >
-                  <h3 className="text-xl font-semibold mb-2">{title}</h3>
-                  <p className="text-gray-700 mb-1">
-                    <span className="font-medium">{t('nav.jobs')}:</span> {job.location}
-                  </p>
-                  <p className="text-gray-700 mb-4">
-                    <span className="font-medium">{job.job_type}</span>
-                  </p>
-                  <p className="text-gray-700 mb-4 line-clamp-3">{description}</p>
-                  {requirements && (
-                    <details className="mb-4">
-                      <summary className="cursor-pointer text-gray-900">
-                        {t('jobs.requirements')}
-                      </summary>
-                      <p className="mt-2 text-gray-600 whitespace-pre-line">{requirements}</p>
-                    </details>
-                  )}
-                  <button className="mt-2 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition">
-                    {t('hero.button')}
-                  </button>
-                </div>
+                <details key={job.id} className="bg-white rounded-lg shadow group">
+                  <summary className="cursor-pointer select-none p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 group-open:mb-1">
+                        {title}
+                      </h3>
+                      <p className="text-sm text-gray-700">
+                        {job.location} • {job.job_type}
+                      </p>
+                    </div>
+                  </summary>
+                  <div className="px-4 pb-4 text-gray-700 space-y-3">
+                    <p className="whitespace-pre-line">{description}</p>
+                    {requirements && (
+                      <div>
+                        <h4 className="font-medium">{t('jobs.requirements')}</h4>
+                        <p className="whitespace-pre-line">{requirements}</p>
+                      </div>
+                    )}
+                    <button className="mt-2 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition">
+                      {t('hero.button')}
+                    </button>
+                  </div>
+                </details>
               )
             })}
           </div>
