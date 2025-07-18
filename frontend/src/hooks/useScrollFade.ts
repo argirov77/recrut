@@ -7,14 +7,12 @@ export default function useScrollFade(ref: RefObject<HTMLElement | null>) {
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add('animate-fade-up')
-          el.classList.remove('animate-fade-down')
+          el.classList.add('opacity-100', 'translate-y-0', 'scale-1')
         } else {
-          el.classList.add('animate-fade-down')
-          el.classList.remove('animate-fade-up')
+          el.classList.remove('opacity-100', 'translate-y-0', 'scale-1')
         }
       },
-      { threshold: 0.3, root: document.querySelector('main') }
+      { root: null, threshold: 0.3 }
     )
     io.observe(el)
     return () => io.disconnect()
