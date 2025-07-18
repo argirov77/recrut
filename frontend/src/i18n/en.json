@@ -32,7 +32,8 @@
     "title": "Current vacancies",
     "loading": "Loading vacancies…",
     "noJobs": "No open positions at the moment.",
-    "error": "Could not load vacancies. Please try again later."
+    "error": "Could not load vacancies. Please try again later.",
+    "locationLabel": "Location"
   },
 
   "testimonials": {
