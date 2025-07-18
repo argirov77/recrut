@@ -12,7 +12,11 @@ export default function useScrollFade(ref: RefObject<HTMLElement | null>) {
           el.classList.remove('opacity-100', 'translate-y-0', 'scale-1')
         }
       },
-      { root: null, threshold: 0.3 }
+      {
+        root: null,
+        // Adjust threshold to trigger the animation sooner or later
+        threshold: 0.3,
+      }
     )
     io.observe(el)
     return () => io.disconnect()
