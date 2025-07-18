@@ -47,6 +47,12 @@ class JobResponse(JobBase):
     requirements_en: Optional[str] = None
     requirements_ru: Optional[str] = None
     requirements_bg: Optional[str] = None
+    location_en: Optional[str] = None
+    location_ru: Optional[str] = None
+    location_bg: Optional[str] = None
+    job_type_en: Optional[str] = None
+    job_type_ru: Optional[str] = None
+    job_type_bg: Optional[str] = None
 
     class Config:
         from_attributes = True

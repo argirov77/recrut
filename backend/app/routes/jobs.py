@@ -39,6 +39,8 @@ async def list_jobs(
                 setattr(job, f"title_{lang}", translation.title)
                 setattr(job, f"description_{lang}", translation.description)
                 setattr(job, f"requirements_{lang}", translation.requirements)
+                setattr(job, f"location_{lang}", translation.location)
+                setattr(job, f"job_type_{lang}", translation.job_type)
     return jobs
 
 
