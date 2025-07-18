@@ -83,7 +83,7 @@ export default function JobList() {
                 >
                   <h3 className="text-xl font-semibold mb-2">{title}</h3>
                   <p className="text-gray-700 mb-1">
-                    <span className="font-medium">{t('nav.jobs')}:</span> {job.location}
+                    <span className="font-medium">{t('jobs.locationLabel')}:</span> {job.location}
                   </p>
                   <p className="text-gray-700 mb-4">
                     <span className="font-medium">{job.job_type}</span>
