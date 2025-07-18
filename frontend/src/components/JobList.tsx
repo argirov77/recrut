@@ -1,6 +1,7 @@
 // frontend/src/components/JobList.tsx
 
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useLanguage } from '../context/LanguageContext'
 
@@ -97,9 +98,12 @@ export default function JobList() {
                       <p className="mt-2 text-gray-600 whitespace-pre-line">{requirements}</p>
                     </details>
                   )}
-                  <button className="mt-2 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition">
+                  <Link
+                    to={`/?position=${encodeURIComponent(title)}#contact`}
+                    className="mt-2 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition"
+                  >
                     {t('hero.button')}
-                  </button>
+                  </Link>
                 </div>
               )
             })}
