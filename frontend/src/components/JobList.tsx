@@ -1,5 +1,4 @@
 // frontend/src/components/JobList.tsx
-
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useLanguage } from '../context/LanguageContext'
@@ -21,6 +20,12 @@ interface Job {
   requirements_en?: string
   requirements_ru?: string
   requirements_bg?: string
+  location_en?: string
+  location_ru?: string
+  location_bg?: string
+  job_type_en?: string
+  job_type_ru?: string
+  job_type_bg?: string
 }
 
 export default function JobList() {
@@ -69,35 +74,77 @@ export default function JobList() {
   return (
     <section id="jobs" className="py-20 bg-gray-100">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl font-semibold text-center mb-8">{t('jobs.title')}</h2>
+        <h2 className="text-3xl font-heading font-extrabold text-primary text-center mb-8">
+          {t('jobs.title')}
+        </h2>
+
         {jobs && jobs.length > 0 ? (
           <div className="space-y-6 max-w-3xl mx-auto">
             {jobs.map((job) => {
-              const title = job[`title_${lang}` as keyof Job] ?? job.title
-              const description = job[`description_${lang}` as keyof Job] ?? job.description
-              const requirements = job[`requirements_${lang}` as keyof Job] ?? job.requirements
+              const title =
+                (job[`title_${lang}` as keyof Job] as string) ?? job.title
+              const location =
+                (job[`location_${lang}` as keyof Job] as string) ??
+                job.location
+              const jobType =
+                (job[`job_type_${lang}` as keyof Job] as string) ??
+                job.job_type
+              const description =
+                (job[`description_${lang}` as keyof Job] as string) ??
+                job.description
+              const requirements =
+                (job[`requirements_${lang}` as keyof Job] as string) ??
+                job.requirements
+
               return (
-                <details key={job.id} className="bg-white rounded-lg shadow group">
+                <details
+                  key={job.id}
+                  className="group bg-white rounded-lg shadow-lg overflow-hidden"
+                >
                   <summary className="cursor-pointer select-none p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 group-open:mb-1">
+                      <h3 className="text-lg font-heading font-semibold text-primary group-open:mb-1">
                         {title}
                       </h3>
                       <p className="text-sm text-gray-700">
-                        {job.location} • {job.job_type}
+                        {location} • {jobType}
                       </p>
                     </div>
+                    <svg
+                      className="w-5 h-5 text-gray-500 transition-transform group-open:rotate-180"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
                   </summary>
-                  <div className="px-4 pb-4 text-gray-700 space-y-3">
+
+                  <div className="px-4 pb-4 space-y-4 text-gray-700">
                     <p className="whitespace-pre-line">{description}</p>
                     {requirements && (
                       <div>
-                        <h4 className="font-medium">{t('jobs.requirements')}</h4>
+                        <h4 className="font-medium text-primary">
+                          {t('jobs.requirements')}
+                        </h4>
                         <p className="whitespace-pre-line">{requirements}</p>
                       </div>
                     )}
-                    <button className="mt-2 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition">
-                      {t('hero.button')}
+                    <button
+                      onClick={() =>
+                        window.location.assign(
+                          `/?position=${encodeURIComponent(title)}#contact`
+                        )
+                      }
+                      className="mt-2 inline-block px-6 py-2 bg-accentRed text-white rounded-full shadow hover:scale-105 transition"
+                    >
+                      {t('jobs.applyButton')}
                     </button>
                   </div>
                 </details>
@@ -111,3 +158,4 @@ export default function JobList() {
     </section>
   )
 }
+

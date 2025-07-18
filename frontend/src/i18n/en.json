@@ -45,7 +45,8 @@
     "loading": "Loading vacancies…",
     "noJobs": "No open positions at the moment.",
     "error": "Could not load vacancies. Please try again later.",
-    "requirements": "Requirements"
+    "requirements": "Requirements",
+    "applyButton": "Apply"
   },
 
   "testimonials": {
@@ -94,3 +95,4 @@
     "whatsapp": "WhatsApp"
   }
 }
+

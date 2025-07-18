@@ -41,7 +41,8 @@
     "loading": "Зареждане на позиции…",
     "noJobs": "В момента няма свободни позиции.",
     "error": "Грешка при зареждане на позициите.",
-    "requirements": "Изисквания"
+    "requirements": "Изисквания",
+    "applyButton": "Кандидатствай"
   },
 
   "testimonials": {
@@ -81,3 +82,4 @@
 
   "messengers": { "title": "Пишете ни в чатовете", "viber": "Viber", "whatsapp": "WhatsApp" }
 }
+

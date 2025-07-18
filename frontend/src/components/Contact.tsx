@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function Contact() {
   const { t } = useLanguage()
+  const location = useLocation()
 
   const [form, setForm] = useState({
     fullName: '',
@@ -14,6 +16,14 @@ export default function Contact() {
     position: '',
     message: '',
   })
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const title = params.get('position')
+    if (title) {
+      setForm((prev) => ({ ...prev, position: title }))
+    }
+  }, [location.search])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
