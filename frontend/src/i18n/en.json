@@ -73,7 +73,10 @@
     "phone": "Phone",
     "position": "Desired position / staff needed",
     "message": "Additional details",
-    "submit": "Send"
+    "submit": "Send",
+    "success": "Thank you for your application! We will contact you soon.",
+    "error": "Submission failed. Please try again later.",
+    "ok": "OK"
   },
 
   "footer": {
@@ -95,4 +98,3 @@
     "whatsapp": "WhatsApp"
   }
 }
-

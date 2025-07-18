@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import FeedbackModal from './FeedbackModal'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -9,6 +10,8 @@ export default function Contact() {
   const location = useLocation()
 
   const [isOpen, setIsOpen] = useState(false)
+
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const [form, setForm] = useState({
     fullName: '',
@@ -42,27 +45,32 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await fetch(`${API_URL}/api/forms/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        full_name: form.fullName,
-        country: form.country,
-        email: form.email,
-        phone: form.phone,
-        position: form.position,
-        message: form.message,
-      }),
-    })
-    alert('Спасибо за вашу заявку!')
-    setForm({
-      fullName: '',
-      country: '',
-      email: '',
-      phone: '',
-      position: '',
-      message: '',
-    })
+    try {
+      const res = await fetch(`${API_URL}/api/forms/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: form.fullName,
+          country: form.country,
+          email: form.email,
+          phone: form.phone,
+          position: form.position,
+          message: form.message,
+        }),
+      })
+      if (!res.ok) throw new Error('failed')
+      setFeedback({ type: 'success', text: t('contact.success') })
+      setForm({
+        fullName: '',
+        country: '',
+        email: '',
+        phone: '',
+        position: '',
+        message: '',
+      })
+    } catch {
+      setFeedback({ type: 'error', text: t('contact.error') })
+    }
   }
 
   return (
@@ -169,6 +177,13 @@ export default function Contact() {
             </div>
           </form>
         </details>
+        {feedback && (
+          <FeedbackModal
+            type={feedback.type}
+            message={feedback.text}
+            onClose={() => setFeedback(null)}
+          />
+        )}
       </div>
     </section>
   )
