@@ -27,9 +27,19 @@ A modern, full-featured starter template featuring FastAPI backend and React 19 
   - Custom hooks for data fetching
   - Modern error handling with Error Boundaries
   - Suspense for loading states
+  - Smooth section reveals with `AnimatedSection` (scroll snapping removed)
+
   - Tailwind CSS for styling
   - Environment configuration
   - Vite for fast development
+
+### Animation Tweaks
+
+The `AnimatedSection` component fades sections into view using
+IntersectionObserver. Animation timings come from the `fade-up` and `fade-down`
+entries in `frontend/tailwind.config.js`. Edit those durations to speed up or
+slow down the reveal effect. The visibility threshold can be tuned in
+`src/hooks/useScrollFade.ts`.
 
 ## Project Structure
 

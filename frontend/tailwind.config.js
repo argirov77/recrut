@@ -40,7 +40,7 @@ module.exports = {
       /* ─── кастомный max‑width для 4K экранов ─────────── */
       maxWidth: { '1440': '1440px' },
 
-      /* ─── анимация «накрытия» секций ──────────────────── */
+      /* ─── анимация появления секций ───────────────────── */
       keyframes: {
         'fade-up': {
           '0%':   { opacity: '0', transform: 'translateY(60px) scale(0.98)' },
@@ -52,6 +52,7 @@ module.exports = {
         }
       },
       animation: {
+        // Duration here controls how quickly sections fade in/out
         'fade-up':   'fade-up 0.7s ease-out forwards',
         'fade-down': 'fade-down 0.6s ease-out forwards'
       },

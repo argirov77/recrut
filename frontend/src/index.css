@@ -2,19 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scroll snap was removed. Sections fade in using AnimatedSection. */
+
 :root {
   --navbar-height: 4rem;
 }
 
 html {
-  /* scroll-snap-type: y mandatory; */
   scroll-behavior: smooth;
 }
 
 body {
   scroll-padding-top: var(--navbar-height);
-}
-
-section {
-  /* scroll-snap-align: start; */
 }

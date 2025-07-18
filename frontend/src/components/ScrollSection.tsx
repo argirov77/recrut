@@ -1,6 +1,9 @@
 import { useRef, HTMLAttributes } from 'react';
 import useScrollFade from '../hooks/useScrollFade';
 
+// This component animates its children into view.
+// Documentation refers to it as `AnimatedSection`.
+
 export default function ScrollSection(props: HTMLAttributes<HTMLDivElement>) {
   const ref = useRef<HTMLDivElement | null>(null);
   useScrollFade(ref);
