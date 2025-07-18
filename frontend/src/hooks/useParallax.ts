@@ -4,13 +4,21 @@ export default function useParallax(ref: RefObject<HTMLElement | null>, speed = 
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const main = document.querySelector('main')
-    if (!main) return
-    const onScroll = () => {
-      const offset = main.scrollTop
+
+    let rafId = 0
+    const update = () => {
+      const offset = window.scrollY
       el.style.transform = `translateY(${offset * speed}px)`
+      rafId = 0
     }
-    main.addEventListener('scroll', onScroll, { passive: true })
-    return () => main.removeEventListener('scroll', onScroll)
+    const onScroll = () => {
+      if (!rafId) rafId = requestAnimationFrame(update)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [ref, speed])
 }
