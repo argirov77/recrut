@@ -1,7 +1,5 @@
 // frontend/src/components/JobList.tsx
-
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useLanguage } from '../context/LanguageContext'
 
@@ -81,21 +79,28 @@ export default function JobList() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {jobs.map((job) => {
               const title = job[`title_${lang}` as keyof Job] ?? job.title
-              const description = job[`description_${lang}` as keyof Job] ?? job.description
-              const requirements = job[`requirements_${lang}` as keyof Job] ?? job.requirements
-              const location = job[`location_${lang}` as keyof Job] ?? job.location
-              const jobType = job[`job_type_${lang}` as keyof Job] ?? job.job_type
+              const description =
+                job[`description_${lang}` as keyof Job] ?? job.description
+              const requirements =
+                job[`requirements_${lang}` as keyof Job] ?? job.requirements
+              const location =
+                job[`location_${lang}` as keyof Job] ?? job.location
+              const jobType =
+                job[`job_type_${lang}` as keyof Job] ?? job.job_type
+
               return (
                 <div
                   key={job.id}
-                  className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition"
+                  className="flex flex-col p-6 bg-white rounded-lg shadow hover:shadow-lg transition"
                 >
                   <h3 className="text-xl font-semibold mb-2">{title}</h3>
                   <p className="text-gray-700 mb-1">
-                    <span className="font-medium">{t('nav.jobs')}:</span> {location}
+                    <span className="font-medium">{t('jobs.locationLabel')}:</span>{' '}
+                    {location}
                   </p>
                   <p className="text-gray-700 mb-4">
-                    <span className="font-medium">{jobType}</span>
+                    <span className="font-medium">{t('jobs.typeLabel')}:</span>{' '}
+                    {jobType}
                   </p>
                   <p className="text-gray-700 mb-4 line-clamp-3">{description}</p>
                   {requirements && (
@@ -103,15 +108,17 @@ export default function JobList() {
                       <summary className="cursor-pointer text-gray-900">
                         {t('jobs.requirements')}
                       </summary>
-                      <p className="mt-2 text-gray-600 whitespace-pre-line">{requirements}</p>
+                      <p className="mt-2 text-gray-600 whitespace-pre-line">
+                        {requirements}
+                      </p>
                     </details>
                   )}
-                  <Link
-                    to={`/?position=${encodeURIComponent(title)}#contact`}
-                    className="mt-2 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition"
+                  <button
+                    onClick={() => window.location.assign(`/apply?jobId=${job.id}`)}
+                    className="mt-auto px-4 py-2 bg-accentRed text-white rounded hover:bg-accentRed/90 transition"
                   >
-                    {t('hero.button')}
-                  </Link>
+                    {t('jobs.apply')}
+                  </button>
                 </div>
               )
             })}
@@ -123,3 +130,4 @@ export default function JobList() {
     </section>
   )
 }
+
