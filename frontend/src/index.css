@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --navbar-height: 4rem;
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+body {
+  scroll-padding-top: var(--navbar-height);
+}
+
+section {
+  scroll-snap-align: start;
+}
