@@ -5,7 +5,7 @@ import Services from '../components/Services'
 import JobList from '../components/JobList'
 import Testimonials from '../components/Testimonials'
 import Contact from '../components/Contact'
-import MessengerContacts from '../components/MessengerContacts'
+import Chat from '../components/Chat'
 import ScrollSection from '../components/ScrollSection'
 import ParallaxSection from '../components/ParallaxSection'
 
@@ -35,7 +35,7 @@ export default function Home() {
       <ScrollSection id="contact">
         <Contact />
       </ScrollSection>
-      <MessengerContacts />
+      <Chat />
     </>
   )
 }
