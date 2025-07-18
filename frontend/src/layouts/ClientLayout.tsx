@@ -1,10 +1,10 @@
 // frontend/src/layouts/ClientLayout.tsx
-import { Outlet } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { Outlet } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+import { ThemeToggle } from '../components/ui/ThemeToggle'
 
 export default function ClientLayout() {
-  const year = new Date().getFullYear();
+  const year = new Date().getFullYear()
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
@@ -17,7 +17,7 @@ export default function ClientLayout() {
       </div>
 
       {/* MAIN без глобального container — секции сами решают ширину */}
-      <main className="flex-1 snap-y snap-mandatory overflow-y-auto h-screen">
+      <main className="flex-1">
         <Outlet />
       </main>
 
@@ -28,5 +28,5 @@ export default function ClientLayout() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

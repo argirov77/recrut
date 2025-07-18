@@ -1,5 +1,4 @@
 // frontend/src/App.tsx
-import { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 
 // Ваши компоненты
@@ -14,10 +13,6 @@ import MessengerContacts from './components/MessengerContacts'
 import Footer from './components/Footer'
 
 export default function App() {
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth'
-  }, [])
-
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
