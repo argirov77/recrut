@@ -74,52 +74,80 @@ export default function JobList() {
   return (
     <section id="jobs" className="py-20 bg-gray-100">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl font-semibold text-center mb-8">{t('jobs.title')}</h2>
+        <h2 className="text-3xl font-heading font-extrabold text-primary text-center mb-8">
+          {t('jobs.title')}
+        </h2>
+
         {jobs && jobs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-6 max-w-3xl mx-auto">
             {jobs.map((job) => {
-              const title = job[`title_${lang}` as keyof Job] ?? job.title
-              const description =
-                job[`description_${lang}` as keyof Job] ?? job.description
-              const requirements =
-                job[`requirements_${lang}` as keyof Job] ?? job.requirements
+              const title =
+                (job[`title_${lang}` as keyof Job] as string) ?? job.title
               const location =
-                job[`location_${lang}` as keyof Job] ?? job.location
+                (job[`location_${lang}` as keyof Job] as string) ??
+                job.location
               const jobType =
-                job[`job_type_${lang}` as keyof Job] ?? job.job_type
+                (job[`job_type_${lang}` as keyof Job] as string) ??
+                job.job_type
+              const description =
+                (job[`description_${lang}` as keyof Job] as string) ??
+                job.description
+              const requirements =
+                (job[`requirements_${lang}` as keyof Job] as string) ??
+                job.requirements
 
               return (
-                <div
+                <details
                   key={job.id}
-                  className="flex flex-col p-6 bg-white rounded-lg shadow hover:shadow-lg transition"
+                  className="group bg-white rounded-lg shadow-lg overflow-hidden"
                 >
-                  <h3 className="text-xl font-semibold mb-2">{title}</h3>
-                  <p className="text-gray-700 mb-1">
-                    <span className="font-medium">{t('jobs.locationLabel')}:</span>{' '}
-                    {location}
-                  </p>
-                  <p className="text-gray-700 mb-4">
-                    <span className="font-medium">{t('jobs.typeLabel')}:</span>{' '}
-                    {jobType}
-                  </p>
-                  <p className="text-gray-700 mb-4 line-clamp-3">{description}</p>
-                  {requirements && (
-                    <details className="mb-4">
-                      <summary className="cursor-pointer text-gray-900">
-                        {t('jobs.requirements')}
-                      </summary>
-                      <p className="mt-2 text-gray-600 whitespace-pre-line">
-                        {requirements}
+                  <summary className="cursor-pointer select-none p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                    <div>
+                      <h3 className="text-lg font-heading font-semibold text-primary group-open:mb-1">
+                        {title}
+                      </h3>
+                      <p className="text-sm text-gray-700">
+                        {location} • {jobType}
                       </p>
-                    </details>
-                  )}
-                  <button
-                    onClick={() => window.location.assign(`/apply?jobId=${job.id}`)}
-                    className="mt-auto px-4 py-2 bg-accentRed text-white rounded hover:bg-accentRed/90 transition"
-                  >
-                    {t('jobs.apply')}
-                  </button>
-                </div>
+                    </div>
+                    <svg
+                      className="w-5 h-5 text-gray-500 transition-transform group-open:rotate-180"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </summary>
+
+                  <div className="px-4 pb-4 space-y-4 text-gray-700">
+                    <p className="whitespace-pre-line">{description}</p>
+                    {requirements && (
+                      <div>
+                        <h4 className="font-medium text-primary">
+                          {t('jobs.requirements')}
+                        </h4>
+                        <p className="whitespace-pre-line">{requirements}</p>
+                      </div>
+                    )}
+                    <button
+                      onClick={() =>
+                        window.location.assign(
+                          `/?position=${encodeURIComponent(title)}#contact`
+                        )
+                      }
+                      className="mt-2 inline-block px-6 py-2 bg-accentRed text-white rounded-full shadow hover:scale-105 transition"
+                    >
+                      {t('jobs.applyButton')}
+                    </button>
+                  </div>
+                </details>
               )
             })}
           </div>

@@ -21,10 +21,22 @@
   "services": {
     "title": "What we do",
     "list": [
-      { "title": "Targeted recruitment",      "desc": "Short‑listing candidates for hospitality, manufacturing and agriculture." },
-      { "title": "Work permits & visas",      "desc": "Full preparation of documents and representation before the authorities." },
-      { "title": "HR outsourcing",            "desc": "Payroll, contracts and ongoing HR administration under Bulgarian law." },
-      { "title": "Relocation & onboarding",   "desc": "Airport meet‑and‑greet, accommodation search, translation and adaptation." }
+      {
+        "title": "Targeted recruitment",
+        "desc": "Short‑listing candidates for hospitality, manufacturing and agriculture."
+      },
+      {
+        "title": "Work permits & visas",
+        "desc": "Full preparation of documents and representation before the authorities."
+      },
+      {
+        "title": "HR outsourcing",
+        "desc": "Payroll, contracts and ongoing HR administration under Bulgarian law."
+      },
+      {
+        "title": "Relocation & onboarding",
+        "desc": "Airport meet‑and‑greet, accommodation search, translation and adaptation."
+      }
     ]
   },
 
@@ -33,6 +45,7 @@
     "loading": "Loading vacancies…",
     "noJobs": "No open positions at the moment.",
     "error": "Could not load vacancies. Please try again later.",
+    "requirements": "Requirements",
     "applyButton": "Apply"
   },
 
@@ -82,3 +95,4 @@
     "whatsapp": "WhatsApp"
   }
 }
+
