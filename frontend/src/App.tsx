@@ -9,7 +9,7 @@ import Services from './components/Services'
 import JobList from './components/JobList'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
-import MessengerContacts from './components/MessengerContacts'
+import Chat from './components/Chat'
 import Footer from './components/Footer'
 
 export default function App() {
@@ -25,7 +25,7 @@ export default function App() {
           <JobList />
           <Testimonials />
           <Contact />
-          <MessengerContacts />
+          <Chat />
         </main>
 
         <Footer />

@@ -1,10 +1,14 @@
 // frontend/src/layouts/ClientLayout.tsx
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { ThemeToggle } from '../components/ui/ThemeToggle'
+import ChatModal from '../components/ChatModal'
+import { MessageSquare } from 'lucide-react'
 
 export default function ClientLayout() {
   const year = new Date().getFullYear()
+  const [chatOpen, setChatOpen] = useState(false)
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
@@ -27,6 +31,18 @@ export default function ClientLayout() {
           © {year} HR Agency. All rights reserved.
         </div>
       </footer>
+
+      {/* Floating chat button visible only on small screens */}
+      <button
+        onClick={() => setChatOpen(true)}
+        className="lg:hidden fixed bottom-6 right-6 z-40 rounded-full bg-accentGreen p-4 text-white shadow-lg"
+        aria-label="Open chat options"
+      >
+        <MessageSquare className="h-6 w-6" />
+      </button>
+
+      {/* Modal with messenger links */}
+      <ChatModal open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   )
 }
