@@ -1,18 +1,14 @@
-// src/components/ScrollSection.tsx
-import { useRef } from 'react';
-import useReveal from '../hooks/useReveal';
+import { useRef, HTMLAttributes } from 'react';
+import useScrollFade from '../hooks/useScrollFade';
 
-type Props = React.HTMLAttributes<HTMLDivElement>;
-
-export default function ScrollSection({ className = '', ...rest }: Props) {
+export default function ScrollSection(props: HTMLAttributes<HTMLDivElement>) {
   const ref = useRef<HTMLDivElement | null>(null);
-  useReveal(ref);                            // ✔️ типы без ошибки
-
+  useScrollFade(ref);
   return (
     <section
       ref={ref}
-      className={`section-transition ${className}`}
-      {...rest}
+      className={`snap-start ${props.className ?? ''}`}
+      {...props}
     />
   );
 }
