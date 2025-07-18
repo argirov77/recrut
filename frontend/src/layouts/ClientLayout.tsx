@@ -17,7 +17,7 @@ export default function ClientLayout() {
       </div>
 
       {/* MAIN без глобального container — секции сами решают ширину */}
-      <main className="flex-1">
+      <main className="flex-1 snap-y snap-mandatory overflow-y-auto h-screen">
         <Outlet />
       </main>
 
