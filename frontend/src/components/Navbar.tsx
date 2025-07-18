@@ -1,18 +1,26 @@
-import { useState } from 'react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useLanguage } from '../context/LanguageContext';
-import LanguageSwitcher from './LanguageSwitcher';
-import logo from '../assets/logo-icon.png';
+import { useState } from 'react'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useLanguage } from '../context/LanguageContext'
+import LanguageSwitcher from './LanguageSwitcher'
+import logo from '../assets/logo-icon.png'
 
 export default function Navbar() {
-  const { t } = useLanguage();
-  const [open, setOpen] = useState(false);
+  const { t } = useLanguage()
+  const [open, setOpen] = useState(false)
+
+  const handleNavClick = (href: string) => {
+    if (href === '#contact') {
+      const details = document.getElementById('contact-form') as HTMLDetailsElement | null
+      if (details) details.open = true
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   const nav = [
     { href: '#hero', label: t('nav.home') as string },
     { href: '#jobs', label: t('nav.jobs') as string },
     { href: '#contact', label: t('nav.contact') as string },
-  ];
+  ]
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200 shadow-sm">
@@ -31,6 +39,7 @@ export default function Navbar() {
             <a
               key={href}
               href={href}
+              onClick={() => handleNavClick(href)}
               className="text-lg font-medium text-primary hover:text-accentRed transition-colors"
             >
               {label}
@@ -60,7 +69,10 @@ export default function Navbar() {
               <a
                 key={href}
                 href={href}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false)
+                  handleNavClick(href)
+                }}
                 className="text-lg text-primary hover:text-accentRed"
               >
                 {label}
@@ -71,5 +83,5 @@ export default function Navbar() {
         </div>
       )}
     </header>
-  );
+  )
 }
