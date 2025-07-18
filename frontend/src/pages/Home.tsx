@@ -6,16 +6,16 @@ import JobList from '../components/JobList'
 import Testimonials from '../components/Testimonials'
 import Contact from '../components/Contact'
 import Chat from '../components/Chat'
-import ScrollSection from '../components/ScrollSection'
+import AnimatedSection from '../components/AnimatedSection'
 import ParallaxSection from '../components/ParallaxSection'
 
 export default function Home() {
   return (
     <>
       
-      <ScrollSection id="hero">
+      <AnimatedSection id="hero">
         <Hero />
-      </ScrollSection>
+      </AnimatedSection>
       <ParallaxSection
         speed={0.15}
         id="about"
@@ -23,18 +23,18 @@ export default function Home() {
       >
         <About />
       </ParallaxSection>
-      <ScrollSection id="services">
+      <AnimatedSection id="services">
         <Services />
-      </ScrollSection>
-      <ScrollSection id="jobs">
+      </AnimatedSection>
+      <AnimatedSection id="jobs">
         <JobList />
-      </ScrollSection>
-      <ScrollSection id="testimonials">
+      </AnimatedSection>
+      <AnimatedSection id="testimonials">
         <Testimonials />
-      </ScrollSection>
-      <ScrollSection id="contact">
+      </AnimatedSection>
+      <AnimatedSection id="contact">
         <Contact />
-      </ScrollSection>
+      </AnimatedSection>
       <Chat />
     </>
   )
