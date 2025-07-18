@@ -1,84 +1,82 @@
 {
-  "siteTitle": "HR Agency",
+  "siteTitle": "Bulstaff Recruitment Agency",
+
   "nav": {
     "home": "Home",
-    "jobs": "Jobs",
+    "jobs": "Vacancies",
     "contact": "Contact"
   },
+
   "hero": {
-    "headline": "Staff recruitment for your business",
-    "subtext": "We help Ukrainians and Moldovans find jobs in Bulgaria — from hotels to factories and farms.",
-    "button": "View Jobs"
+    "headline": "Reliable staffing for hotels, factories & farms",
+    "subtext": "We source motivated employees, arrange visas and onboarding, and make sure every contract is 100 % compliant with Bulgarian legislation.",
+    "button": "Browse Vacancies"
   },
+
   "about": {
-    "title": "About Us",
-    "text": "We are a small team that since 2020 helps citizens from Ukraine and Moldova find legal employment in Bulgaria. We cooperate with hotels, factories, and farms, monitor labor contracts, and provide full legal support."
+    "title": "Who we are",
+    "text": "Bulstaff is a licensed recruitment agency based in Varna. Since 2015 we have been connecting Bulgarian employers with skilled and seasonal staff from the EU and third countries. Our consultants handle every step — from candidate screening to work‑permit paperwork — so clients can stay focused on their core business."
   },
+
   "services": {
-    "title": "Our Services",
+    "title": "What we do",
     "list": [
-      {
-        "title": "Job Placement",
-        "desc": "We find the best options in hotels, factories, and farms."
-      },
-      {
-        "title": "Visa Assistance",
-        "desc": "We prepare documents and assist with embassies."
-      },
-      {
-        "title": "Legal Support",
-        "desc": "We control labor contracts and protect worker rights."
-      },
-      {
-        "title": "Adaptation",
-        "desc": "Help with housing, translator, and language courses."
-      }
+      { "title": "Targeted recruitment",      "desc": "Short‑listing candidates for hospitality, manufacturing and agriculture." },
+      { "title": "Work permits & visas",      "desc": "Full preparation of documents and representation before the authorities." },
+      { "title": "HR outsourcing",            "desc": "Payroll, contracts and ongoing HR administration under Bulgarian law." },
+      { "title": "Relocation & onboarding",   "desc": "Airport meet‑and‑greet, accommodation search, translation and adaptation." }
     ]
   },
+
   "jobs": {
-    "title": "Current Vacancies",
-    "loading": "Loading jobs...",
+    "title": "Current vacancies",
+    "loading": "Loading vacancies…",
     "noJobs": "No open positions at the moment.",
-    "error": "Failed to load job listings."
+    "error": "Could not load vacancies. Please try again later."
   },
+
   "testimonials": {
-    "title": "Client Testimonials",
+    "title": "What clients say",
     "items": [
       {
-        "name": "Ivan Ivanov",
-        "role": "Hotel Manager, Varna",
-        "text": "Thanks to this agency, I quickly found a hotel job in Varna. Everything was transparent and fast."
+        "name": "Elena Todorova",
+        "role": "HR Manager, Black Sea Hotel Group",
+        "text": "Bulstaff filled 40+ seasonal roles in under three weeks. The team took care of visas and transport — we simply welcomed the staff on site."
       },
       {
-        "name": "Maria Petrova",
-        "role": "Farm Worker, Plovdiv",
-        "text": "They helped me with paperwork and visa, and the employer was ready within the first week."
+        "name": "Nikolay Georgiev",
+        "role": "Plant Director, TechPlast",
+        "text": "Professional, transparent and quick. Bulstaff is now our single supplier for machine operators."
       }
     ]
   },
+
   "contact": {
-    "title": "Apply Now",
-    "fullName": "Full Name",
-    "country": "Country",
+    "title": "Request staff or apply for a job",
+    "fullName": "Full name",
+    "country": "Country of residence",
     "email": "Email",
     "phone": "Phone",
-    "position": "Desired Position",
-    "message": "Additional Information",
-    "submit": "Send Application"
+    "position": "Desired position / staff needed",
+    "message": "Additional details",
+    "submit": "Send"
   },
+
   "footer": {
-    "rights": "© 2025 HR Agency. All rights reserved.",
+    "rights": "© 2025 Bulstaff Recruitment. All rights reserved.",
     "privacy": "Privacy Policy",
     "contacts": "Contacts"
   },
+
   "languageSwitcher": {
     "label": "Language",
     "en": "English",
     "ru": "Русский",
     "bg": "Български"
   },
+
   "messengers": {
-    "title": "Contact us via messengers",
+    "title": "Chat with us",
     "viber": "Viber",
     "whatsapp": "WhatsApp"
   }
