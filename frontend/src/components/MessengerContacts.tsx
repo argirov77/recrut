@@ -6,8 +6,8 @@ export default function MessengerContacts() {
   const phone = '+359 881 234 567' // contact phone number
 
   return (
-    <section id="messengers" className="py-10 bg-gray-100">
-      <div className="container mx-auto px-6 text-center">
+    <section id="messengers" className="py-8 bg-gray-100">
+      <div className="container mx-auto px-6">
         <h2 className="text-2xl font-semibold mb-4">{t('messengers.title')}</h2>
         <div className="flex flex-col items-center space-y-2 text-lg">
           <div>
