@@ -26,7 +26,7 @@ export default function Hero() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
           {t("hero.headline")}
         </h1>
-        <p className="mt-4 text-md sm:text-lg md:text-xl text-gray-200 max-w-2xl">
+        <p className="mt-4 font-sans text-base text-primary max-w-2xl">
           {t("hero.subtext")}
         </p>
         <a

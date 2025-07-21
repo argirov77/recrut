@@ -18,7 +18,7 @@ export default function Services() {
   return (
     <div id="services" className="py-20 bg-gray-50">
       <div className="container mx-auto px-6 text-center mb-12">
-        <h2 className="text-3xl font-semibold text-gray-900">
+        <h2 className="font-heading text-3xl md:text-4xl text-primary text-center mb-8">
           {t("services.title")}
         </h2>
       </div>
@@ -39,10 +39,10 @@ export default function Services() {
               <div className="w-16 h-16 mx-auto text-red-600 mb-4">
                 <Icon />
               </div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
+              <h3 className="font-heading text-2xl text-primary mb-2">
                 {srv.title}
               </h3>
-              <p className="text-gray-600">{srv.desc}</p>
+              <p className="font-sans text-base text-primary">{srv.desc}</p>
             </div>
           );
         })}
