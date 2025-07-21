@@ -3,6 +3,7 @@ import phoneIcon from '../assets/icons/phone-call.png'
 import mailIcon from '../assets/icons/mail.png'
 import viberIcon from '../assets/icons/viber.png'
 import whatsappIcon from '../assets/icons/whatsapp.png'
+import telegramIcon from '../assets/icons/telegram.svg'
 
 export default function ContactSection() {
   const { t } = useLanguage()
@@ -14,7 +15,7 @@ export default function ContactSection() {
         <h2 className="font-heading text-3xl md:text-4xl text-primary mb-8">
           {t('messengers.title')}
         </h2>
-        <div className="mx-auto grid max-w-md grid-cols-1 gap-4 sm:grid-cols-2 md:max-w-none md:grid-cols-4">
+        <div className="mx-auto grid max-w-md grid-cols-1 gap-4 sm:grid-cols-2 md:max-w-none md:grid-cols-5">
           <a
             href={`tel:${phone.replace(/\s+/g, '')}`}
             className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all"
@@ -49,6 +50,18 @@ export default function ContactSection() {
                 {t('messengers.whatsapp')}
               </p>
               <p className="font-sans text-base text-primary">{phone}</p>
+            </div>
+          </a>
+          <a
+            href="https://t.me/bulstaff"
+            className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all"
+          >
+            <img src={telegramIcon} alt="Telegram" className="h-8 w-8" />
+            <div className="text-left">
+              <p className="font-sans text-base text-primary font-medium">
+                {t('messengers.telegram')}
+              </p>
+              <p className="font-sans text-base text-primary">@bulstaff</p>
             </div>
           </a>
           <a

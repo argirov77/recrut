@@ -96,10 +96,11 @@
   },
 
   "messengers": {
-    "title": "Chat with us",
+    "title": "Contact us",
     "phone": "Phone",
     "viber": "Viber",
     "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
     "email": "Email"
   }
 }

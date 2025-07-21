@@ -3,6 +3,7 @@ import phoneIcon from '../assets/icons/phone-call.png'
 import mailIcon from '../assets/icons/mail.png'
 import viberIcon from '../assets/icons/viber.png'
 import whatsappIcon from '../assets/icons/whatsapp.png'
+import telegramIcon from '../assets/icons/telegram.svg'
 
 interface ChatModalProps {
   open: boolean
@@ -62,6 +63,18 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
                 {t('messengers.whatsapp')}
               </p>
               <p className="font-sans text-base text-primary">{phone}</p>
+            </div>
+          </a>
+          <a
+            href="https://t.me/bulstaff"
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all"
+          >
+            <img src={telegramIcon} alt="Telegram" className="h-8 w-8" />
+            <div className="text-left">
+              <p className="font-sans text-base text-primary font-medium">
+                {t('messengers.telegram')}
+              </p>
+              <p className="font-sans text-base text-primary">@bulstaff</p>
             </div>
           </a>
           <a

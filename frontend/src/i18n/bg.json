@@ -87,10 +87,11 @@
   "languageSwitcher": { "label": "Език", "en": "English", "ru": "Русский", "bg": "Български" },
 
   "messengers": {
-    "title": "Пишете ни в чатовете",
+    "title": "Свържете се с нас",
     "phone": "Телефон",
     "viber": "Viber",
     "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
     "email": "Имейл"
   }
 }
