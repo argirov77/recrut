@@ -9,7 +9,6 @@ import Services from './components/Services'
 import JobList from './components/JobList'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
-import ContactSection from './components/ContactSection'
 import Footer from './components/Footer'
 
 export default function App() {
@@ -25,7 +24,6 @@ export default function App() {
           <JobList />
           <Testimonials />
           <Contact />
-          <ContactSection />
         </main>
 
         <Footer />

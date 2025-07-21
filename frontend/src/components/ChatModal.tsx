@@ -1,8 +1,8 @@
 import { useLanguage } from '../context/LanguageContext'
-import viberIcon from '../assets/icons/viber.svg'
-import whatsappIcon from '../assets/icons/whatsapp.svg'
-import telegramIcon from '../assets/icons/telegram.svg'
-import emailIcon from '../assets/icons/email.svg'
+import phoneIcon from '../assets/icons/phone-call.png'
+import mailIcon from '../assets/icons/mail.png'
+import viberIcon from '../assets/icons/viber.png'
+import whatsappIcon from '../assets/icons/whatsapp.png'
 
 interface ChatModalProps {
   open: boolean
@@ -13,7 +13,6 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
   const { t } = useLanguage()
   const phone = '+359 881 234 567'
   const email = 'info@bulstaff.com'
-  const telegram = 'bulstaff'
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 lg:hidden">
@@ -30,42 +29,50 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
         </h2>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <a
+            href={`tel:${phone.replace(/\s+/g, '')}`}
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all"
+          >
+            <img src={phoneIcon} alt="Phone" className="h-8 w-8" />
+            <div className="text-left">
+              <p className="font-sans text-base text-primary font-medium">
+                {t('messengers.phone')}
+              </p>
+              <p className="font-sans text-base text-primary">{phone}</p>
+            </div>
+          </a>
+          <a
             href={`viber://chat?number=${phone.replace(/\s+/g, '')}`}
-            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all"
           >
             <img src={viberIcon} alt="Viber" className="h-8 w-8" />
             <div className="text-left">
-              <p className="font-sans text-base text-primary font-medium">{t('messengers.viber')}</p>
+              <p className="font-sans text-base text-primary font-medium">
+                {t('messengers.viber')}
+              </p>
               <p className="font-sans text-base text-primary">{phone}</p>
             </div>
           </a>
           <a
             href={`https://wa.me/${phone.replace(/\D/g, '')}`}
-            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all"
           >
             <img src={whatsappIcon} alt="WhatsApp" className="h-8 w-8" />
             <div className="text-left">
-              <p className="font-sans text-base text-primary font-medium">{t('messengers.whatsapp')}</p>
+              <p className="font-sans text-base text-primary font-medium">
+                {t('messengers.whatsapp')}
+              </p>
               <p className="font-sans text-base text-primary">{phone}</p>
             </div>
           </a>
           <a
-            href={`https://t.me/${telegram}`}
-            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
-          >
-            <img src={telegramIcon} alt="Telegram" className="h-8 w-8" />
-            <div className="text-left">
-              <p className="font-sans text-base text-primary font-medium">{t('messengers.telegram')}</p>
-              <p className="font-sans text-base text-primary">@{telegram}</p>
-            </div>
-          </a>
-          <a
             href={`mailto:${email}`}
-            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all"
           >
-            <img src={emailIcon} alt="Email" className="h-8 w-8" />
+            <img src={mailIcon} alt="Email" className="h-8 w-8" />
             <div className="text-left">
-              <p className="font-sans text-base text-primary font-medium">{t('messengers.email')}</p>
+              <p className="font-sans text-base text-primary font-medium">
+                {t('messengers.email')}
+              </p>
               <p className="font-sans text-base text-primary">{email}</p>
             </div>
           </a>
