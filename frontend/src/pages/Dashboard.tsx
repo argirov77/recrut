@@ -13,7 +13,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Dashboard</h1>
+        <h1 className="text-4xl font-bold mb-4 text-primary dark:text-white">Dashboard</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300">
           Monitor your application metrics and performance
         </p>
@@ -22,7 +22,7 @@ export default function Dashboard() {
       <Suspense
         fallback={
           <div className="text-center py-8 text-gray-600 dark:text-gray-400">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accentCyan mx-auto mb-4" />
             Loading dashboard data...
           </div>
         }
@@ -72,16 +72,16 @@ function DashboardCard({
     >
       <div className="flex items-start space-x-4">
         <div
-          className="flex-shrink-0 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 
-          text-blue-600 dark:text-blue-400 group-hover:bg-blue-100 
-          dark:group-hover:bg-blue-900/50 transition-colors"
+          className="flex-shrink-0 p-2 rounded-lg bg-accentCyan/10 dark:bg-accentCyan/30
+          text-accentCyan dark:text-accentCyan group-hover:bg-accentCyan/20
+          dark:group-hover:bg-accentCyan/50 transition-colors"
         >
           {icon}
         </div>
         <div>
           <h2
-            className="text-xl font-semibold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 
-            dark:group-hover:text-blue-400 transition-colors"
+            className="text-xl font-semibold mb-2 text-primary dark:text-white group-hover:text-accentCyan
+            dark:group-hover:text-accentCyan transition-colors"
           >
             {title}
           </h2>

@@ -8,7 +8,7 @@ export function HealthStatus() {
   return (
     <div className="flex items-center">
       <StatusDot status={data.status} />
-      <span className="text-gray-600">Status: {data.status}</span>
+      <span className="text-primary">Status: {data.status}</span>
     </div>
   )
 }

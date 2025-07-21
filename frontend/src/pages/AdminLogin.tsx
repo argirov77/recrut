@@ -45,9 +45,9 @@ export default function AdminLogin() {
             className="w-full px-3 py-2 border rounded"
           />
         </div>
-        {error && <div className="text-red-600">{error}</div>}
+        {error && <div className="text-accentRed">{error}</div>}
         <div className="flex items-center justify-between">
-          <Link to="/admin/register" className="text-blue-600">
+          <Link to="/admin/register" className="text-primary hover:text-accentCyan transition">
             Register
           </Link>
           <Button type="submit" disabled={isLoading}>

@@ -70,7 +70,7 @@ export default function AdminJobList() {
   }
   if (error) {
     return (
-      <p className="text-red-600">
+      <p className="text-accentRed">
         <strong>Error:</strong> {error}
       </p>
     )

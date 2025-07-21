@@ -2,10 +2,10 @@ import { useAppState, useAppDispatch, ACTIONS } from '../../context/AppContext'
 import { NotificationType } from '../../types'
 
 const NOTIFICATION_COLORS: Record<NotificationType, string> = {
-  info: 'bg-blue-500 dark:bg-blue-600',
-  success: 'bg-green-500 dark:bg-green-600',
-  error: 'bg-red-500 dark:bg-red-600',
-  warning: 'bg-yellow-500 dark:bg-yellow-600',
+  info: 'bg-accentCyan',
+  success: 'bg-accentGreen',
+  error: 'bg-accentRed',
+  warning: 'bg-accentRed',
 }
 
 export function Notification() {

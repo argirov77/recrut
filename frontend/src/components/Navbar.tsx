@@ -40,7 +40,7 @@ export default function Navbar() {
               key={href}
               href={href}
               onClick={() => handleNavClick(href)}
-              className="text-lg font-medium text-primary hover:text-accentRed transition-colors"
+              className="text-lg font-medium text-primary hover:text-accentCyan transition-colors"
             >
               {label}
             </a>
@@ -73,7 +73,7 @@ export default function Navbar() {
                   setOpen(false)
                   handleNavClick(href)
                 }}
-                className="text-lg text-primary hover:text-accentRed"
+                className="text-lg text-primary hover:text-accentCyan"
               >
                 {label}
               </a>

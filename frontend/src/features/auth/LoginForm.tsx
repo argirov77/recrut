@@ -87,7 +87,7 @@ function LoginFormContent({ onSuccess }: LoginFormProps) {
               className="w-full"
             />
           </div>
-          {state.error && <div className="text-sm text-red-500">{state.error}</div>}
+          {state.error && <div className="text-sm text-accentRed">{state.error}</div>}
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button

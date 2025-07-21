@@ -16,33 +16,31 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
       <div className="relative bg-white rounded-lg p-6 w-11/12 max-w-sm">
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
+          className="absolute right-3 top-3 text-gray-500 hover:text-accentCyan"
           aria-label="Close"
         >
           ×
         </button>
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          {t('messengers.title')}
-        </h2>
+        <h2 className="text-xl font-semibold mb-4 text-center">{t('messengers.title')}</h2>
         <div className="grid gap-4">
           <a
             href={`viber://chat?number=${phone.replace(/\s+/g, '')}`}
-            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200 text-primary hover:text-accentCyan"
           >
             <img src={viberIcon} alt="Viber" className="h-8 w-8" />
             <div className="text-left">
               <p className="font-medium">{t('messengers.viber')}</p>
-              <p className="text-gray-700">{phone}</p>
+              <p className="text-primary">{phone}</p>
             </div>
           </a>
           <a
             href={`https://wa.me/${phone.replace(/\D/g, '')}`}
-            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200 text-primary hover:text-accentCyan"
           >
             <img src={whatsappIcon} alt="WhatsApp" className="h-8 w-8" />
             <div className="text-left">
               <p className="font-medium">{t('messengers.whatsapp')}</p>
-              <p className="text-gray-700">{phone}</p>
+              <p className="text-primary">{phone}</p>
             </div>
           </a>
         </div>
