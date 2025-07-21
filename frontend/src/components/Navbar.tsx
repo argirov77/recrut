@@ -18,6 +18,8 @@ export default function Navbar() {
 
   const nav = [
     { href: '#hero', label: t('nav.home') as string },
+    { href: '#about', label: t('nav.about') as string },
+    { href: '#services', label: t('nav.services') as string },
     { href: '#jobs', label: t('nav.jobs') as string },
     { href: '#contact', label: t('nav.contact') as string },
   ]
