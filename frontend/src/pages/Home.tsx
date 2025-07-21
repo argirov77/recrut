@@ -5,14 +5,13 @@ import Services from '../components/Services'
 import JobList from '../components/JobList'
 import Testimonials from '../components/Testimonials'
 import Contact from '../components/Contact'
-import Chat from '../components/Chat'
+import ContactSection from '../components/ContactSection'
 import AnimatedSection from '../components/AnimatedSection'
 import ParallaxSection from '../components/ParallaxSection'
 
 export default function Home() {
   return (
     <>
-      
       <AnimatedSection id="hero">
         <Hero />
       </AnimatedSection>
@@ -35,7 +34,7 @@ export default function Home() {
       <AnimatedSection id="contact">
         <Contact />
       </AnimatedSection>
-      <Chat />
+      <ContactSection />
     </>
   )
 }
