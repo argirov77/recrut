@@ -23,8 +23,8 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200 shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-6 py-3">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 shadow-md">
+      <div className="container mx-auto flex items-center justify-between px-6 py-5">
         {/* logo */}
         <a href="#" className="flex items-center gap-3 select-none">
           <img src={logo} alt="Bulstaff logo" className="h-10 w-10" />
