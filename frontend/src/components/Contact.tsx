@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import FeedbackModal from './FeedbackModal'
+import viberIcon from '../assets/icons/viber.svg'
+import whatsappIcon from '../assets/icons/whatsapp.svg'
+import telegramIcon from '../assets/icons/telegram.svg'
+import emailIcon from '../assets/icons/email.svg'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function Contact() {
   const { t } = useLanguage()
   const location = useLocation()
+  const phone = '+359 881 234 567'
+  const email = 'info@bulstaff.com'
+  const telegram = 'bulstaff'
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -184,6 +191,55 @@ export default function Contact() {
             onClose={() => setFeedback(null)}
           />
         )}
+        <div className="mt-12 text-center">
+          <p className="font-heading text-xl text-primary mb-6">{t('contact.cta')}</p>
+          <div className="mx-auto grid max-w-md grid-cols-1 gap-4 sm:grid-cols-2 md:max-w-none md:grid-cols-4">
+            <a
+              href={`viber://chat?number=${phone.replace(/\s+/g, '')}`}
+              className="flex items-center gap-4 p-4 bg-white rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            >
+              <img src={viberIcon} alt="Viber" className="h-8 w-8" />
+              <div className="text-left">
+                <p className="font-sans text-base text-primary font-medium">{t('messengers.viber')}</p>
+                <p className="font-sans text-base text-primary">{phone}</p>
+              </div>
+            </a>
+            <a
+              href={`https://wa.me/${phone.replace(/\D/g, '')}`}
+              className="flex items-center gap-4 p-4 bg-white rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            >
+              <img src={whatsappIcon} alt="WhatsApp" className="h-8 w-8" />
+              <div className="text-left">
+                <p className="font-sans text-base text-primary font-medium">{t('messengers.whatsapp')}</p>
+                <p className="font-sans text-base text-primary">{phone}</p>
+              </div>
+            </a>
+            <a
+              href={`https://t.me/${telegram}`}
+              className="flex items-center gap-4 p-4 bg-white rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            >
+              <img src={telegramIcon} alt="Telegram" className="h-8 w-8" />
+              <div className="text-left">
+                <p className="font-sans text-base text-primary font-medium">{t('messengers.telegram')}</p>
+                <p className="font-sans text-base text-primary">@{telegram}</p>
+              </div>
+            </a>
+            <a
+              href={`mailto:${email}`}
+              className="flex items-center gap-4 p-4 bg-white rounded-lg hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            >
+              <img src={emailIcon} alt="Email" className="h-8 w-8" />
+              <div className="text-left">
+                <p className="font-sans text-base text-primary font-medium">{t('messengers.email')}</p>
+                <p className="font-sans text-base text-primary">{email}</p>
+              </div>
+            </a>
+          </div>
+          <div className="mt-6">
+            <p className="font-sans text-base text-primary">{t('contact.address')}</p>
+            <p className="font-sans text-base text-primary">{t('contact.person')}</p>
+          </div>
+        </div>
       </div>
     </div>
   )
