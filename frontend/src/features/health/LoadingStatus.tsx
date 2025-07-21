@@ -4,7 +4,7 @@ export function LoadingStatus() {
   return (
     <div className="flex items-center">
       <StatusDot status="loading" />
-      <span className="text-gray-600">Checking status...</span>
+      <span className="text-primary">Checking status...</span>
     </div>
   )
 }

@@ -14,7 +14,7 @@ export default function MessengerContacts() {
             <span className="font-medium mr-1">{t('messengers.viber')}:</span>
             <a
               href={`viber://chat?number=${phone.replace(/\s+/g, '')}`}
-              className="text-gray-900 hover:underline"
+              className="text-primary hover:text-accentCyan transition"
             >
               {phone}
             </a>
@@ -23,7 +23,7 @@ export default function MessengerContacts() {
             <span className="font-medium mr-1">{t('messengers.whatsapp')}:</span>
             <a
               href={`https://wa.me/${phone.replace(/\D/g, '')}`}
-              className="text-gray-900 hover:underline"
+              className="text-primary hover:text-accentCyan transition"
             >
               {phone}
             </a>

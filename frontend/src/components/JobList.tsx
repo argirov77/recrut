@@ -65,7 +65,7 @@ export default function JobList() {
     return (
       <div id="jobs" className="py-20 bg-gray-100">
         <div className="container mx-auto px-6 text-center">
-          <span className="text-lg text-red-500">{error}</span>
+          <span className="text-lg text-accentRed">{error}</span>
         </div>
       </div>
     )
@@ -81,20 +81,13 @@ export default function JobList() {
         {jobs && jobs.length > 0 ? (
           <div className="space-y-6 max-w-3xl mx-auto">
             {jobs.map((job) => {
-              const title =
-                (job[`title_${lang}` as keyof Job] as string) ?? job.title
-              const location =
-                (job[`location_${lang}` as keyof Job] as string) ??
-                job.location
-              const jobType =
-                (job[`job_type_${lang}` as keyof Job] as string) ??
-                job.job_type
+              const title = (job[`title_${lang}` as keyof Job] as string) ?? job.title
+              const location = (job[`location_${lang}` as keyof Job] as string) ?? job.location
+              const jobType = (job[`job_type_${lang}` as keyof Job] as string) ?? job.job_type
               const description =
-                (job[`description_${lang}` as keyof Job] as string) ??
-                job.description
+                (job[`description_${lang}` as keyof Job] as string) ?? job.description
               const requirements =
-                (job[`requirements_${lang}` as keyof Job] as string) ??
-                job.requirements
+                (job[`requirements_${lang}` as keyof Job] as string) ?? job.requirements
 
               return (
                 <details
@@ -130,17 +123,13 @@ export default function JobList() {
                     <p className="whitespace-pre-line">{description}</p>
                     {requirements && (
                       <div>
-                        <h4 className="font-medium text-primary">
-                          {t('jobs.requirements')}
-                        </h4>
+                        <h4 className="font-medium text-primary">{t('jobs.requirements')}</h4>
                         <p className="whitespace-pre-line">{requirements}</p>
                       </div>
                     )}
                     <button
                       onClick={() =>
-                        window.location.assign(
-                          `/?position=${encodeURIComponent(title)}#contact`
-                        )
+                        window.location.assign(`/?position=${encodeURIComponent(title)}#contact`)
                       }
                       className="mt-2 inline-block px-6 py-2 bg-accentRed text-white rounded-full shadow hover:scale-105 transition"
                     >
@@ -158,4 +147,3 @@ export default function JobList() {
     </div>
   )
 }
-

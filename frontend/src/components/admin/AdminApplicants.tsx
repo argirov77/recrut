@@ -72,7 +72,7 @@ export default function AdminApplicants() {
   if (loading) return <p className="p-6">Loading…</p>
   if (error)
     return (
-      <p className="p-6 text-red-600">
+      <p className="p-6 text-accentRed">
         <strong>Error:</strong> {error}
       </p>
     )

@@ -97,9 +97,7 @@ export default function AdminJobForm() {
     try {
       const API = import.meta.env.VITE_API_URL || ''
       const token = localStorage.getItem('token') || ''
-      const url = editMode
-        ? `${API}/api/jobs/${jobId}`
-        : `${API}/api/jobs`
+      const url = editMode ? `${API}/api/jobs/${jobId}` : `${API}/api/jobs`
       const method = editMode ? 'PUT' : 'POST'
 
       const res = await fetch(url, {
@@ -142,11 +140,9 @@ export default function AdminJobForm() {
 
   return (
     <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">
-        {editMode ? 'Edit Job' : 'New Job'}
-      </h2>
+      <h2 className="text-2xl font-semibold mb-4">{editMode ? 'Edit Job' : 'New Job'}</h2>
       {error && (
-        <p className="mb-4 text-red-600">
+        <p className="mb-4 text-accentRed">
           <strong>Error:</strong> {error}
         </p>
       )}
@@ -158,9 +154,7 @@ export default function AdminJobForm() {
               type="button"
               onClick={() => setActiveLang(l)}
               className={`px-3 py-1 border-b-2 ${
-                activeLang === l
-                  ? 'border-blue-500 font-semibold'
-                  : 'border-transparent'
+                activeLang === l ? 'border-accentCyan font-semibold' : 'border-transparent'
               }`}
             >
               {l.toUpperCase()}
@@ -173,9 +167,7 @@ export default function AdminJobForm() {
           return (
             <>
               <div>
-                <label className="block mb-1 font-medium">
-                  Title ({activeLang.toUpperCase()})
-                </label>
+                <label className="block mb-1 font-medium">Title ({activeLang.toUpperCase()})</label>
                 <Input
                   value={fields.title}
                   onChange={(e) =>
@@ -279,4 +271,3 @@ export default function AdminJobForm() {
     </div>
   )
 }
-
