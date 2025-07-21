@@ -88,9 +88,9 @@
 
   "messengers": {
     "title": "Напишите нам",
+    "phone": "Телефон",
     "viber": "Viber",
     "whatsapp": "WhatsApp",
-    "telegram": "Telegram",
     "email": "Email"
   }
 }
