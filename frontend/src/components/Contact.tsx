@@ -83,7 +83,7 @@ export default function Contact() {
           className="group max-w-lg mx-auto bg-white border border-gray-200 rounded-xl shadow-lg transition-all duration-300 ease-out overflow-hidden"
         >
           <summary className="cursor-pointer select-none p-4 flex items-center justify-between">
-            <span className="text-xl font-heading font-semibold text-primary">
+            <span className="font-heading text-2xl text-primary">
               {t('contact.title')}
             </span>
             <svg

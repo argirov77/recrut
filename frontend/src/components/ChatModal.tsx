@@ -21,7 +21,7 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
         >
           ×
         </button>
-        <h2 className="text-xl font-semibold mb-4 text-center">
+        <h2 className="font-heading text-3xl md:text-4xl text-primary text-center mb-8">
           {t('messengers.title')}
         </h2>
         <div className="grid gap-4">
@@ -31,8 +31,8 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
           >
             <img src={viberIcon} alt="Viber" className="h-8 w-8" />
             <div className="text-left">
-              <p className="font-medium">{t('messengers.viber')}</p>
-              <p className="text-gray-700">{phone}</p>
+              <p className="font-sans text-base text-primary font-medium">{t('messengers.viber')}</p>
+              <p className="font-sans text-base text-primary">{phone}</p>
             </div>
           </a>
           <a
@@ -41,8 +41,8 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
           >
             <img src={whatsappIcon} alt="WhatsApp" className="h-8 w-8" />
             <div className="text-left">
-              <p className="font-medium">{t('messengers.whatsapp')}</p>
-              <p className="text-gray-700">{phone}</p>
+              <p className="font-sans text-base text-primary font-medium">{t('messengers.whatsapp')}</p>
+              <p className="font-sans text-base text-primary">{phone}</p>
             </div>
           </a>
         </div>

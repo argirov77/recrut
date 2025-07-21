@@ -13,16 +13,16 @@ export default function Testimonials() {
   return (
     <div id="testimonials" className="py-20 bg-white">
       <div className="container mx-auto px-6 text-center mb-12">
-        <h2 className="text-3xl font-semibold text-gray-900">
+        <h2 className="font-heading text-3xl md:text-4xl text-primary text-center mb-8">
           {t("testimonials.title")}
         </h2>
       </div>
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
         {reviews.map((r, idx) => (
           <div key={idx} className="p-6 bg-gray-50 rounded-lg shadow">
-            <blockquote className="text-gray-600 italic mb-4">“{r.text}”</blockquote>
-            <p className="text-gray-900 font-medium">{r.name}</p>
-            <p className="text-gray-500 text-sm">{r.role}</p>
+            <blockquote className="font-sans text-base text-primary italic mb-4">“{r.text}”</blockquote>
+            <p className="font-sans text-base text-primary font-medium">{r.name}</p>
+            <p className="font-sans text-base text-primary">{r.role}</p>
           </div>
         ))}
       </div>

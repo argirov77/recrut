@@ -7,10 +7,10 @@ export default function About() {
   return (
     <div id="about" className="py-20 bg-white">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl font-semibold text-gray-900 mb-4">
+        <h2 className="font-heading text-3xl md:text-4xl text-primary text-center mb-8">
           {t("about.title")}
         </h2>
-        <p className="text-gray-600 leading-relaxed">
+        <p className="font-sans text-base text-primary leading-relaxed">
           {t("about.text")}
         </p>
       </div>

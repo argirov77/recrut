@@ -55,7 +55,7 @@ export default function JobList() {
     return (
       <div id="jobs" className="py-20 bg-gray-100">
         <div className="container mx-auto px-6 text-center">
-          <span className="text-lg text-gray-500">{t('jobs.loading')}</span>
+          <span className="font-sans text-base text-primary">{t('jobs.loading')}</span>
         </div>
       </div>
     )
@@ -65,7 +65,7 @@ export default function JobList() {
     return (
       <div id="jobs" className="py-20 bg-gray-100">
         <div className="container mx-auto px-6 text-center">
-          <span className="text-lg text-red-500">{error}</span>
+          <span className="font-sans text-base text-primary">{error}</span>
         </div>
       </div>
     )
@@ -74,7 +74,7 @@ export default function JobList() {
   return (
     <div id="jobs" className="py-20 bg-gray-100">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl font-heading font-extrabold text-primary text-center mb-8">
+        <h2 className="font-heading text-3xl md:text-4xl text-primary text-center mb-8">
           {t('jobs.title')}
         </h2>
 
@@ -103,10 +103,10 @@ export default function JobList() {
                 >
                   <summary className="cursor-pointer select-none p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
                     <div>
-                      <h3 className="text-lg font-heading font-semibold text-primary group-open:mb-1">
+                      <h3 className="font-heading text-2xl text-primary mb-2 group-open:mb-1">
                         {title}
                       </h3>
-                      <p className="text-sm text-gray-700">
+                      <p className="font-sans text-base text-primary">
                         {location} • {jobType}
                       </p>
                     </div>
@@ -126,14 +126,14 @@ export default function JobList() {
                     </svg>
                   </summary>
 
-                  <div className="px-4 pb-4 space-y-4 text-gray-700">
-                    <p className="whitespace-pre-line">{description}</p>
+                  <div className="px-4 pb-4 space-y-4 text-primary">
+                    <p className="font-sans text-base whitespace-pre-line text-primary">{description}</p>
                     {requirements && (
                       <div>
                         <h4 className="font-medium text-primary">
                           {t('jobs.requirements')}
                         </h4>
-                        <p className="whitespace-pre-line">{requirements}</p>
+                        <p className="font-sans text-base text-primary whitespace-pre-line">{requirements}</p>
                       </div>
                     )}
                     <button
@@ -152,7 +152,7 @@ export default function JobList() {
             })}
           </div>
         ) : (
-          <p className="text-center text-gray-500">{t('jobs.noJobs')}</p>
+          <p className="font-sans text-base text-primary text-center">{t('jobs.noJobs')}</p>
         )}
       </div>
     </div>
