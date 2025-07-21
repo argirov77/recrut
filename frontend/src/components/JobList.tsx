@@ -53,9 +53,9 @@ export default function JobList() {
 
   if (loading) {
     return (
-      <div id="jobs" className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6 text-center">
-          <span className="text-lg text-gray-500">{t('jobs.loading')}</span>
+      <div id="jobs" className="py-20 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 text-center">
+          <span className="text-lg text-gray-700">{t('jobs.loading')}</span>
         </div>
       </div>
     )
@@ -63,17 +63,17 @@ export default function JobList() {
 
   if (error) {
     return (
-      <div id="jobs" className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6 text-center">
-          <span className="text-lg text-red-500">{error}</span>
+      <div id="jobs" className="py-20 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 text-center">
+          <span className="text-lg text-accentRed">{error}</span>
         </div>
       </div>
     )
   }
 
   return (
-    <section id="jobs" className="py-20 bg-gray-100">
-      <div className="container mx-auto px-6">
+    <section id="jobs" className="py-20 bg-gray-50">
+      <div className="max-w-5xl mx-auto px-4">
         <h2 className="text-3xl font-heading font-extrabold text-primary text-center mb-8">
           {t('jobs.title')}
         </h2>
@@ -142,7 +142,7 @@ export default function JobList() {
                           `/?position=${encodeURIComponent(title)}#contact`
                         )
                       }
-                      className="mt-2 inline-block px-6 py-2 bg-accentRed text-white rounded-full shadow hover:scale-105 transition"
+                      className="mt-2 inline-block px-6 py-2 bg-accentRed text-white rounded-md hover:bg-accentRed/90 transition"
                     >
                       {t('jobs.applyButton')}
                     </button>
@@ -152,7 +152,7 @@ export default function JobList() {
             })}
           </div>
         ) : (
-          <p className="text-center text-gray-500">{t('jobs.noJobs')}</p>
+          <p className="text-center text-gray-700">{t('jobs.noJobs')}</p>
         )}
       </div>
     </section>

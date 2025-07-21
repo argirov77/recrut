@@ -6,9 +6,9 @@ export default function Chat() {
   const { t } = useLanguage()
   const phone = '+359 881 234 567'
   return (
-    <section id="messengers" className="py-10 bg-gray-100 hidden lg:block">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-2xl font-semibold mb-6">{t('messengers.title')}</h2>
+    <section id="messengers" className="py-10 bg-gray-50 hidden lg:block">
+      <div className="max-w-5xl mx-auto px-4 text-center">
+        <h2 className="text-primary font-heading text-2xl lg:text-3xl mb-6">{t('messengers.title')}</h2>
         <div className="mx-auto grid max-w-md grid-cols-1 gap-4 sm:grid-cols-2">
           <a
             href={`viber://chat?number=${phone.replace(/\s+/g, '')}`}

@@ -21,7 +21,7 @@ export default function ChatModal({ open, onClose }: ChatModalProps) {
         >
           ×
         </button>
-        <h2 className="text-xl font-semibold mb-4 text-center">
+        <h2 className="text-primary font-heading text-xl mb-4 text-center">
           {t('messengers.title')}
         </h2>
         <div className="grid gap-4">

@@ -31,7 +31,7 @@ export default function Hero() {
         </p>
         <a
           href="#jobs"
-          className="mt-8 inline-block px-8 py-3 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 transition"
+          className="mt-8 inline-block px-8 py-3 bg-accentRed text-white rounded-md hover:bg-accentRed/90 transition"
         >
           {t("hero.button")}
         </a>

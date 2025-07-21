@@ -22,32 +22,32 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Admin Sign in</h1>
+    <div className="max-w-md mx-auto bg-white rounded-lg shadow px-6 py-6">
+      <h1 className="text-primary font-heading text-2xl lg:text-3xl mb-4">Admin Sign in</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block mb-1 font-medium">Email</label>
+          <label className="block mb-1 font-medium text-primary">Email</label>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className="w-full bg-white border border-gray-200 rounded-md px-4 py-2 text-primary placeholder-gray-400"
           />
         </div>
         <div>
-          <label className="block mb-1 font-medium">Password</label>
+          <label className="block mb-1 font-medium text-primary">Password</label>
           <input
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+            className="w-full bg-white border border-gray-200 rounded-md px-4 py-2 text-primary placeholder-gray-400"
           />
         </div>
-        {error && <div className="text-red-600">{error}</div>}
+        {error && <div className="text-accentRed">{error}</div>}
         <div className="flex items-center justify-between">
-          <Link to="/admin/register" className="text-blue-600">
+          <Link to="/admin/register" className="text-accentCyan hover:underline">
             Register
           </Link>
           <Button type="submit" disabled={isLoading}>

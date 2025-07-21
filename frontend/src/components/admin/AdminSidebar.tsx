@@ -8,7 +8,7 @@ const links = [
 
 export default function AdminSidebar() {
   return (
-    <aside className="w-48 bg-gray-100 dark:bg-gray-900 p-4">
+    <aside className="w-48 bg-gray-50 dark:bg-gray-900 p-4">
       <nav className="space-y-3">
         {links.map(({ to, label }) => (
           <NavLink

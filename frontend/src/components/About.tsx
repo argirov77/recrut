@@ -5,13 +5,13 @@ export default function About() {
   const { t } = useLanguage();
 
   return (
-    <section id="about" className="py-20 bg-white">
-      <div className="container mx-auto px-6">
-        <h2 className="text-3xl font-semibold text-gray-900 mb-4">
-          {t("about.title")}
+    <section id="about" className="py-20 bg-gray-50">
+      <div className="max-w-5xl mx-auto px-4">
+        <h2 className="text-center text-primary font-heading text-2xl lg:text-3xl mb-8">
+          {t('about.title')}
         </h2>
-        <p className="text-gray-600 leading-relaxed">
-          {t("about.text")}
+        <p className="text-gray-700 leading-relaxed text-base lg:text-lg">
+          {t('about.text')}
         </p>
       </div>
     </section>

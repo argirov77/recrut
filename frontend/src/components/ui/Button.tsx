@@ -14,11 +14,11 @@ export default function Button({
   children,
   ...rest
 }: ButtonProps) {
-  const baseStyles = "px-6 py-2 rounded font-medium transition";
+  const baseStyles = 'px-6 py-2 rounded-md font-medium transition';
   const variants = {
-    primary: "bg-accent text-white hover:bg-accent-dark",
-    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
-    ghost: "bg-transparent text-accent hover:text-accent-dark",
+    primary: 'bg-accentRed text-white hover:bg-accentRed/90',
+    secondary: 'bg-accentGreen text-white hover:bg-accentGreen/90',
+    ghost: 'bg-transparent text-accentCyan hover:text-accentCyan/90',
   };
 
   return (
