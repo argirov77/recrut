@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import { ThemeToggle } from '../components/ui/ThemeToggle'
 import ChatModal from '../components/ChatModal'
 import { MessageSquare } from 'lucide-react'
 
@@ -14,11 +13,6 @@ export default function ClientLayout() {
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* HEADER */}
       <Navbar />
-
-      {/* Плавающий тумблер темы — всегда в правом‑верхнем углу */}
-      <div className="fixed right-6 top-24 z-50">
-        <ThemeToggle />
-      </div>
 
       {/* MAIN без глобального container — секции сами решают ширину */}
       <main className="flex-1">
