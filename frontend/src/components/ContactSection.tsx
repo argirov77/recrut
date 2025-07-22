@@ -3,7 +3,7 @@ import phoneIcon from '../assets/icons/phone-call.png'
 import mailIcon from '../assets/icons/mail.png'
 import viberIcon from '../assets/icons/viber.png'
 import whatsappIcon from '../assets/icons/whatsapp.png'
-import telegramIcon from '../assets/icons/telegram.svg'
+import telegramIcon from '../assets/icons/telegram.png'
 
 export default function ContactSection() {
   const { t } = useLanguage()
