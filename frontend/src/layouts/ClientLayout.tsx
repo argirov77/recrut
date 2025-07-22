@@ -22,7 +22,7 @@ export default function ClientLayout() {
       {/* FOOTER с контейнером, чтобы текст не «лип» к краям на широких экранах */}
       <footer className="bg-white dark:bg-gray-800 shadow mt-auto">
         <div className="container mx-auto px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          © {year} HR Agency. All rights reserved.
+          © {year} Bulstaff. All rights reserved.
         </div>
       </footer>
 
