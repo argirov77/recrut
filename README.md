@@ -143,6 +143,27 @@ fastapi-react-starter/
    - **Username:** `admin`
    - **Password:** `admin`
 
+### Running on a VPS
+
+If you want to expose the application to the internet, the `docker-compose.yml`
+includes an **nginx** service that listens on port `80` and proxies requests to
+the backend and frontend containers. Simply run the stack on your server:
+
+```bash
+docker compose up -d
+```
+
+Make sure your VPS firewall allows incoming connections on port `80` (and `443`
+if you later add TLS). On Ubuntu with UFW this can be enabled with:
+
+```bash
+sudo ufw allow 80/tcp
+```
+
+After starting the containers, the API will be reachable at
+`http://your-server-ip/api` and the React frontend will be served from
+`http://your-server-ip/`.
+
 ### Automated Setup Scripts
 
 For your convenience, this project includes automated setup scripts for both Windows and Linux/Mac:
