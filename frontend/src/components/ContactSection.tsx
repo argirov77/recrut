@@ -7,8 +7,8 @@ import telegramIcon from '../assets/icons/telegram.png'
 
 export default function ContactSection() {
   const { t } = useLanguage()
-  const phone = '+359 881 234 567'
-  const email = 'info@bulstaff.com'
+  const phone = '+359 888 306 333'
+  const email = 'office@bulstaff.com'
   const telegram = 'https://t.me/bulstaff'
   return (
     <section id="messengers" className="bg-gray-100 py-10">
