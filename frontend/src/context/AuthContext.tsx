@@ -2,7 +2,9 @@
 import { createContext, useReducer, useContext, ReactNode, useCallback, useEffect } from 'react'
 import { AuthState, LoginCredentials, RegisterCredentials, AuthResult, User } from '@/types/auth'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+// When VITE_API_URL isn't set, use the current origin so the app works
+// both locally and behind a reverse proxy (e.g. nginx on a VPS).
+const API_URL = import.meta.env.VITE_API_URL || ''
 
 // --- Action types ---
 export const AUTH_ACTIONS = {
