@@ -76,7 +76,7 @@ export default function AdminJobForm() {
     if (!editMode) return
     ;(async () => {
       try {
-        const API = import.meta.env.VITE_API_URL || ''
+        const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
         const token = localStorage.getItem('token') || ''
         const res = await fetch(`${API}/api/jobs/${jobId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -95,7 +95,7 @@ export default function AdminJobForm() {
     setSaving(true)
     setError(null)
     try {
-      const API = import.meta.env.VITE_API_URL || ''
+      const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
       const token = localStorage.getItem('token') || ''
       const url = editMode
         ? `${API}/api/jobs/${jobId}`
@@ -125,7 +125,7 @@ export default function AdminJobForm() {
     setSaving(true)
     setError(null)
     try {
-      const API = import.meta.env.VITE_API_URL || ''
+      const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
       const token = localStorage.getItem('token') || ''
       const res = await fetch(`${API}/api/jobs/${jobId}`, {
         method: 'DELETE',

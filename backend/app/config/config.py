@@ -13,7 +13,11 @@ class Settings(BaseSettings):
     APP_NAME: str = "FastAPI React Starter"
     APP_DESCRIPTION: str = "FastAPI React Starter Template"
     DATABASE_URL: str = "sqlite+aiosqlite:///./app.db"
-    CORS_ORIGINS: List[str] = ["http://localhost:5173", "http://localhost:3000"]
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://154.43.62.173:5173",
+    ]
     API_PREFIX: str = "/api"
 
     # Database settings

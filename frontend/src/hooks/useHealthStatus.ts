@@ -10,7 +10,8 @@ export function useHealthStatus() {
 
 async function fetchHealthStatus() {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/health`)
+    const base = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
+    const response = await fetch(`${base}/api/health`)
     if (!response.ok) return { status: 'error' }
     const data = await response.json()
     return data
