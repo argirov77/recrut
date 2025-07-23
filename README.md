@@ -136,6 +136,11 @@ fastapi-react-starter/
    - Start the FastAPI backend at http://localhost:8000
    - Start the React frontend at http://localhost:5173
 
+   The frontend expects the backend URL from the `VITE_API_URL` environment
+   variable. When running everything with Docker Compose the services share the
+   same domain, so you can leave this variable empty. For local development,
+   set it to `http://localhost:8000`.
+
    The Swagger docs will be available at http://localhost:8000/docs
 
    The first start creates an administrator account with:
@@ -163,6 +168,10 @@ sudo ufw allow 80/tcp
 After starting the containers, the API will be reachable at
 `http://your-server-ip/api` and the React frontend will be served from
 `http://your-server-ip/`.
+
+When using the provided `nginx` service the frontend can access the backend on
+the same domain. Ensure the `VITE_API_URL` variable is unset or empty so the
+application uses relative URLs.
 
 ### Automated Setup Scripts
 
