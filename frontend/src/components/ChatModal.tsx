@@ -11,8 +11,8 @@ interface ChatModalProps {
 
 export default function ChatModal({ open, onClose }: ChatModalProps) {
   const { t } = useLanguage()
-  const phone = '+359 881 234 567'
-  const email = 'info@bulstaff.com'
+  const phone = '+359 888 306 333'
+  const email = 'office@bulstaff.com'
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 lg:hidden">
