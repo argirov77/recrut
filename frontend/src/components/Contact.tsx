@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext'
 import FeedbackModal from './FeedbackModal'
 import ContactSection from './ContactSection'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
 
 export default function Contact() {
   const { t } = useLanguage()

@@ -37,7 +37,7 @@ export default function JobList() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const API = import.meta.env.VITE_API_URL || ''
+        const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
         const response = await axios.get<Job[]>(`${API}/api/jobs`, {
           params: { lang },
         })

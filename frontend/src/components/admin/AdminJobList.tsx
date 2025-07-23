@@ -21,7 +21,7 @@ export default function AdminJobList() {
       setLoading(true)
       setError(null)
       try {
-        const API = import.meta.env.VITE_API_URL || ''
+        const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
         const token = localStorage.getItem('token') || ''
 
         const res = await fetch(`${API}/api/jobs`, {
@@ -48,7 +48,7 @@ export default function AdminJobList() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this job?')) return
     try {
-      const API = import.meta.env.VITE_API_URL || ''
+      const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
       const token = localStorage.getItem('token') || ''
       const res = await fetch(`${API}/api/jobs/${id}`, {
         method: 'DELETE',
