@@ -7,6 +7,16 @@ import bg from "../i18n/bg.json";
 // Типы языковых кодов
 export type LangCode = "en" | "ru" | "bg";
 
+// все поддерживаемые языки
+const supported: LangCode[] = ["en", "ru", "bg"];
+
+// функция для выбора первоначального языка
+function detectBrowserLang(): LangCode {
+  if (typeof navigator === "undefined") return "en";
+  const code = navigator.language.split("-")[0] as LangCode;
+  return supported.includes(code) ? code : "en";
+}
+
 // Объединённый тип всех возможных словарей (JSON-файлов)
 type Dictionary = typeof en | typeof ru | typeof bg;
 
@@ -25,7 +35,11 @@ const LanguageContext = createContext<LanguageContextProps>({
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<LangCode>("en");
+  const saved =
+    (typeof localStorage !== "undefined" &&
+      (localStorage.getItem("lang") as LangCode | null)) || null;
+  const initial = saved ?? detectBrowserLang();
+  const [lang, setLang] = useState<LangCode>(initial);
 
   // Выбираем словарь
   const dictionary: Dictionary =
@@ -44,8 +58,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return result;
   };
 
+  const changeLang = (c: LangCode) => {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("lang", c);
+    }
+    setLang(c);
+  };
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang: changeLang, t }}>
       {children}
     </LanguageContext.Provider>
   );
