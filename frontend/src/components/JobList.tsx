@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useLanguage } from '../context/LanguageContext'
+import { API_BASE_URL } from '@/lib/api'
 
 interface Job {
   id: number
@@ -37,8 +38,7 @@ export default function JobList() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
-        const response = await axios.get<Job[]>(`${API}/api/jobs`, {
+        const response = await axios.get<Job[]>(`${API_BASE_URL}/api/jobs`, {
           params: { lang },
         })
         setJobs(response.data)

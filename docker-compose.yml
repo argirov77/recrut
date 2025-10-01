@@ -54,7 +54,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_BASE_URL=http://154.43.62.173:8000
+      - VITE_API_BASE_URL=http://backend:8000
     depends_on:
       backend:
         condition: service_healthy

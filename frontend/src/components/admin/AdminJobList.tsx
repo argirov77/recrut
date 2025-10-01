@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../ui/Button'
+import { API_BASE_URL } from '@/lib/api'
 
 // тип вакансии
 interface Job {
@@ -21,10 +22,9 @@ export default function AdminJobList() {
       setLoading(true)
       setError(null)
       try {
-        const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
         const token = localStorage.getItem('token') || ''
 
-        const res = await fetch(`${API}/api/jobs`, {
+        const res = await fetch(`${API_BASE_URL}/api/jobs`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -48,9 +48,8 @@ export default function AdminJobList() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this job?')) return
     try {
-      const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
       const token = localStorage.getItem('token') || ''
-      const res = await fetch(`${API}/api/jobs/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/jobs/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })

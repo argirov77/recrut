@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Button from '../ui/Button'
 import Input from '../ui/input'
 import Textarea from '../ui/Textarea'
+import { API_BASE_URL } from '@/lib/api'
 
 type LangCode = 'en' | 'ru' | 'bg'
 const langs: LangCode[] = ['en', 'ru', 'bg']
@@ -76,9 +77,8 @@ export default function AdminJobForm() {
     if (!editMode) return
     ;(async () => {
       try {
-        const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
         const token = localStorage.getItem('token') || ''
-        const res = await fetch(`${API}/api/jobs/${jobId}`, {
+        const res = await fetch(`${API_BASE_URL}/api/jobs/${jobId}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!res.ok) throw new Error(await res.text())
@@ -95,11 +95,10 @@ export default function AdminJobForm() {
     setSaving(true)
     setError(null)
     try {
-      const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
       const token = localStorage.getItem('token') || ''
       const url = editMode
-        ? `${API}/api/jobs/${jobId}`
-        : `${API}/api/jobs`
+        ? `${API_BASE_URL}/api/jobs/${jobId}`
+        : `${API_BASE_URL}/api/jobs`
       const method = editMode ? 'PUT' : 'POST'
 
       const res = await fetch(url, {
@@ -125,9 +124,8 @@ export default function AdminJobForm() {
     setSaving(true)
     setError(null)
     try {
-      const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
       const token = localStorage.getItem('token') || ''
-      const res = await fetch(`${API}/api/jobs/${jobId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/jobs/${jobId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })
