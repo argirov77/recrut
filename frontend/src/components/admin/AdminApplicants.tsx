@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import Button from '../ui/Button'
+import { API_BASE_URL } from '@/lib/api'
 
 interface Applicant {
   id: number
@@ -25,9 +26,8 @@ export default function AdminApplicants() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this applicant?')) return
     try {
-      const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
       const token = localStorage.getItem('token') || ''
-      const res = await fetch(`${API}/api/forms/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/forms/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -47,9 +47,8 @@ export default function AdminApplicants() {
       setLoading(true)
       setError(null)
       try {
-        const API = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
         const token = localStorage.getItem('token') || ''
-        const res = await fetch(`${API}/api/forms`, {
+        const res = await fetch(`${API_BASE_URL}/api/forms`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!res.ok) {

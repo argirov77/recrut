@@ -164,6 +164,13 @@ After starting the containers, the API will be reachable at
 `http://your-server-ip/api` and the React frontend will be served from
 `http://your-server-ip/`.
 
+> **Production builds**
+>
+> When building the frontend for production behind nginx, set the
+> `VITE_API_BASE_URL` environment variable to `/api` (or to the full public
+> backend URL) before running the build. This ensures all requests are routed
+> through the reverse proxy.
+
 ### Automated Setup Scripts
 
 For your convenience, this project includes automated setup scripts for both Windows and Linux/Mac:

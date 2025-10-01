@@ -1,8 +1,7 @@
 // frontend/src/context/AuthContext.tsx
 import { createContext, useReducer, useContext, ReactNode, useCallback, useEffect } from 'react'
 import { AuthState, LoginCredentials, RegisterCredentials, AuthResult, User } from '@/types/auth'
-
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
+import { API_BASE_URL } from '@/lib/api'
 
 // --- Action types ---
 export const AUTH_ACTIONS = {
@@ -70,7 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Fetch current user when we have a token
   const fetchCurrentUser = useCallback(async (token: string) => {
     try {
-      const res = await fetch(`${API_URL}/api/auth/me`, {
+      const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       if (res.ok) {
@@ -92,7 +91,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     async (creds: LoginCredentials): Promise<AuthResult> => {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true })
       try {
-        const res = await fetch(`${API_URL}/api/auth/login`, {
+        const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(creds),
@@ -123,7 +122,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true })
       try {
         const { confirmPassword, ...reg } = creds
-        const res = await fetch(`${API_URL}/api/auth/register`, {
+        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(reg),

@@ -3,8 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import FeedbackModal from './FeedbackModal'
 import ContactSection from './ContactSection'
-
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://154.43.62.173:8000'
+import { API_BASE_URL } from '@/lib/api'
 
 export default function Contact() {
   const { t } = useLanguage()
@@ -47,7 +46,7 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch(`${API_URL}/api/forms/`, {
+      const res = await fetch(`${API_BASE_URL}/api/forms/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
