@@ -29,7 +29,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
       - DB_HOST=postgres
       - DB_PORT=5432
-      - CORS_ORIGINS=["http://localhost:5173", "http://154.43.62.173:5173"]
+      - CORS_ORIGINS=["http://localhost:5173", "http://154.43.62.173:5173", "http://bulstaff.eu", "https://bulstaff.eu"]
       - ENVIRONMENT=development
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-qwerty1234}
     depends_on:
