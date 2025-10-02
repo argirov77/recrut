@@ -4,6 +4,7 @@ const links = [
   { to: '/admin/dashboard', label: 'Dashboard' },
   { to: '/admin/jobs',      label: 'Jobs'      },
   { to: '/admin/forms',     label: 'Applicants'},
+  { to: '/admin/security',  label: 'Security'  },
 ]
 
 export default function AdminSidebar() {
