@@ -1,6 +1,6 @@
 // frontend/src/context/AuthContext.tsx
 import { createContext, useReducer, useContext, ReactNode, useCallback, useEffect } from 'react'
-import { AuthState, LoginCredentials, RegisterCredentials, AuthResult, User } from '@/types/auth'
+import { AuthState, LoginCredentials, AuthResult, User } from '@/types/auth'
 import { API_BASE_URL } from '@/lib/api'
 
 // --- Action types ---
@@ -55,7 +55,6 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
 const AuthStateContext = createContext<AuthState | undefined>(undefined)
 const AuthDispatchContext = createContext<{
   login: (c: LoginCredentials) => Promise<AuthResult>
-  register: (c: RegisterCredentials) => Promise<AuthResult>
   logout: () => void
 } | null>(null)
 
@@ -116,35 +115,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [fetchCurrentUser]
   )
 
-  // register action
-  const register = useCallback(
-    async (creds: RegisterCredentials): Promise<AuthResult> => {
-      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true })
-      try {
-        const { confirmPassword, ...reg } = creds
-        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(reg),
-        })
-        const data = await res.json()
-        if (!res.ok) {
-          dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false })
-          return {
-            success: false,
-            error: data.detail || 'Registration failed',
-          }
-        }
-        // auto-login
-        return login({ email: reg.email, password: reg.password })
-      } catch (err: any) {
-        dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false })
-        return { success: false, error: err.message }
-      }
-    },
-    [login]
-  )
-
   // logout
   const logout = () => {
     localStorage.removeItem('token')
@@ -159,7 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthStateContext.Provider value={state}>
-      <AuthDispatchContext.Provider value={{ login, register, logout }}>
+      <AuthDispatchContext.Provider value={{ login, logout }}>
         {children}
       </AuthDispatchContext.Provider>
     </AuthStateContext.Provider>
@@ -185,6 +155,6 @@ export function useAuthDispatch() {
 
 export function useAuth() {
   const state = useAuthState()
-  const { login, register, logout } = useAuthDispatch()
-  return { ...state, login, register, logout }
+  const { login, logout } = useAuthDispatch()
+  return { ...state, login, logout }
 }

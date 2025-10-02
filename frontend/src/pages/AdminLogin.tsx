@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Button from '../components/ui/Button'
 
@@ -46,10 +46,7 @@ export default function AdminLogin() {
           />
         </div>
         {error && <div className="text-red-600">{error}</div>}
-        <div className="flex items-center justify-between">
-          <Link to="/admin/register" className="text-blue-600">
-            Register
-          </Link>
+        <div className="flex items-center justify-end">
           <Button type="submit" disabled={isLoading}>
             {isLoading ? 'Signing in…' : 'Login'}
           </Button>

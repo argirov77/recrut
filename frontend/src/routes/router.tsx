@@ -18,7 +18,6 @@ const About     = React.lazy(() => import('../pages/About'))
 
 // Админские страницы (из папки pages)
 const AdminLogin   = React.lazy(() => import('../pages/AdminLogin'))
-const Register     = React.lazy(() => import('../pages/Register'))
 const Dashboard    = React.lazy(() => import('../pages/Dashboard'))
 const JobAdmin     = React.lazy(() => import('../pages/JobAdmin'))
 const AdminForms   = React.lazy(() => import('../pages/AdminForms'))
@@ -58,8 +57,6 @@ export const router = createBrowserRouter([
       // /admin или /admin/login → логин
       { index: true,      element: withSuspense(<AdminLogin />) },
       { path: 'login',    element: withSuspense(<AdminLogin />) },
-      { path: 'register', element: withSuspense(<Register />) },
-
       // защищённый дашборд
       {
         path: 'dashboard',

@@ -89,15 +89,7 @@ function LoginFormContent({ onSuccess }: LoginFormProps) {
           </div>
           {state.error && <div className="text-sm text-red-500">{state.error}</div>}
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/register')}
-            type="button"
-            disabled={state.isLoading}
-          >
-            Register
-          </Button>
+        <CardFooter className="flex justify-end">
           <Button type="submit" disabled={state.isLoading}>
             {state.isLoading ? 'Logging in...' : 'Login'}
           </Button>
