@@ -19,6 +19,8 @@ class Settings(BaseSettings):
         "http://154.43.62.173:5173",
         "http://bulstaff.eu",
         "https://bulstaff.eu",
+        "http://bulstaff.agilityforms.com",
+        "https://bulstaff.agilityforms.com",
     ]
     API_PREFIX: str = "/api"
 
