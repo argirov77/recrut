@@ -5,7 +5,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.db.database import get_db
 from app.db.models import User
-from app.schemas.auth import Token, TokenData, UserCreate, UserResponse, LoginRequest
+from app.schemas.auth import (
+    Token,
+    TokenData,
+    UserCreate,
+    UserResponse,
+    LoginRequest,
+    PasswordChangeRequest,
+)
 from app.services.auth import create_access_token
 from app.config import get_settings
 from pydantic import EmailStr
@@ -122,3 +129,22 @@ async def reset_password(token: str, new_password: str, db: AsyncSession = Depen
     await db.commit()
 
     return {"message": "Password has been reset successfully"}
+
+
+@router.post("/change-password")
+async def change_password(
+    payload: PasswordChangeRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    if not current_user.verify_password(payload.current_password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Current password is incorrect",
+        )
+
+    current_user.set_password(payload.new_password)
+    db.add(current_user)
+    await db.commit()
+
+    return {"message": "Password updated successfully"}

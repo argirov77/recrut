@@ -20,6 +20,11 @@ export interface AuthResult {
   error: string | null
 }
 
+export interface PasswordChangePayload {
+  currentPassword: string
+  newPassword: string
+}
+
 export interface AuthState {
   user: User | null
   token: string | null

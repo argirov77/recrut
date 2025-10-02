@@ -1,6 +1,12 @@
 // frontend/src/context/AuthContext.tsx
 import { createContext, useReducer, useContext, ReactNode, useCallback, useEffect } from 'react'
-import { AuthState, LoginCredentials, AuthResult, User } from '@/types/auth'
+import {
+  AuthState,
+  LoginCredentials,
+  AuthResult,
+  User,
+  PasswordChangePayload,
+} from '@/types/auth'
 import { API_BASE_URL } from '@/lib/api'
 
 // --- Action types ---
@@ -57,6 +63,7 @@ const AuthStateContext = createContext<AuthState | undefined>(undefined)
 const AuthDispatchContext = createContext<{
   login: (c: LoginCredentials) => Promise<AuthResult>
   logout: () => void
+  changePassword: (payload: PasswordChangePayload) => Promise<AuthResult>
 } | null>(null)
 
 interface AuthProviderProps {
@@ -125,6 +132,61 @@ export function AuthProvider({ children }: AuthProviderProps) {
     dispatch({ type: AUTH_ACTIONS.LOGOUT })
   }
 
+  const changePassword = useCallback(
+    async ({ currentPassword, newPassword }: PasswordChangePayload): Promise<AuthResult> => {
+      const token = state.token ?? localStorage.getItem('token')
+      if (!token) {
+        return { success: false, error: 'Not authenticated' }
+      }
+
+      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true })
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/change-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            current_password: currentPassword,
+            new_password: newPassword,
+          }),
+        })
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem('token')
+            dispatch({ type: AUTH_ACTIONS.LOGOUT })
+            return {
+              success: false,
+              error: 'Session expired. Please sign in again.',
+            }
+          }
+
+          let errorMessage = 'Failed to change password'
+          const raw = await res.text()
+          if (raw) {
+            try {
+              const data = JSON.parse(raw)
+              errorMessage = data.detail || raw
+            } catch {
+              errorMessage = raw
+            }
+          }
+
+          return { success: false, error: errorMessage }
+        }
+
+        return { success: true, error: null }
+      } catch (err: any) {
+        return { success: false, error: err.message }
+      } finally {
+        dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false })
+      }
+    },
+    [state.token]
+  )
+
   useEffect(() => {
     if (state.token && !state.user) {
       fetchCurrentUser(state.token)
@@ -133,7 +195,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthStateContext.Provider value={state}>
-      <AuthDispatchContext.Provider value={{ login, logout }}>
+      <AuthDispatchContext.Provider value={{ login, logout, changePassword }}>
         {children}
       </AuthDispatchContext.Provider>
     </AuthStateContext.Provider>
@@ -159,6 +221,6 @@ export function useAuthDispatch() {
 
 export function useAuth() {
   const state = useAuthState()
-  const { login, logout } = useAuthDispatch()
-  return { ...state, login, logout }
+  const { login, logout, changePassword } = useAuthDispatch()
+  return { ...state, login, logout, changePassword }
 }

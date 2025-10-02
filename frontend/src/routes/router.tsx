@@ -21,6 +21,7 @@ const AdminLogin   = React.lazy(() => import('../pages/AdminLogin'))
 const Dashboard    = React.lazy(() => import('../pages/Dashboard'))
 const JobAdmin     = React.lazy(() => import('../pages/JobAdmin'))
 const AdminForms   = React.lazy(() => import('../pages/AdminForms'))
+const AdminSecurity = React.lazy(() => import('../pages/AdminSecurity'))
 
 // Админские компоненты (дочерние маршруты)
 const AdminJobList  = React.lazy(() => import('../components/admin/AdminJobList'))
@@ -107,6 +108,15 @@ export const router = createBrowserRouter([
         element: withSuspense(
           <ProtectedRoute>
             <AdminForms />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: 'security',
+        element: withSuspense(
+          <ProtectedRoute>
+            <AdminSecurity />
           </ProtectedRoute>
         ),
       },
