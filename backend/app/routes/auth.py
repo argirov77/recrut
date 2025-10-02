@@ -39,7 +39,17 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
 
 
 @router.post("/register", response_model=UserResponse)
-async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
+async def register(
+    user_data: UserCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not current_user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only superusers can create new accounts",
+        )
+
     # Check if user exists
     result = await db.execute(select(User).filter(User.email == user_data.email))
     if result.scalar_one_or_none():
