@@ -21,7 +21,7 @@ type AuthAction =
 const getInitialState = (): AuthState => ({
   isAuthenticated: Boolean(localStorage.getItem('token')),
   token: localStorage.getItem('token'),
-  isLoading: false,
+  isLoading: Boolean(localStorage.getItem('token')),
   user: null,
 })
 
@@ -40,6 +40,7 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
         ...state,
         isAuthenticated: false,
         token: null,
+        isLoading: false,
         user: null,
       }
     case AUTH_ACTIONS.SET_LOADING:
@@ -67,6 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Fetch current user when we have a token
   const fetchCurrentUser = useCallback(async (token: string) => {
+    dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true })
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -82,6 +84,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('Failed to fetch user:', err)
       localStorage.removeItem('token')
       dispatch({ type: AUTH_ACTIONS.LOGOUT })
+    } finally {
+      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false })
     }
   }, [])
 
