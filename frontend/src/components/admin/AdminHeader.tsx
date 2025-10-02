@@ -13,9 +13,9 @@ export default function AdminHeader() {
   }
 
   return (
-    <header className="bg-gray-800 text-white flex items-center justify-between px-6 py-4">
+    <header className="bg-white border-b border-gray-200 text-gray-900 flex items-center justify-between px-6 py-4">
       <h1 className="text-xl font-semibold">Admin Panel</h1>
-      <Button variant="ghost" onClick={handleLogout}>
+      <Button variant="secondary" onClick={handleLogout}>
         Logout
       </Button>
     </header>
