@@ -22,6 +22,7 @@ async def admin_required(current_user: User = Depends(get_current_user)) -> User
     return current_user
 
 
+@router.post("", response_model=ContactFormResponse, status_code=status.HTTP_201_CREATED)
 @router.post("/", response_model=ContactFormResponse, status_code=status.HTTP_201_CREATED)
 async def submit_form(form_in: ContactFormCreate, db: AsyncSession = Depends(get_db)):
     form = ContactForm(**form_in.dict())
@@ -31,6 +32,7 @@ async def submit_form(form_in: ContactFormCreate, db: AsyncSession = Depends(get
     return form
 
 
+@router.get("", response_model=list[ContactFormResponse], dependencies=[Depends(admin_required)])
 @router.get("/", response_model=list[ContactFormResponse], dependencies=[Depends(admin_required)])
 async def list_forms(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(ContactForm))
