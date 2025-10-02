@@ -14,12 +14,16 @@ export default function Button({
   children,
   ...rest
 }: ButtonProps) {
-  const baseStyles = "px-6 py-2 rounded font-medium transition";
+  const baseStyles =
+    "inline-flex items-center gap-2 rounded-lg px-6 py-2 font-medium transition focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed";
   const variants = {
-    primary: "bg-accent text-white hover:bg-accent-dark",
-    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
-    ghost: "bg-transparent text-accent hover:text-accent-dark",
-  };
+    primary:
+      "bg-accentGreen text-white hover:bg-accentGreen/90 focus:ring-2 focus:ring-offset-2 focus:ring-accentCyan",
+    secondary:
+      "border border-gray-200 bg-white text-primary hover:bg-gray-100 focus:ring-2 focus:ring-offset-2 focus:ring-accentCyan",
+    ghost:
+      "text-primary hover:bg-accentCyan/10 focus:ring-2 focus:ring-offset-2 focus:ring-accentCyan",
+  } as const;
 
   return (
     <button
