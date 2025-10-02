@@ -5,9 +5,9 @@ import AdminApplicants from '../components/admin/AdminApplicants'
 
 export default function AdminForms() {
   return (
-    <div className="flex-1">
+    <div className="flex-1 flex flex-col bg-gray-50">
       <AdminHeader />
-      <div className="p-6">
+      <div className="flex-1 p-8">
         <AdminApplicants />
       </div>
     </div>

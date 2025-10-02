@@ -9,7 +9,7 @@ export default function AdminChangePassword() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const inputClasses =
-    'mt-1 w-full rounded border border-gray-300 dark:border-gray-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent'
+    'mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40'
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -34,15 +34,13 @@ export default function AdminChangePassword() {
   return (
     <div className="max-w-lg space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Change password</h2>
-        <p className="text-gray-600 dark:text-gray-300">
-          Update the credentials for your administrator account.
-        </p>
+        <h2 className="text-2xl font-semibold text-gray-900">Change password</h2>
+        <p className="text-gray-600">Update the credentials for your administrator account.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 p-6 rounded shadow-sm">
+      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Current password</label>
+          <label className="block text-sm font-medium text-gray-700">Current password</label>
           <input
             type="password"
             required
@@ -53,7 +51,7 @@ export default function AdminChangePassword() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">New password</label>
+          <label className="block text-sm font-medium text-gray-700">New password</label>
           <input
             type="password"
             required
@@ -65,7 +63,7 @@ export default function AdminChangePassword() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Confirm new password</label>
+          <label className="block text-sm font-medium text-gray-700">Confirm new password</label>
           <input
             type="password"
             required
@@ -82,9 +80,7 @@ export default function AdminChangePassword() {
           </Button>
           {feedback && (
             <span
-              className={`text-sm ${
-                feedback.type === 'success' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-              }`}
+              className={`text-sm ${feedback.type === 'success' ? 'text-green-600' : 'text-red-600'}`}
             >
               {feedback.message}
             </span>

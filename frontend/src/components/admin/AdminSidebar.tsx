@@ -9,17 +9,17 @@ const links = [
 
 export default function AdminSidebar() {
   return (
-    <aside className="w-48 bg-gray-100 dark:bg-gray-900 p-4">
-      <nav className="space-y-3">
+    <aside className="w-56 bg-white border-r border-gray-200 p-6">
+      <nav className="space-y-2">
         {links.map(({ to, label }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
-              `block px-3 py-2 rounded ${
+              `block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 isActive
-                  ? 'bg-gray-300 dark:bg-gray-700 font-semibold'
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-800'
+                  ? 'bg-accentCyan/10 text-accentGreen'
+                  : 'text-gray-700 hover:bg-gray-100'
               }`
             }
           >
