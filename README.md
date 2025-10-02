@@ -140,8 +140,9 @@ fastapi-react-starter/
 
    The first start creates an administrator account with:
 
-   - **Username:** `admin`
-   - **Password:** `admin`
+   - **Username:** `office`
+   - **Email:** `office@bulstaff.com`
+   - **Password:** `qwerty1234`
 
 ### Running on a VPS
 

@@ -92,12 +92,12 @@ async def _create_default_admin() -> None:
         if result.scalar_one_or_none():
             return
         admin = User(
-            email="admin@example.com",
-            username="admin",
+            email="office@bulstaff.com",
+            username="office",
             role="admin",
             is_superuser=True,
         )
-        admin.set_password("admin")
+        admin.set_password("qwerty1234")
         session.add(admin)
         await session.commit()
 
