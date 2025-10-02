@@ -79,9 +79,9 @@ def create_superuser(
     # создаём таблицы, если ещё нет
     Base.metadata.create_all(bind=engine)
 
-    username = username or "admin"
-    email = email or "admin@example.com"
-    password = password or "changeme"
+    username = username or "office"
+    email = email or "office@bulstaff.com"
+    password = password or "qwerty1234"
 
     db = SessionLocal()
     exists = db.query(User).filter_by(username=username).first()

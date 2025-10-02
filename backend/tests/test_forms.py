@@ -33,8 +33,8 @@ async def client():
     app.dependency_overrides[get_db] = override_get_db
 
     async with async_session() as session:
-        admin = User(email="admin@example.com", username="admin", role="admin")
-        admin.set_password("password")
+        admin = User(email="office@bulstaff.com", username="office", role="admin")
+        admin.set_password("qwerty1234")
         session.add(admin)
         await session.commit()
 
@@ -65,7 +65,7 @@ async def test_form_submission_and_admin_view(client: AsyncClient):
 
     res = await client.post(
         "/api/auth/login",
-        json={"email": "admin@example.com", "password": "password"},
+        json={"email": "office@bulstaff.com", "password": "qwerty1234"},
     )
     assert res.status_code == 200
     token = res.json()["access_token"]
@@ -95,7 +95,7 @@ async def test_delete_form(client: AsyncClient):
 
     res = await client.post(
         "/api/auth/login",
-        json={"email": "admin@example.com", "password": "password"},
+        json={"email": "office@bulstaff.com", "password": "qwerty1234"},
     )
     token = res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}

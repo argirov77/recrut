@@ -1,8 +1,8 @@
 # backend/Dockerfile (Alpine-версия)
 FROM python:3.13-alpine AS base
 
-ARG ADMIN_USERNAME=admin
-ARG ADMIN_EMAIL=admin@example.com
+ARG ADMIN_USERNAME=office
+ARG ADMIN_EMAIL=office@bulstaff.com
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
