@@ -17,10 +17,10 @@ class Settings(BaseSettings):
         "http://localhost:5173",
         "http://localhost:3000",
         "http://154.43.62.173:5173",
-        "http://bulstaff.eu",
-        "https://bulstaff.eu",
-        "http://bulstaff.agilityforms.com",
-        "https://bulstaff.agilityforms.com",
+        "http://budstaff.eu",
+        "https://budstaff.eu",
+        "http://budstaff.agilityforms.com",
+        "https://budstaff.agilityforms.com",
     ]
     API_PREFIX: str = "/api"
 
