@@ -2,11 +2,11 @@
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 import ChatModal from '../components/ChatModal'
 import { MessageSquare } from 'lucide-react'
 
 export default function ClientLayout() {
-  const year = new Date().getFullYear()
   const [chatOpen, setChatOpen] = useState(false)
 
   return (
@@ -20,11 +20,7 @@ export default function ClientLayout() {
       </main>
 
       {/* FOOTER с контейнером, чтобы текст не «лип» к краям на широких экранах */}
-      <footer className="bg-white dark:bg-gray-800 shadow mt-auto">
-        <div className="container mx-auto px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          © {year} Bulstaff. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
 
       {/* Floating chat button visible only on small screens */}
       <button

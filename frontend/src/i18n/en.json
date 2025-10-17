@@ -1,5 +1,5 @@
 {
-  "siteTitle": "Bulstaff Recruitment Agency",
+  "siteTitle": "BULSTAFF LTD Recruitment Agency",
 
   "nav": {
     "home": "Home",
@@ -17,7 +17,7 @@
 
   "about": {
     "title": "Who we are",
-    "text": "Bulstaff is a licensed recruitment agency based in Varna. Since 2015 we have been connecting Bulgarian employers with skilled and seasonal staff from the EU and third countries. Our consultants handle every step — from candidate screening to work‑permit paperwork — so clients can stay focused on their core business."
+    "text": "BULSTAFF LTD is a licensed recruitment agency based in Varna. Since 2015 we have been connecting Bulgarian employers with skilled and seasonal staff from the EU and third countries. Our consultants handle every step — from candidate screening to work‑permit paperwork — so clients can stay focused on their core business."
   },
 
   "services": {
@@ -57,12 +57,12 @@
       {
         "name": "Elena Todorova",
         "role": "HR Manager, Black Sea Hotel Group",
-        "text": "Bulstaff filled 40+ seasonal roles in under three weeks. The team took care of visas and transport — we simply welcomed the staff on site."
+        "text": "BULSTAFF LTD filled 40+ seasonal roles in under three weeks. The team took care of visas and transport — we simply welcomed the staff on site."
       },
       {
         "name": "Nikolay Georgiev",
         "role": "Plant Director, TechPlast",
-        "text": "Professional, transparent and quick. Bulstaff is now our single supplier for machine operators."
+        "text": "Professional, transparent and quick. BULSTAFF LTD is now our single supplier for machine operators."
       }
     ]
   },
@@ -85,7 +85,7 @@
   },
 
   "footer": {
-    "rights": "© 2025 Bulstaff Recruitment. All rights reserved.",
+    "rights": "All rights reserved.",
     "privacy": "Privacy Policy",
     "contacts": "Contacts"
   },
@@ -104,5 +104,10 @@
     "whatsapp": "WhatsApp",
     "telegram": "Telegram",
     "email": "Email"
+  },
+
+  "company": {
+    "legalName": "BULSTAFF LTD",
+    "logoAlt": "BULSTAFF LTD logo"
   }
 }
