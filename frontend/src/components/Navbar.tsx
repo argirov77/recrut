@@ -6,6 +6,8 @@ import logo from '../assets/logo-icon.png'
 
 export default function Navbar() {
   const { t } = useLanguage()
+  const companyName = t('company.legalName') as string
+  const logoAlt = t('company.logoAlt') as string
   const [open, setOpen] = useState(false)
 
   const handleNavClick = (href: string) => {
@@ -29,9 +31,9 @@ export default function Navbar() {
       <div className="container mx-auto flex items-center justify-between px-6 py-5">
         {/* logo */}
         <a href="#" className="flex items-center gap-3 select-none">
-          <img src={logo} alt="Bulstaff logo" className="h-10 w-10" />
+          <img src={logo} alt={logoAlt} className="h-10 w-10" />
           <span className="font-heading text-2xl md:text-3xl font-extrabold text-primary">
-            BULSTAFF
+            {companyName}
           </span>
         </a>
 
