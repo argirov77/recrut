@@ -41,7 +41,17 @@ export default function JobList() {
         const response = await axios.get<Job[]>(`${API_BASE_URL}/api/jobs`, {
           params: { lang },
         })
-        setJobs(response.data)
+        const data = response.data
+
+        if (!Array.isArray(data)) {
+          console.error('Unexpected jobs response shape', data)
+          setError(t('jobs.error'))
+          setJobs([])
+          return
+        }
+
+        setError(null)
+        setJobs(data)
       } catch (_) {
         setError(t('jobs.error'))
       } finally {
